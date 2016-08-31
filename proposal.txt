@@ -1,0 +1,14 @@
+Project Title: TiME to Make Better Doctors: 3600 Feedback for Medical Students
+Client: Richard Hobbs, MD – Director, TiME Program and UNC School of Medicine
+
+The UNC Technology in Medical Education (TiME) Program is an innovative approach to medical education at the University of North Carolina School of Medicine (SOM). In an age so dominated by increasing use of technology, our goal is to teach students how to best use these resources to foster both high-quality medical education and patient care. TiME is a multi-faceted curriculum, though the cornerstone of the program is the iPad initiative, which, starting March 2017, will provide a fully loaded iPad Mini4 to all students starting their clinical rotations. 
+
+Among other things, the iPad’s portability creates a new tool for student evaluation. My goal is always to make better doctors. With the iPad, I am looking for COMP 523 students to assist me in creation of an app that collects 3600 feedback on students as they take the medical history and perform a physical examination on their patients. 
+
+Practically, after a student finishes interacting with a patient, students would pass the iPad to the patient who would then enter confidential feedback for the student. The supervising physician working with the student would then do the same. Finally, the student him or herself would provide reflective feedback. 
+
+When completed, this app would be used by all 180+ medical students/year, 8-12 times over the course of their clinical education. The data collected during each of their rotations will enable us to demonstrate student progress with medical history and exam and allow for identification of those students requiring more assistance. It will also help us refine curriculum to create better doctors, more capable of caring for patients. Results would likely be publishable in medical education journals and the app itself could find a nationwide market among medical educators. 
+
+The app would be specifically for iOS and intended to run on iPad mini4’s. Data collected would be securely stored and organized using REDCap (Qualtrics is another option). Ideally, collected data would also interact with the SOM learning management system/grading database (either Sakai or one45). The only absolute requirement is to use iOS.
+
+If the above is easily accomplished, the same interface can be used to create other assessment/evaluation tools. These could be course specific tools (e.g. – for psychiatric interview) or a procedural checklist (e.g – suturing, venipuncture). The same concept could also be applied to assess a student’s presentation of medical information on rounds. The 3600 concept would incorporate feedback from all participants, including the patient or family and assess how clearly the medical information was presented. Extension to residents in training is another logical progression for this technology.
