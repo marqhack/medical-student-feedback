@@ -19,20 +19,18 @@ This makes a local copy of the code on your machine, changes you to the root of 
 
 ### Saving your changes 
 
-* After you've made some changes to files locally, and want to save them, you **_stage_** and _**commit**_ your changes:
+After you've made some changes to files locally, and want to save them, you **_stage_** and _**commit**_ your changes:
 
     git add --all
     git commit -m "<type up a descriptive message of the changes you made>"
 
 ### Uploading your changes 
 
-* When you're ready to push up to the repo, **stage** and **commit** your changes, then:  
+When you're ready to push up to the repo, **stage** and **commit** your changes, then:  
 
     git push origin develop
    
-You might need to enter your github username and passowrd. 
-
-There are a few other things you'll need to know, but let's start here. 
+You might need to enter your github username and passowrd. There are a few other things you'll need to know, but let's start here. 
 
 
 
