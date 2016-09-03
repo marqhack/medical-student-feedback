@@ -12,7 +12,7 @@ into your terminal. If it does anything other than spit out the version, then yo
 
 Copy the following commands into your terminal:
 
-* Getting started
+### Getting started
 
     git clone https://github.com/tylerklose/medical-student-feedback.git
     cd medical-student-feedback
@@ -20,19 +20,16 @@ Copy the following commands into your terminal:
 
 This makes a local copy of the code on your machine, changes you to the root of the repository/directory, and switches to a "branch" called marquis. (Name yours something different for now). We work in a different branch so that when we break everything and nothing works, we still have a working copy of our code.
 
-    <make some changes to files locally>
-
-
-* After you've made some changes, and want to save them, you *_stage_* and _*commit*_ your changes:
+   
+### After you've made some changes to files locally, and want to save them, you **_stage_** and _**commit**_ your changes:
 
     git add --all
     git commit -m "<type up a descriptive message of the changes you made>"
 
-
-* When you're ready to push things up to our repository (so that we can all see the local changes you've been making, stage and commit your changes, then:
+### When you're ready to push up to the repo:
 
     git push origin develop
-    <here, you'll probably have to type in your username and password for github>
+    (you might need to enter github username and password)
 
 There are a few other things you'll need to know, but let's start here. 
 
