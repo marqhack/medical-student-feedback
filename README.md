@@ -5,12 +5,15 @@ _Helping medical educators provide feedback to their students_
 
 
 *Make sure you have git installed!* You can check by typing 
+
     git --version 
+
 into your terminal. If it does anything other than spit out the version, then you'll need to install git. 
 
 Copy the following commands into your terminal:
 
 * Getting started
+
     git clone https://github.com/tylerklose/medical-student-feedback.git
     cd medical-student-feedback
     git branch marquis 
