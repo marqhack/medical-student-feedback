@@ -1,4 +1,4 @@
-# Medical Student Feedback
+# Feedback
 _Helping medical educators provide feedback to their students_ 
 
 ## What to do 
