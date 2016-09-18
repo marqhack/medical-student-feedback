@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="jquery-3.1.0.js"></script>
+		<script type="text/javascript" src="poc.js"></script>
+		<link rel="stylesheet" type="text/css" href="poc.css">
+	</head>
+	<body>
+		<div>
+			<div class="level-1" id="evaluation-info">
+				<div class="level-2">
+					Evaluation Date:<br>
+					<input id="date" type="textbox">
+				</div>
+				<div class="level-2">
+					Student Name:<br>
+					<input id="student-name" type="textbox">
+				</div>
+				<div class="level-2">
+					Evaluator Name:<br>
+					<input id="evaluator-name" type="textbox">
+				</div>
+				<div class="level-2">
+					Evaluator Title:<br>
+					<select id="evaluator-title">
+						<option>Professional</option>
+						<option>Resident</option>
+						<option>Intern</option>
+					</select>
+				</div class="level-2">
+				<div class="level-2">
+					EPA:<br>
+					<select id="epa">
+						<option>EPA 1</option>
+						<option>EPA 2</option>
+						<option>EPA 3</option>
+						<option>EPA 4</option>
+						<option>EPA 5</option>
+					</select>
+				</div>
+			</div>
+			<div class="level-1" id="feedback">
+				<div class="level-2">
+					Question 1: This will be an example of a question that requires a freeform textbox for an answer.<br>
+					<textarea id="q1"></textarea>
+				</div>
+				<div class="level-2">
+					Question 2: This will be an example of a question that requires radio buttons for an answer.<br>
+					<input name="q2" id="sd" type="radio">Strongly Disagree
+					<input name="q2" id="d" type="radio">Disagree
+					<input name="q2" id="n" type="radio">Neither Agree or Disagree
+					<input name="q2" id="d" type="radio">Agree
+					<input name="q2" id="sa" type="radio">Strongly Agree
+				</div>
+				<div class="level-2">
+					Question 3: The student took the patient's blood pressure.
+					<input id="q3" type="checkbox">
+				</div>
+			</div>
+			<div id="submit-wrapper">
+					<button id="submit">Submit Feedback</button>
+			</div>
+			<div id="response"></div>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,32 @@
+body {
+  width: 450px;
+  min-width: 450px;
+  height: 80%;
+  min-height: 400px;
+  margin: 0 auto;
+  background-color: #ffffff;
+}
+
+	.level-1 {
+		background-color: #99badd;
+		margin: 20px auto;
+		padding-top: 20px;
+		border-bottom: solid 1px #99badd;
+		border-left: solid 1px #99badd;
+		border-right: solid 1px #99badd;
+	}
+
+		.level-2 {
+    		padding: 5px 10px;
+    		background-color: #ffffff;
+    		border: solid 0px #000000;
+    		border-bottom: solid 1px #99badd;
+   		}
+
+	#submit-wrapper {
+		display: block;
+		margin: auto 0;
+		width: 100%;
+		text-align: center;
+		padding: 5px 0px;
+	}
