@@ -2,6 +2,14 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var AddEPA = React.createClass({
+	handleClick: function(e) {
+		var obj = {
+			name: document.getElementById('name').value,
+			description: document.getElementById('description').value
+		}
+		console.log(JSON.stringify(obj));
+	},
+
 	render: function() {
 		return(
 			<div>
@@ -17,7 +25,7 @@ var AddEPA = React.createClass({
 				</div>
 
 				<div>
-					<button id="submit-new-epa" type="submit">Add</button>
+					<button id="submit-new-epa" type="submit" onClick={this.handleClick}>Add</button>
 				</div>
 			</div>
 		);

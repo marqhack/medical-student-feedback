@@ -22,7 +22,3 @@ ReactDOM.render(
 );
 
 ReactDOM.render(<AddEPA />, document.getElementById('add-epa'));
-
-document.getElementById('submit-new-epa').click(function() {
-	console.log("add has been clicked");
-});
