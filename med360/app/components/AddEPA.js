@@ -1,8 +1,13 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
+var AddQuestion = require('./AddQuestion');
 
 var AddEPA = React.createClass({
-	handleClick: function(e) {
+	getInitialState: function() {
+		return {questions: [{id: 1}]}
+	},
+
+	save: function(e) {
 		var obj = {
 			name: document.getElementById('name').value,
 			description: document.getElementById('description').value,
@@ -14,7 +19,21 @@ var AddEPA = React.createClass({
 		}
 
 		console.log(JSON.stringify(obj));
-		console.log(document.getElementsByClassName('enter-question'));
+	},
+
+	addQuestion: function() {
+		console.log(this.state);	
+		// newQuestion['id'] = this.state.questions.length + 1;
+		// console.log(newQuestion.id);
+		var newQuestion = {
+			id: this.state.questions.length + 1
+		}
+		console.log(newQuestion.id);
+
+		modifiedQuestions = this.state.questions.slice();
+		modifiedQuestions.push(newQuestion);
+		this.setState({ questions: modifiedQuestions });
+		console.log("after add: "+ JSON.stringify(this.state));
 	},
 
 	render: function() {
@@ -30,59 +49,21 @@ var AddEPA = React.createClass({
 					<label htmlFor="description">Description: </label>
 					<textarea id="description" />
 				</div>
+				<div id="questions-container">
+				{
+				    this.state.questions.map((item) => (
+                        <AddQuestion key={item.id} />
+                    ))
+                }
+				</div>
+
 
 				<div>
-					Question 1: 
-					<input className="enter-question" type="textbox" id="question-1" />
+					<button id="add-new-question" onClick={this.addQuestion}>Add</button>
 				</div>
 
 				<div>
-					Question 2: 
-					<input className="enter-question" type="textbox" id="question-2" />
-				</div>
-
-				<div>
-					Question 3: 
-					<input className="enter-question" type="textbox" id="question-3" />
-				</div>
-
-				<div>
-					Question 4: 
-					<input className="enter-question" type="textbox" id="question-4" />
-				</div>
-
-				<div>
-					Question 5: 
-					<input className="enter-question" type="textbox" id="question-5" />
-				</div>
-
-				<div>
-					Question 6: 
-					<input className="enter-question" type="textbox" id="question-6" />
-				</div>
-
-				<div>
-					Question 7: 
-					<input className="enter-question" type="textbox" id="question-7" />
-				</div>
-
-				<div>
-					Question 8: 
-					<input className="enter-question" type="textbox" id="question-8" />
-				</div>
-
-				<div>
-					Question 9: 
-					<input className="enter-question" type="textbox" id="question-9" />
-				</div>
-
-				<div>
-					Question 10: 
-					<input className="enter-question" type="textbox" id="question-10" />
-				</div>
-
-				<div>
-					<button id="submit-new-epa" type="submit" onClick={this.handleClick}>Add</button>
+					<button id="submit-new-epa" type="submit" onClick={this.save}>Save</button>
 				</div>
 			</div>
 		);

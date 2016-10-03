@@ -4,6 +4,7 @@ var Rotation = require('./components/Rotation');
 var ActivitySelector = require('./components/ActivitySelector');
 var ObserverSelector = require('./components/ObserverSelector');
 var AddEPA = require('./components/AddEPA');
+var AddQuestion = require('./components/AddQuestion');
 
   
 ReactDOM.render(
