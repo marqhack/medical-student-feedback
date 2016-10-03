@@ -4,30 +4,107 @@
 <head>
 	<meta charset="utf-8">
 	<title>Medical Student Feedback</title>
-	<link href="index.css" rel="stylesheet" type="text/css">
+	<link href="./index.css" rel="stylesheet" type="text/css">
+	<style>
 
-	<style type="text/css">
 		body {
-			background-color: #4BD1F7;
+
 		}
-		#title, #subtitle {
-			text-align: center;
-			color: #0E3794;
-		}
+			#header {
+				width: 100%;
+				background-color: #99badd;
+				border: 1px solid #1f2d5c;
+				border-radius: 4px;
+			}
+
+				#title, #subtitle {
+					text-align: center;
+					color: #1f2d5c;
+				}
+
+			.observation-info {
+				margin: 10px 10px;
+				height: 200px;
+				width: 200px;
+				vertical-align: top;
+				border: 1px solid #1f2d5c;
+				border-radius: 4px;
+				padding: 10px;
+				background-color: #99badd;
+				text-align: initial;
+			}
+
+			#add-epa {
+				width: 100%;
+			}
+
+			#epa-container {
+				width: 100%;
+				margin: 25px auto; 
+				background-color: #99badd;
+				border-radius: 4px;
+				border: 1px solid #1f2d5c;
+
+			}
+				#epa-container > h3 {
+					text-align: center;
+					color: #1f2d5c;			
+				}
+
+				#epa-container > div {
+					padding-left: 50px;
+				}
+
+					#name {
+						width: 400px;
+						height: 1.2em;
+					}
+
+				#description-div {
+					margin-top: 10px;
+					margin-bottom: 10px;
+					padding-bottom: 10px;
+					border-bottom: 2px solid #1f2d5c;
+				}
+
+					#description-div > label {
+						vertical-align: top;
+					}
+
+					#description {
+						width: 400px;
+						height: 50px;
+					}
+
+
+					.enter-question {
+						margin: 10px 10px;
+						width: 600px;
+						height: 1.2em;
+					}
+
 
 	</style>
 </head>
 
 <body>
-	<h1 id="title">Technology in Medical Education</h1>
-	<h2 id="subtitle">Medical Student Feedback</h2>
-	<div id="rotations"></div>
+	<div>
+		<div id="header">
+			<h1 id="title">Technology in Medical Education</h1>
+			<h2 id="subtitle">Medical Student Feedback</h2>
+		</div>
 
-	<div id="activities"></div>
+		<div id="add-epa"></div>
+		
+		<div style="display: block; width: 100%; text-align: center;">
+			<div class="observation-info" style="display: inline-block" id="rotations"></div>
 
-	<div id="observers"></div>
+			<div class="observation-info" style="display: inline-block" id="activities"></div>
 
-	<div id="add-epa"></div>
+			<div class="observation-info" style="display: inline-block" id="observers"></div>
+		</div>
+
+	</div>
 </body>
 
 
