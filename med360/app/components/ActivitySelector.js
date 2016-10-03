@@ -16,8 +16,8 @@ var ActivitySelector = React.createClass({
 
 	render: function(){
 		return(
-			<div class="activity">
-				<h3>Select all activities observed and requiring feedback.</h3>
+			<div className="activity">
+				<h3>Select all activities observed</h3>
 				<label>
 					<input type="checkbox" value="activity1" onChange={this.handleChange} />
 					History
