@@ -16,9 +16,6 @@ db.serialize(function() {
     stmt.finalize();
 });
 
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('medFeedback.db');
-
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
     {'title':'secondbrokenthing', 'id':2, 'owner':'him', 'status':'also my bad', 'priority':'ffffuuu'},
