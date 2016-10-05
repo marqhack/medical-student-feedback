@@ -2,11 +2,40 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 var api = express();
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('medFeedback.db');
+
+
+db.serialize(function() {
+    db.run("CREATE TABLE IF NOT EXISTS students (pid INT, name TEXT)");
+    var stmt = db.prepare("INSERT INTO students VALUES (?, ?)");
+    for(var i = 0; i< 10; i++){
+        var n = "name";
+        stmt.run(i, n);
+    }
+    stmt.finalize();
+});
+
+var sqlite3 = require('sqlite3').verbose();
+var db = new sqlite3.Database('medFeedback.db');
 
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
     {'title':'secondbrokenthing', 'id':2, 'owner':'him', 'status':'also my bad', 'priority':'ffffuuu'},
 ];
+
+api.get('/medFeedback', function(req, res){
+    db.all("SELECT pid, name FROM students", function(err, rows){
+        res.json(JSON.stringify(rows));
+    });
+});
+
+api.post('/medFeedback', function(req, res){
+    var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
+    stmt.run(row.pid + 1, "name");
+    stmt.finalize();
+});
+
 
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
