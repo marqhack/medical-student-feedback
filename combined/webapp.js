@@ -1,12 +1,13 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var db = require('./dbhandler');
 var app = express();
 var api = express();
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('medFeedback.db');
+//var sqlite3 = require('sqlite3').verbose();
+//var db = new sqlite3.Database('medFeedback.db');
 
 
-db.serialize(function() {
+/*db.serialize(function() {
     db.run("CREATE TABLE IF NOT EXISTS students (pid INT, name TEXT)");
     var stmt = db.prepare("INSERT INTO students VALUES (?, ?)");
     for(var i = 0; i< 10; i++){
@@ -14,10 +15,7 @@ db.serialize(function() {
         stmt.run(i, n);
     }
     stmt.finalize();
-});
-
-var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database('medFeedback.db');
+}); */
 
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
@@ -34,7 +32,7 @@ api.post('/medFeedback', function(req, res){
     var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
     stmt.run(row.pid + 1, "name");
     stmt.finalize();
-});
+}); 
 
 
 app.listen(3000, function () {
