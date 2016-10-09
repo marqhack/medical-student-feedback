@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var path = require("path");
 var app = express();
 var api = express();
 var sqlite3 = require('sqlite3').verbose();
@@ -40,7 +41,17 @@ app.listen(3000, function () {
 
 //App root
 app.get('/', function (req, res) {
-    res.send("Just some root, move along, nothing to see here.");
+    res.sendFile(path.join(__dirname+'/static/index.html'));
+});
+
+//App login page
+app.get('/login', function(req, res){
+    res.send("You've reached the login page");
+});
+
+//App admin page
+app.get('/admin', function(req, res){
+    res.sendFile(path.join(__dirname+'/static/admin.html'));
 });
 
 //API root
@@ -48,6 +59,7 @@ api.use(bodyParser.json( { type: '*/*' }));
 api.get('/', function(req, res){
     res.send("This is the API! Congrats");
 });
+
 api.get('/bugs', function (req, res) {
     res.send(JSON.stringify(bugData));
 });

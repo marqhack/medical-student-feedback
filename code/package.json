@@ -22,6 +22,7 @@
     "watchify": "^3.7.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.16.0"
+    "babel-cli": "^6.16.0",
+    "react-bootstrap": "^0.30.5"
   }
 }

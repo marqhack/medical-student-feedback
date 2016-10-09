@@ -12,6 +12,15 @@ gulp.task('bundle', function() {
     .pipe(gulp.dest('static/'));
 });
 
+//admin js bundle
+gulp.task('adminbundle', function(){
+  return browserify('src/admin.js')
+    .transform('babelify', {presets: 'react'})
+    .bundle()
+    .pipe(source('adminbundle.js'))
+    .pipe(gulp.dest('static/'));
+});
+
 
 gulp.task('watch', function() {
 
