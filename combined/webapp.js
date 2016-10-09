@@ -3,19 +3,6 @@ var bodyParser = require('body-parser');
 var db = require('./dbhandler');
 var app = express();
 var api = express();
-//var sqlite3 = require('sqlite3').verbose();
-//var db = new sqlite3.Database('medFeedback.db');
-
-
-/*db.serialize(function() {
-    db.run("CREATE TABLE IF NOT EXISTS students (pid INT, name TEXT)");
-    var stmt = db.prepare("INSERT INTO students VALUES (?, ?)");
-    for(var i = 0; i< 10; i++){
-        var n = "name";
-        stmt.run(i, n);
-    }
-    stmt.finalize();
-}); */
 
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
@@ -63,12 +50,6 @@ api.post('/bugs', function (req, res) {
     res.send('POST request to homepage');
     console.log('end length: '+ bugData.length);
 });
-
-
-
-
-
-
 
 app.use('/api', api)
 app.use(express.static('static'));
