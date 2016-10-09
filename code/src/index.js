@@ -4,7 +4,6 @@ var RotationSelector = require('./components/RotationSelector');
 var ActivitySelector = require('./components/ActivitySelector');
 var ObserverSelector = require('./components/ObserverSelector');
 var Button = require('react-bootstrap/lib/Button');
-
 var NavPanel = require('./components/NavPanel');
 
 
