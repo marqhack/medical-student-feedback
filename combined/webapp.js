@@ -4,15 +4,23 @@ var db = require('./dbhandler');
 var app = express();
 var api = express();
 
+//var epajson = {'epaNum': 1, 'name':'Professionalism', 'description': 'How Professional the med student is.'};
+//db.addEPA(epajson);
+
+
+//console.log(db);
+
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
     {'title':'secondbrokenthing', 'id':2, 'owner':'him', 'status':'also my bad', 'priority':'ffffuuu'},
 ];
 
 api.get('/medFeedback', function(req, res){
-    db.all("SELECT pid, name FROM students", function(err, rows){
+    db.spillEPAs();
+    res.json("YAAAS");
+   /* db.all("SELECT pid, name FROM students", function(err, rows){
         res.json(JSON.stringify(rows));
-    });
+    }); */
 });
 
 api.post('/medFeedback', function(req, res){
