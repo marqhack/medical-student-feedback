@@ -57,10 +57,21 @@ var ObserverSelector = React.createClass({
 			<div className="profSelector">
 				<ControlLabel>Professionals</ControlLabel>
 				<ProfList profs={this.state.profs} onRemove={this.handleRemove} />
-				<form onSubmit={this.handleSubmit}>
-					<input id="name" placeholder="Name" onChange={this.handleNameChange} value={this.state.name} />
-					<input id="email" placeholder="Email" onChange={this.handleEmailChange} value={this.state.email} />
-					<button>{'Add Professional ' + (this.state.profs.length +1)}</button>
+				<form inline onSubmit={this.handleSubmit}>
+				<Form inline>
+				<FormGroup controlId="addProf">
+					<ControlLabel>Name</ControlLabel>
+					{' '}
+					<FormControl id="name" type="text" placeholder="Name" onChange={this.handleNameChange} value={this.state.name}/>
+					{' '}
+					<ControlLabel>Email</ControlLabel>
+					{' '}
+					<FormControl id="email" type="email" placeholder="Email" onChange={this.handleEmailChange} value={this.state.email}/>
+					{' '}
+				</FormGroup>
+				{' '}
+				<Button size="small" type="submit" bsStyle="warning">{'Add Professional ' + (this.state.profs.length +1)}</Button>
+				</Form>
 				</form>
 			</div>
 		);
@@ -76,7 +87,9 @@ var ProfList = React.createClass({
 			<div id="profs">
 			{this.props.profs.map(prof => (
 				<div key={prof.id}>{(prof.id) + ") " + (prof.name) + ": " + (prof.email) + " "}
-					<input type="button" onClick={this.props.onRemove.bind(this, prof)} value="Remove" />
+					<Button type="submit" bsSize="xsmall" bsStyle="danger" onClick={this.props.onRemove.bind(this, prof)}>
+					Remove  
+					</Button>
 				</div>
 				))}
 			</div>

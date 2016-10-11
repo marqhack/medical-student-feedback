@@ -36260,7 +36260,7 @@ var ObserverSelector = React.createClass({
 	},
 
 	render: function () {
-		return React.createElement('div', { className: 'profSelector' }, React.createElement(ControlLabel, null, 'Professionals'), React.createElement(ProfList, { profs: this.state.profs, onRemove: this.handleRemove }), React.createElement('form', { onSubmit: this.handleSubmit }, React.createElement('input', { id: 'name', placeholder: 'Name', onChange: this.handleNameChange, value: this.state.name }), React.createElement('input', { id: 'email', placeholder: 'Email', onChange: this.handleEmailChange, value: this.state.email }), React.createElement('button', null, 'Add Professional ' + (this.state.profs.length + 1))));
+		return React.createElement('div', { className: 'profSelector' }, React.createElement(ControlLabel, null, 'Professionals'), React.createElement(ProfList, { profs: this.state.profs, onRemove: this.handleRemove }), React.createElement('form', { inline: true, onSubmit: this.handleSubmit }, React.createElement(Form, { inline: true }, React.createElement(FormGroup, { controlId: 'addProf' }, React.createElement(ControlLabel, null, 'Name'), ' ', React.createElement(FormControl, { id: 'name', type: 'text', placeholder: 'Name', onChange: this.handleNameChange, value: this.state.name }), ' ', React.createElement(ControlLabel, null, 'Email'), ' ', React.createElement(FormControl, { id: 'email', type: 'email', placeholder: 'Email', onChange: this.handleEmailChange, value: this.state.email }), ' '), ' ', React.createElement(Button, { size: 'small', type: 'submit', bsStyle: 'warning' }, 'Add Professional ' + (this.state.profs.length + 1)))));
 	}
 });
 
@@ -36270,7 +36270,7 @@ var ProfList = React.createClass({
 
 	render: function () {
 
-		return React.createElement('div', null, React.createElement('div', { id: 'profs' }, this.props.profs.map(prof => React.createElement('div', { key: prof.id }, prof.id + ") " + prof.name + ": " + prof.email + " ", React.createElement('input', { type: 'button', onClick: this.props.onRemove.bind(this, prof), value: 'Remove' })))));
+		return React.createElement('div', null, React.createElement('div', { id: 'profs' }, this.props.profs.map(prof => React.createElement('div', { key: prof.id }, prof.id + ") " + prof.name + ": " + prof.email + " ", React.createElement(Button, { type: 'submit', bsSize: 'xsmall', bsStyle: 'danger', onClick: this.props.onRemove.bind(this, prof) }, 'Remove')))));
 
 		return React.createElement('div', null, prof);
 	}
