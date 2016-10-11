@@ -9,11 +9,18 @@ var SurveyEPA = React.createClass({
 	},
 
 	render: function() {
+		var surveyEPAStyle = {
+			margin: "20px",
+			padding: "20px",
+			backgroundColor: "#ffffff",
+			borderRadius: "4px"
+		};
+
 		return (
 			// for each question of the epa, render a SurveyQuestion
-			<div>
+			<div style={surveyEPAStyle}>
 				{ this.props.EPA.questions.map(function(question, index) { 
-					return (<SurveyQuestion key={ 'question-' + index } prompt={ question.prompt } />); 
+					return (<SurveyQuestion key={ 'question-' + index } prompt={ question.prompt } /> ); 
 				})}
 			</div>
 		);

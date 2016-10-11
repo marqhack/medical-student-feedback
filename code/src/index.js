@@ -8,10 +8,6 @@ var Button = require('react-bootstrap/lib/Button');
 var NavPanel = require('./components/NavPanel');
 var $ = require('jquery');
 
-
-
-
-
 ReactDOM.render(
 	<NavPanel />, document.getElementById("nav")
 );
@@ -31,11 +27,11 @@ ReactDOM.render(
   document.getElementById("observers")
 );
 
-ReactDOM.render(<Survey />, document.getElementById('survey-container'));
-
 ReactDOM.render(
 	<Button bsStyle="success" type="submit">Continue </Button>, document.getElementById("submit")
 );
+
+ReactDOM.render(<Survey />, document.getElementById('survey-container'));
 
 
 

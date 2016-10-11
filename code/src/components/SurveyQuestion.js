@@ -5,6 +5,8 @@
 
 var React = require('react');
 var ReactDOM = require('react-dom');
+var Radio = require('react-bootstrap/lib/Radio');
+var FormGroup = require('react-bootstrap/lib/FormGroup');
 
 var SurveyQuestion = React.createClass({
 	getInitialState: function() {
@@ -12,19 +14,25 @@ var SurveyQuestion = React.createClass({
 	},
 
 	render: function() {
+		var questionRadioContainerStyle = {
+			paddingLeft: "20px",
+			paddingTop: "10px",
+			margin: "0 20px" 
+		};
+
 		return(
-			<div>
+			<div style={questionRadioContainerStyle} className="question-radio-container">
 				<div className="survey-question-prompt">
 					{ this.props.prompt }
 				</div>
-				<div className="survey-question-radios">
-					<input type="radio" name="survey-question-answers" value="0" /> 0
-					<input type="radio" name="survey-question-answers" value="1" /> 1
-					<input type="radio" name="survey-question-answers" value="2" /> 2
-					<input type="radio" name="survey-question-answers" value="3" /> 3
-					<input type="radio" name="survey-question-answers" value="4" /> 4
-					<input type="radio" name="survey-question-answers" value="5" /> 5
-				</div>
+				<FormGroup>
+					<Radio inline>0</Radio>
+					<Radio inline>1</Radio>
+					<Radio inline>2</Radio>
+					<Radio inline>3</Radio>
+					<Radio inline>4</Radio>
+					<Radio inline>5</Radio>
+				</FormGroup>
 			</div>
 		)
 	}
