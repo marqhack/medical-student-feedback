@@ -9,7 +9,6 @@ var NavPanel = require('./components/NavPanel');
 
 
 
-
 ReactDOM.render(
 	<NavPanel />, document.getElementById("nav")
 );

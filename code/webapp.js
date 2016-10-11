@@ -17,21 +17,18 @@ db.serialize(function() {
     stmt.finalize();
 });
 
-var bugData = [ 
-    {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
-    {'title':'secondbrokenthing', 'id':2, 'owner':'him', 'status':'also my bad', 'priority':'ffffuuu'},
+var profData = [
+    
 ];
 
-api.get('/medFeedback', function(req, res){
-    db.all("SELECT pid, name FROM students", function(err, rows){
-        res.json(JSON.stringify(rows));
-    });
+api.get('/profs', function (req, res) {
+    res.send(JSON.stringify(profData));
 });
 
-api.post('/medFeedback', function(req, res){
-    var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
-    stmt.run(row.pid + 1, "name");
-    stmt.finalize();
+api.post('/profs', function (req, res) {
+    var newProf = req.body; 
+    profData.push(newProf); 
+    
 });
 
 
@@ -49,6 +46,7 @@ app.get('/login', function(req, res){
     res.send("You've reached the login page");
 });
 
+
 //App admin page
 app.get('/admin', function(req, res){
     res.sendFile(path.join(__dirname+'/static/admin.html'));
@@ -59,26 +57,6 @@ api.use(bodyParser.json( { type: '*/*' }));
 api.get('/', function(req, res){
     res.send("This is the API! Congrats");
 });
-
-api.get('/bugs', function (req, res) {
-    res.send(JSON.stringify(bugData));
-});
-
-api.post('/bugs', function (req, res) {
-    
-
-    console.log('start length: '+ bugData.length);
-    var newBug = req.body;
-    newBug.id = bugData.length + 1;
-    bugData.push(newBug); 
-    res.send('POST request to homepage');
-    console.log('end length: '+ bugData.length);
-});
-
-
-
-
-
 
 
 app.use('/api', api)
