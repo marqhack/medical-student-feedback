@@ -16,11 +16,15 @@ var bugData = [
 ];
 
 api.get('/medFeedback', function(req, res){
-    db.spillEPAs();
-    res.json("YAAAS");
-   /* db.all("SELECT pid, name FROM students", function(err, rows){
-        res.json(JSON.stringify(rows));
-    }); */
+    var query = db.getDB();
+    spillEPAs();
+
+    function spillEPAs() {
+      query.all("SELECT * FROM EPAs", function(err, rows){
+         res.json(JSON.stringify(rows));
+    });
+}
+
 });
 
 api.post('/medFeedback', function(req, res){
@@ -61,3 +65,4 @@ api.post('/bugs', function (req, res) {
 
 app.use('/api', api)
 app.use(express.static('static'));
+
