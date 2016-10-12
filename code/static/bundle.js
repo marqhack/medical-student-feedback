@@ -36242,39 +36242,9 @@ var ProfEmailForm = require('./ProfEmailForm');
 const ObserverSelector = React.createClass({
 	displayName: 'ObserverSelector',
 
-
 	render: function () {
 
-		return React.createElement(
-			'div',
-			null,
-			React.createElement(
-				ControlLabel,
-				null,
-				'Select observer'
-			),
-			React.createElement('br', null),
-			React.createElement(
-				ButtonGroup,
-				{ vertical: true, block: true },
-				React.createElement(
-					Button,
-					null,
-					'Patient'
-				),
-				React.createElement(
-					Button,
-					null,
-					'Self'
-				),
-				React.createElement(
-					Button,
-					null,
-					'Professional',
-					React.createElement(ProfEmailForm, null)
-				)
-			)
-		);
+		return React.createElement('div', null, React.createElement(ControlLabel, null, 'Select observer'), React.createElement('br', null), React.createElement(ButtonGroup, { vertical: true, block: true }, React.createElement(Button, null, 'Patient'), React.createElement(Button, null, 'Self'), React.createElement(Button, null, 'Professional', React.createElement(ProfEmailForm, null))));
 	}
 
 });
