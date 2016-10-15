@@ -68,11 +68,6 @@ app.get('/admin', function(req, res){
 
 //API root
 api.use(bodyParser.json( { type: '*/*' })); 
-api.get('/', function(req, res){
-    res.send("This is the API! Congrats");
-});
-
-
 
 app.use('/api', api)
 app.use(express.static('static'));
