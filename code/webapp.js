@@ -8,7 +8,6 @@ var api = express();
 //db.addEPA(epajson);
 
 
-//console.log(db);
 
 var bugData = [ 
     {'title':'brokenthing', 'id':1, 'owner':'me', 'status':'my bad', 'priority':'ffffuuu'},
