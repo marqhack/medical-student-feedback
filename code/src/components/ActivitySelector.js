@@ -1,44 +1,30 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 
+var FormGroup = require('react-bootstrap/lib/FormGroup');
+var FormControl = require('react-bootstrap/lib/FormControl');
+var ControlLabel = require('react-bootstrap/lib/ControlLabel');
+var Form = require('react-bootstrap/lib/Form');
 
-var ActivitySelector = React.createClass({
-	 
-	 initialState: function(){
-	 	return (
-	 		checked: false
-	 	);
-	 },
 
-	 handleChange: function(e){
-	 	this.setState(e.target.value);
-	 },
-
+const ActivitySelector = React.createClass({
 	render: function(){
 		return(
-			<div className="activity">
-				<h3>Select all activities observed</h3>
-				<label>
-					<input type="checkbox" value="activity1" onChange={this.handleChange} />
-					History
-				</label>
-				<br />
-				<label>
-					<input type="checkbox" value="activity2" onChange={this.handleChange} />
-					Physical Exam
-				</label>
-				<br />
-				<label>
-					<input type="checkbox" value="activity3" onChange={this.handleChange} />
-					Informed Consent
-				</label>
-				<br />
-				<label>
-					<input type="checkbox" value="activity4" onChange={this.handleChange} />
-					Patient Handoff
-				</label>
-			</div>
-		);
+
+			<form>
+				<FormGroup controlId="activitySelector">
+	     		<ControlLabel>Select all activities</ControlLabel>
+	     		<FormControl componentClass="select" multiple>
+	        		<option value="select">Select all...</option>
+	        		<option value="epa1">Gather patient history</option>
+	        		<option value="epa2">Give a physical exam</option>
+	      			<option value="epa6">Provide oral presentation of clinical encounter</option>
+	      			<option value="epa8">Patient handoff</option>
+	      			<option value="epa11">Obtain informed consent</option>
+	      		</FormControl>
+				</FormGroup>
+			</form>
+		)
 	}
 });
 
