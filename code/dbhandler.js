@@ -24,6 +24,8 @@ function addEPA(json) {
     stmt.finalize(); 
 }
 
+
+
 function getDB() {
 	return db;
 }
