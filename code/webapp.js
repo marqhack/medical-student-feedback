@@ -22,14 +22,22 @@ api.use(bodyParser.json( { type: '*/*' }));
 
 
 
-
+// format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
 api.get('/epalist', function(req, res){
     var query = db.getDB();
     spillEPAs();
 
     function spillEPAs() {
-        query.all("SELECT * FROM EPAs", function(err, rows){
-            res.json(JSON.stringify(rows));
+        query.all("SELECT S.epaNum, S.qNum, Q.qContent FROM Survey S, Questions Q WHERE S.qNum = Q.qNum", 
+            function(err, rows){
+
+            /*response = "EPA#\t\t" + "q#\t\t" + "Content\n";
+            for(index in rows) {
+                row = rows[index];
+                response += row['epaNum'] + "\t\t\t" + row['qNum'] + "\t\t\t" + row['qContent'] + "\n";
+            }*/
+
+            res.send(JSON.stringify(rows));
         });
     }
 });
@@ -38,6 +46,12 @@ api.post('/epalist', function(req, res){
     var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
     stmt.run(row.pid + 1, "name");
     stmt.finalize();
+
+
+    /*input = req.jsonObject;
+
+    // pass to function in dbhandler
+    db.addEPAWithQuestions(input);*/
 }); 
 
 var profData = [
