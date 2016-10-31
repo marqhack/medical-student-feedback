@@ -171,7 +171,19 @@ function addEvaluator(json) {
  *
  */
 function logAssessment(json) {
-
+    var currentdate = new Date();
+    currentdate = currentdate.getFullYear() + "-" + currentdate.getMonth() + "-" + currentdate.getDate();
+    
+    db.serialize(function() {
+        var stmt = db.prepare("INSERT INTO Assessments(pid, evid, epaNum, created) VALUES(?, ?, ?, ?)");
+        var run = stmt.run(json['pid'], json['evid'], json['epaNum'], currentdate,  function callback(err) {
+            // no known errors should occur when inserting to Evaluators
+            if(err) {
+                console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
+                console.log(err);
+            }
+        });
+    });
 }
 
 /**
@@ -202,3 +214,4 @@ module.exports.initdb = initdb;
 module.exports.addQuestionToEPA = addQuestionToEPA;
 module.exports.addStudent = addStudent;
 module.exports.addEvaluator = addEvaluator;
+module.exports.logAssessment = logAssessment;
