@@ -83,3 +83,29 @@ db.addQuestionToEPA(epawquest2);
 
 
 /** Students */
+db.addStudent("Martin Porras"); //1
+db.addStudent("Marquis Hackett"); //2
+db.addStudent("Tyler Klose"); //3
+db.addStudent("Erin Boehlert"); //4
+
+
+/** Evaluators */
+evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu"}; //1
+evaluator2 = {'name': "John Doe", 'email': "jd@med.unc.edu"}; //2
+evaluator3 = {'name': "Johnny Knoxville", 'email': "jox@med.unc.edu"}; //3
+db.addEvaluator(evaluator1);
+db.addEvaluator(evaluator2);
+db.addEvaluator(evaluator3);
+
+//** Assessments */
+assess1 = {'pid': 1, 'evid': 1, 'aNum': 6};
+assess2 = {'pid': 1, 'evid': 1, 'aNum': 7};
+assess3 = {'pid': 1, 'evid': 2, 'aNum': 3};
+assess4 = {'pid': 1, 'evid': 2, 'aNum': 7};
+// repeated
+assess5 = {'pid': 1, 'evid': 1, 'aNum': 6};
+db.logAssessment(assess1);
+db.logAssessment(assess2);
+db.logAssessment(assess3);
+db.logAssessment(assess4);
+db.logAssessment(assess5);

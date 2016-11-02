@@ -10,10 +10,10 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL, email STRING NOT NULL, UNIQUE(email))");
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
-        db.run("CREATE TABLE IF NOT EXISTS Questions(qNum INTEGER PRIMARY KEY AUTOINCREMENT, qContent STRING NOT NULL, UNIQUE(qContent))");
-        db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, qNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(qNum) REFERENCES QUESTIONS, PRIMARY KEY(epaNum, qNum))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, epaNum INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(epaNum) References EPAs, UNIQUE(pid, evid, epaNum, completed))");
-        db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, qid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, FOREIGN KEY(qid) REFERENCES Questions, UNIQUE(aid, qid))");
+        db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, UNIQUE(aContent))");
+        db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, PRIMARY KEY(epaNum, aNum))");
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities, UNIQUE(pid, evid, aNum, score, completed))");
+        //db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, UNIQUE(aid))");
         db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
 }
@@ -50,15 +50,15 @@ function addEpaWithQuestions(json) {
         function addQuestions(json) {    
             var counter = 0;
             var qArray = [];
-            var questions = "SELECT Q.qNum FROM Questions Q WHERE Q.qContent='";
+            var questions = "SELECT A.aNum FROM Activities A WHERE A.aContent='";
             for(name in json) {
                 if(counter > 1) {
                     qArray.push(json[name]);
                     questions = questions + json[name] + "'";
                     if(counter < (count = Object.keys(json).length) - 1)  
-                        questions = questions + " OR Q.qContent='";
+                        questions = questions + " OR A.aContent='";
                     db.serialize(function() {
-                        var stmt = db.prepare("INSERT INTO Questions(qContent) VALUES(?)");
+                        var stmt = db.prepare("INSERT INTO Activities(aContent) VALUES(?)");
                         var run = stmt.run(json[name], function callback(err) {
                             if(err) {
                                 console.log("Error: Repeated Question. Due to numerous EPAs sharing questions, this error can be ignored.");              // will need to figure out error handling, perhaps an event?
@@ -77,7 +77,7 @@ function addEpaWithQuestions(json) {
             db.each(questions, function(err, row) {
                 db.serialize(function() {
                     var stmt = db.prepare("INSERT INTO Survey VALUES(?, ?)");
-                    var run = stmt.run(epa, row['qNum'], function callback(err) {
+                    var run = stmt.run(epa, row['aNum'], function callback(err) {
                         if(err) {
                             console.log("Error: Repeated Question. Due to numerous EPAs sharing questions, this error can be ignored.");              // will need to figure out error handling, perhaps an event?
                         }                
@@ -99,11 +99,11 @@ function addQuestionToEPA(json) {
                 console.log("Error: The EPA is not yet in the database. Please create it before attempting to insert questions to it.");
             else {
                 db.serialize(function() { 
-                    db.all("SELECT qNum FROM Questions WHERE qContent=?", json['question'], function(err, rows) {
+                    db.all("SELECT aNum FROM Activities WHERE aContent=?", json['question'], function(err, rows) {
                         if(rows.length == 0)  
                             addNewQuestion(json);
                         else 
-                            buildSurvey(json['epaNum'], rows[0].qNum);
+                            buildSurvey(json['epaNum'], rows[0].aNum);
                     });
                 });
             }
@@ -111,7 +111,7 @@ function addQuestionToEPA(json) {
 
         function addNewQuestion(json) {
             db.serialize(function() { 
-                var stmt = db.prepare("INSERT INTO Questions(qContent) VALUES(?)");
+                var stmt = db.prepare("INSERT INTO Activities(aContent) VALUES(?)");
                 var run = stmt.run(json['question'], function callback(err) { 
                     if(err != undefined && err['errno'] == 19) {}
                     else if(err != undefined)
@@ -119,16 +119,16 @@ function addQuestionToEPA(json) {
                 });
             });
             db.serialize(function() { 
-                db.all("SELECT qNum FROM Questions WHERE qContent=?", json['question'], function(err, rows) {
-                    buildSurvey(json['epaNum'], rows[0].qNum);
+                db.all("SELECT aNum FROM Activities WHERE aContent=?", json['question'], function(err, rows) {
+                    buildSurvey(json['epaNum'], rows[0].aNum);
                 });
             });
         }
 
-        function buildSurvey(epaNum, qNum) {
+        function buildSurvey(epaNum, aNum) {
             db.serialize(function() {
                 var stmt = db.prepare("INSERT INTO Survey VALUES(?, ?)");
-                var run = stmt.run(epaNum, qNum, function callback(err) {
+                var run = stmt.run(epaNum, aNum, function callback(err) {
                     if(err != undefined && err['errno'] == 19) 
                         console.log("Error: The question already exists for EPA#%d.", epaNum);
                     else if(err != undefined)
@@ -160,9 +160,9 @@ function addEvaluator(json) {
     db.serialize(function() { 
         var stmt = db.prepare("INSERT INTO Evaluators(name, email) VALUES(?, ?)");
         var run = stmt.run(json['name'], json['email'], function callback(err) {
-            // no known errors should occur when inserting to Evaluators
+            // error if email is repeated
             if(err) 
-                console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
+                console.log("Error: Evaluator %s is already in the database.", json['name']);  
         });
     });
 }
@@ -175,9 +175,8 @@ function logAssessment(json) {
     currentdate = currentdate.getFullYear() + "-" + currentdate.getMonth() + "-" + currentdate.getDate();
     
     db.serialize(function() {
-        var stmt = db.prepare("INSERT INTO Assessments(pid, evid, epaNum, created) VALUES(?, ?, ?, ?)");
-        var run = stmt.run(json['pid'], json['evid'], json['epaNum'], currentdate,  function callback(err) {
-            // no known errors should occur when inserting to Evaluators
+        var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, created) VALUES(?, ?, ?, ?)");
+        var run = stmt.run(json['pid'], json['evid'], json['aNum'], currentdate,  function callback(err) {
             if(err) {
                 console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
                 console.log(err);
