@@ -12,7 +12,7 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, UNIQUE(aContent))");
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, PRIMARY KEY(epaNum, aNum))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities, UNIQUE(pid, evid, aNum, score, completed))");
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities, UNIQUE(pid, evid, aNum, completed))");
         //db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, UNIQUE(aid))");
         db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
@@ -168,11 +168,11 @@ function addEvaluator(json) {
 }
 
 /**
- *
+ *  Input: json['pid'] = pid, json['evid'], json['aNum']
  */
 function logAssessment(json) {
     var currentdate = new Date();
-    currentdate = currentdate.getFullYear() + "-" + currentdate.getMonth() + "-" + currentdate.getDate();
+    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
     
     db.serialize(function() {
         var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, created) VALUES(?, ?, ?, ?)");
@@ -186,10 +186,23 @@ function logAssessment(json) {
 }
 
 /**
- *
+ *  Given an aid and score, update the respective entry in the assessments table. An error will occur if the entry
+ *  is a duplicate (a duplicate is defined as the same student being evaluated on the same EPA more than once by the same
+ *  evaluator in a given day). 
  */
-function logResponses(json) {
-
+function logResponse(aid, score) {
+    var currentdate = new Date();
+    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+    db.serialize(function() {
+        var stmt = db.prepare("UPDATE Assessments SET score=?, completed=? WHERE aid=?");
+        var run = stmt.run(score, currentdate, aid, function callback(err) {
+            if(err) {
+                console.log("Error: Duplicate Assessment.");  
+                //console.log(err);
+            }
+        });
+        stmt.finalize();            
+    });
 }
 
 
@@ -214,3 +227,4 @@ module.exports.addQuestionToEPA = addQuestionToEPA;
 module.exports.addStudent = addStudent;
 module.exports.addEvaluator = addEvaluator;
 module.exports.logAssessment = logAssessment;
+module.exports.logResponse = logResponse;
