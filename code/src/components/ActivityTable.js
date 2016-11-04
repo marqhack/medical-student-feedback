@@ -11,58 +11,20 @@ var $ = require('jquery');
 
 var ActivityTable = React.createClass({
 	getInitialState: function() {	
-		return {
-			activities: [{
-					activityName: "activity 1", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 2", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 3", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 4", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",	
-					self: "on"
-				}, 	{
-					activityName: "activity 5", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}]
-
-		}	
+		return {};
 	},
 
-	// submitObservers: function() {
+	addRow: function(activityRow){
+		this.state.activities << activityRow;
+		this.setState({activities: this.state.activities});
+	},
 
+	// handleSubmit: function(){
+	// 	console.log({JSON.stringify(this.state)});
 	// },
-	onChange: function(index, observer, checked) {
-		console.log("index: " + index + ", observer: " + observer + ", checked: " + checked);
-		return null;
-	},
-	render: function() {
-		var activityRowStyle = {
+	
 
-		};
+	render: function() {
 
 		return (
 			<div>
@@ -75,11 +37,12 @@ var ActivityTable = React.createClass({
 						<Col xs={5} md={5} lg={1}> Patient </Col>
 					</Row>
 
-					{
-						this.state.activities.map(function(activity, index) { 
-							return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity.activityName } handleChange={ this.onChange.bind(this) }  />); 
-						})
-					}
+				{
+					this.props.activities.map(function(activity, index) { 
+						return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity } addRow = {this.addRow} />); 
+					})
+				}							
+
 				</Grid>
 
 				<Button type="submit" bsSize="xsmall" bsStyle="success" >Continue</Button>
