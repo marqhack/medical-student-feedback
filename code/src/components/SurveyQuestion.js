@@ -32,22 +32,22 @@ var SurveyQuestion = React.createClass({
 					{ this.props.prompt }
 				</div>
 				<FormGroup>
-					<Radio name={"question"+this.props.index} value="option0" inline checked={this.state.selectedOption === "option0"}
+					<Radio value="option0" inline checked={this.state.selectedOption === "option0"}
 					onChange = {this.handleOptionChange}
 					>0</Radio>
-					<Radio name={"question"+this.props.index} value="option1" inline checked={this.state.selectedOption === "option1"}
+					<Radio value="option1" inline checked={this.state.selectedOption === "option1"}
 					onChange = {this.handleOptionChange}
 					>1</Radio>
-					<Radio name={"question"+this.props.index} value="option2" inline checked={this.state.selectedOption === "option2"}
+					<Radio value="option2" inline checked={this.state.selectedOption === "option2"}
 					onChange = {this.handleOptionChange}
 					>2</Radio>
-					<Radio name={"question"+this.props.index} value="option3" inline checked={this.state.selectedOption === "option3"}
+					<Radio value="option3" inline checked={this.state.selectedOption === "option3"}
 					onChange = {this.handleOptionChange}
 					>3</Radio>
-					<Radio name={"question"+this.props.index} value="option4" inline checked={this.state.selectedOption === "option4"}
+					<Radio value="option4" inline checked={this.state.selectedOption === "option4"}
 					onChange = {this.handleOptionChange}
 					>4</Radio>
-					<Radio name={"question"+this.props.index} value="option5" inline checked={this.state.selectedOption === "option5"}
+					<Radio value="option5" inline checked={this.state.selectedOption === "option5"}
 					onChange = {this.handleOptionChange}
 					>5</Radio>
 				</FormGroup>
