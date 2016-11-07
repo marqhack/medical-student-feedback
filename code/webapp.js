@@ -66,16 +66,12 @@ app.get('/', function (req, res) {
     res.sendFile(path.join(__dirname+'/static/index.html'));
 });
 
-//App login page
-app.get('/login', function(req, res){
-    res.send("You've reached the login page");
-});
-
 
 //App admin page
 app.get('/admin', function(req, res){
     res.sendFile(path.join(__dirname+'/static/admin.html'));
 });
+
 
 //API root
 api.use(bodyParser.json( { type: '*/*' })); 

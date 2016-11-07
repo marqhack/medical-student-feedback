@@ -20,7 +20,7 @@ var SurveyEPA = React.createClass({
 			// for each question of the epa, render a SurveyQuestion
 			<div style={surveyEPAStyle}>
 				{ this.props.EPA.questions.map(function(question, index) { 
-					return (<SurveyQuestion key={ 'question-' + index } prompt={ question.prompt } /> ); 
+					return (<SurveyQuestion key={ 'question-' + index } index = {index} prompt={ question.prompt } /> ); 
 				})}
 			</div>
 		);

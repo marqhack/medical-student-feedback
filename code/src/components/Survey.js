@@ -20,6 +20,12 @@ var Survey = React.createClass({
 			EPAs: [] 
 		}
 	},
+
+	handleSubmit: function(e){
+		alert("submit");
+		
+	},
+
 	render: function() {
 		var surveyStyle = {
 			margin: "20px",
@@ -39,7 +45,8 @@ var Survey = React.createClass({
                         return (<SurveyEPA key={ 'epa-' + index } EPA={ EPA } />); 
                     })
                 }
-                <Button style={submitStyle} bsClass="btn-block btn-sucess btn-sm" type="submit">Submit</Button>			
+
+                <Button style={submitStyle} bsClass="btn-block btn-sucess btn-sm" type="submit" onClick = {this.handleSubmit}>Submit</Button>			
 			</div>
 		);
 	}

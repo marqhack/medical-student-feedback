@@ -11,54 +11,15 @@ var $ = require('jquery');
 
 var ActivityTable = React.createClass({
 	getInitialState: function() {	
-		return {
-			activities: [{
-					activityName: "activity 1", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 2", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 3", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}, {
-					activityName: "activity 4", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",	
-					self: "on"
-				}, 	{
-					activityName: "activity 5", 
-					intern: "off",
-					resident: "off",
-					professional: "off",
-					patient: "off",
-					self: "on"
-				}]
-
-		}	
+		return {};
 	},
 
-	// submitObservers: function() {
+	addRow: function(activityRow){
+		this.state.activities << activityRow;
+		this.setState({activities: this.state.activities});
+	},
 
-	// },
 	render: function() {
-		var activityRowStyle = {
-
-		};
 
 		return (
 			<div>
@@ -73,7 +34,7 @@ var ActivityTable = React.createClass({
 
 					{
 						this.state.activities.map(function(activity, index) { 
-							return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity.activityName } />); 
+							return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity.activityName }  />); 
 						})
 					}
 				</Grid>
