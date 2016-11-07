@@ -55,10 +55,6 @@ var ActivityTable = React.createClass({
 	// submitObservers: function() {
 
 	// },
-	onChange: function(index, observer, checked) {
-		console.log("index: " + index + ", observer: " + observer + ", checked: " + checked);
-		return null;
-	},
 	render: function() {
 		var activityRowStyle = {
 
@@ -77,7 +73,7 @@ var ActivityTable = React.createClass({
 
 					{
 						this.state.activities.map(function(activity, index) { 
-							return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity.activityName } handleChange={ this.onChange.bind(this) }  />); 
+							return (<ActivityRow key={ 'activity-' + index } index={ index } activity={ activity.activityName } />); 
 						})
 					}
 				</Grid>

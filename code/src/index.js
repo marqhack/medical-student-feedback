@@ -2,6 +2,7 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 var ActivityTable = require('./components/ActivityTable');
+var SendSurvey = require('./components/SendSurvey');
 
 var Button = require('react-bootstrap/lib/Button');
 var NavPanel = require('./components/NavPanel');
@@ -11,6 +12,8 @@ ReactDOM.render(
 );
 
 ReactDOM.render(<ActivityTable />, document.getElementById("activities"));
+
+ReactDOM.render(<SendSurvey />, document.getElementById("observers"));
 
 // ReactDOM.render(
 //   <ActivitySelector />, 
@@ -22,10 +25,7 @@ ReactDOM.render(<ActivityTable />, document.getElementById("activities"));
 //   document.getElementById("rotations")
 // );
 
-// ReactDOM.render(
-//   <ObserverSelector />,
-//   document.getElementById("observers")
-// );
+
 
 // ReactDOM.render(
 // 	<Button bsStyle="success" type="submit">Continue </Button>, document.getElementById("submit")

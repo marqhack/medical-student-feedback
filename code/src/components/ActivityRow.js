@@ -10,10 +10,10 @@ var $ = require('jquery');
 var ActivityRow = React.createClass({
 	getInitialState: function() {	
 		return {
-			intern: false,
-			resident: false,
-			professional: false,
-			patient: false,
+			intern: "off",
+			resident: "off",
+			faculty: "off",
+			patient: "off",
 			self: "on"
 		}
 	},
@@ -25,15 +25,15 @@ var ActivityRow = React.createClass({
 	onResidentChange: function(e) {
 		this.setState({ resident: e.target.value });
 	},
-	onProfessionalChange: function(e) {
-		this.setState({ professional: e.target.value });
+	onFacultyChange: function(e) {
+		this.setState({ faculty: e.target.value });
 	},
 	onPatientChange: function(e) {
 		this.setState({ patient: e.target.value });	
 	},
 	
 	render: function() {
-		var activityRowStyle = {
+	var activityRowStyle = {
 
 		};
 
@@ -42,7 +42,7 @@ var ActivityRow = React.createClass({
 				<Col xs={5} md={5} lg={1}> {this.props.activity} </Col>
 				<Col xs={5} md={5} lg={1}> <Checkbox onChange={this.onInternChange}></Checkbox> </Col>
 				<Col xs={5} md={5} lg={1}> <Checkbox onChange={this.onResidentChange}></Checkbox>  </Col>
-				<Col xs={5} md={5} lg={1}> <Checkbox onChange={this.onProfessionalChange}></Checkbox> </Col>
+				<Col xs={5} md={5} lg={1}> <Checkbox onChange={this.onFacultyChange}></Checkbox> </Col>
 				<Col xs={5} md={5} lg={1}> <Checkbox onChange={this.onPatientChange}></Checkbox> </Col>
 			</Row>
 		);
