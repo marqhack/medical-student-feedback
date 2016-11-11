@@ -21,6 +21,15 @@ gulp.task('adminbundle', function(){
     .pipe(gulp.dest('static/'));
 });
 
+//survey page bundle
+gulp.task('surveybundle', function(){
+   return browserify('src/survey.js')
+    .transform('babelify', {presets: 'react'})
+    .bundle()
+    .pipe(source('surveybundle.js'))
+    .pipe(gulp.dest('static/'));
+});
+
 
 gulp.task('watch', function() {
 

@@ -10,7 +10,13 @@ var FormGroup = require('react-bootstrap/lib/FormGroup');
 
 var SurveyQuestion = React.createClass({
 	getInitialState: function() {
-		return null;
+		return {
+			selectedOption: ''
+		}
+	},
+
+	handleOptionChange: function(e){
+		this.setState({selectedOption: e.target.value});
 	},
 
 	render: function() {
@@ -26,12 +32,24 @@ var SurveyQuestion = React.createClass({
 					{ this.props.prompt }
 				</div>
 				<FormGroup>
-					<Radio inline>0</Radio>
-					<Radio inline>1</Radio>
-					<Radio inline>2</Radio>
-					<Radio inline>3</Radio>
-					<Radio inline>4</Radio>
-					<Radio inline>5</Radio>
+					<Radio value="option0" inline checked={this.state.selectedOption === "option0"}
+					onChange = {this.handleOptionChange}
+					>0</Radio>
+					<Radio value="option1" inline checked={this.state.selectedOption === "option1"}
+					onChange = {this.handleOptionChange}
+					>1</Radio>
+					<Radio value="option2" inline checked={this.state.selectedOption === "option2"}
+					onChange = {this.handleOptionChange}
+					>2</Radio>
+					<Radio value="option3" inline checked={this.state.selectedOption === "option3"}
+					onChange = {this.handleOptionChange}
+					>3</Radio>
+					<Radio value="option4" inline checked={this.state.selectedOption === "option4"}
+					onChange = {this.handleOptionChange}
+					>4</Radio>
+					<Radio value="option5" inline checked={this.state.selectedOption === "option5"}
+					onChange = {this.handleOptionChange}
+					>5</Radio>
 				</FormGroup>
 			</div>
 		)
