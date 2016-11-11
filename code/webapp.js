@@ -65,12 +65,7 @@ api.get('/profs', function (req, res) {
 api.post('/profs', function (req, res) {
     var newProf = req.body; 
     profData.push(newProf); 
-    
 });
-
-
-
-
 
 
 
