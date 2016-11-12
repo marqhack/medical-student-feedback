@@ -205,6 +205,12 @@ function logResponse(aid, score) {
     });
 }
 
+function getActivities(req, res) {
+    db.all("SELECT * FROM Activities", function(err, rows) {
+        res.send(rows);
+    });
+}
+
 
 
 /**
@@ -228,3 +234,4 @@ module.exports.addStudent = addStudent;
 module.exports.addEvaluator = addEvaluator;
 module.exports.logAssessment = logAssessment;
 module.exports.logResponse = logResponse;
+module.exports.getActivities = getActivities;

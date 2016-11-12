@@ -19,7 +19,7 @@ api.use(bodyParser.json( { type: '*/*' }));
 }); */
 
 
-
+api.get('/test', db.getActivities);
 
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
