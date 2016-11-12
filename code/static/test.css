@@ -1,0 +1,109 @@
+#app-container{
+	background-color: #3853A0;
+	padding: 15px;
+	margin: auto;
+	border-radius: 10px;
+	max-width: 1000px;
+	min-width: 300px;
+}
+	h1{
+		font-family: Helvetica, serif;
+		text-align: center;
+		color: #FFFFFF;
+	}
+
+	#page-1{
+
+	}
+
+		#observers-container{
+
+		}
+
+			.observer-info{
+				display:inline-block;
+				background-color: #AAD0F3;
+				border-radius: 10px;
+				padding: 10px;
+				margin-bottom: 15px;
+				font-size: 20px;
+				font-family: Arial, sans-serif;
+			}
+
+				.email{
+					/*font-size: 20px;*/
+				}
+
+					input[type=email]{
+						border: thin solid black;
+						border-radius: 4px;
+						padding: 5px;
+						font-size: 15px;
+					}
+
+				.activities-container{
+					padding: 5px;
+					margin-top: 10px;
+					margin-bottom: 10px;
+				}
+
+				.active{
+					background-color: #515458;
+					color: #FFFFFF;
+				}
+
+				.checkbox{
+
+				}
+					input[type=checkbox]{
+						position: relative;
+						visibility: hidden;
+						cursor: pointer;
+						width: 55px;
+						height: 30px;
+						vertical-align: middle;
+					}
+
+					input[type=checkbox]:after{
+						display: block;
+						content: "NO";
+						position: absolute;
+						visibility: visible;
+						height: 30px;
+						line-height: 30px;
+						width: 50px;
+						text-align: center;
+						border-radius: 4px;
+						background: #F29633;
+						color: #FFFFFF;
+						cursor: pointer;
+					}
+					input[type=checkbox]:checked:after{
+						content: "YES";
+						background: #39C958;
+						color: #FFFFFF;
+					}
+
+	button {
+		background-color: #FFFFFF;
+		border: none;
+		border-radius: 4px;
+		margin: 2px;
+		font-size: 15px;
+		letter-spacing: 1px;
+		padding: 10px;
+	}
+
+	button:hover{
+		background-color: #CFD3D5;
+	}
+	button.active:hover{
+		background-color: #515458;
+	}
+
+
+
+
+
+
+

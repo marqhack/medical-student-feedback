@@ -61,7 +61,7 @@ var ActivityTable = React.createClass({
 						<Col xs={5} md={5} lg={1}> Activity </Col>
 						<Col xs={5} md={5} lg={1}> Intern </Col>
 						<Col xs={5} md={5} lg={1}> Resident  </Col>
-						<Col xs={5} md={5} lg={1}> Professional </Col>
+						<Col xs={5} md={5} lg={1}> Faculty </Col>
 						<Col xs={5} md={5} lg={1}> Patient </Col>
 					</Row>
 

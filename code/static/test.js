@@ -37,9 +37,9 @@ function render_activities_table(activities) {
 
 function add_observer_div(activities) {
 	var observer_info_container = $('<div class="observer-info">');
-	var email = $('<div>Email: <input type="email" placeholder="example@xyz.com"></div>');
+	var email = $('<div class="email">Email: <input type="email" placeholder="example@xyz.com"></div>');
 
-	var activities_container = $('<div class=".activities-container"></div>');
+	var activities_container = $('<div class="activities-container"></div>');
 	$.get('api/test', function(activities_json) {
 		activities_json.forEach(function(activity) {
 			console.log(activity);	
@@ -49,7 +49,7 @@ function add_observer_div(activities) {
 	});
 	
 
-	var checkbox = $('<div><input type="checkbox">Yes, I am taking survey on this device</div>');
+	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
