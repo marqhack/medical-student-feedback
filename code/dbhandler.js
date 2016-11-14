@@ -8,11 +8,11 @@ var db = new sqlite3.Database("medfeedback.db");
 function initdb() {
     db.serialize(function() {
         db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL)");
-        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL, email STRING NOT NULL, UNIQUE(email))");
+        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL, email STRING NOT NULL, type STRING NOT NULL, UNIQUE(email))");
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, UNIQUE(aContent))");
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, PRIMARY KEY(epaNum, aNum))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities, UNIQUE(pid, evid, aNum, completed))");
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, on_device INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
         //db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, UNIQUE(aid))");
         db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
@@ -158,8 +158,8 @@ function addStudent(name) {
  */
 function addEvaluator(json) {
     db.serialize(function() { 
-        var stmt = db.prepare("INSERT INTO Evaluators(name, email) VALUES(?, ?)");
-        var run = stmt.run(json['name'], json['email'], function callback(err) {
+        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
+        var run = stmt.run(json['name'], json['email'], json['type'], function callback(err) {
             // error if email is repeated
             if(err) 
                 console.log("Error: Evaluator %s is already in the database.", json['name']);  
@@ -168,22 +168,42 @@ function addEvaluator(json) {
 }
 
 /**
- *  Input: json['pid'] = pid, json['evid'], json['aNum']
+ *  Input: Object with the following properties: 
+ *         {activities: [x1, x2,...,x3], pid: #, email: email, on_device: false};
  */
-function logAssessment(json) {
-    var currentdate = new Date();
-    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+function logAssessment(assessment) {
+    var response = [];
+    for(i = 0; i < assessment.length; i++) {
+        var current = assessment[i];
+        for(f = 0; f < current.activities.length; f++)
+            enterToDB(current.pid, current.email, current.activities[f], current.on_device ? 1 : 0)
+        
+    }
     
-    db.serialize(function() {
-        var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, created) VALUES(?, ?, ?, ?)");
-        var run = stmt.run(json['pid'], json['evid'], json['aNum'], currentdate,  function callback(err) {
-            if(err) {
-                console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
-                console.log(err);
+    function enterToDB(pid, email, aNum, on_device) {
+        var currentdate = new Date();
+        currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+
+        db.all("SELECT evid, type FROM Evaluators WHERE email=?", email, function(err, rows) {
+            if(rows != null && rows.length != 0) {
+                var evid = rows[0].evid;
+                var type = rows[0].type;
+                db.serialize(function() {
+                    var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, on_device, created) VALUES(?, ?, ?, ?, ?)");
+                    var run = stmt.run(pid, evid, aNum, on_device, currentdate,  function callback(err) {
+                        if(err) {
+                            console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
+                            console.log(err);
+                        }
+                    });
+                });             
             }
-        });
-    });
+            else 
+              console.log("Error: The email did not match an evaluator in the database.");  
+        });        
+    }
 }
+
 
 /**
  *  Given an aid and score, update the respective entry in the assessments table. An error will occur if the entry
