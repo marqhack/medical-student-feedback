@@ -90,15 +90,23 @@ db.addStudent("Erin Boehlert"); //4
 
 
 /** Evaluators */
-evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu"}; //1
-evaluator2 = {'name': "John Doe", 'email': "jd@med.unc.edu"}; //2
-evaluator3 = {'name': "Johnny Knoxville", 'email': "jox@med.unc.edu"}; //3
+evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
+evaluator2 = {'name': "John Doe", 'email': "jd@med.unc.edu", 'type': 'Faculty'}; //2
+evaluator3 = {'name': "Johnny Knoxville", 'email': "jox@med.unc.edu", 'type': 'Professional'}; //3
 db.addEvaluator(evaluator1);
 db.addEvaluator(evaluator2);
 db.addEvaluator(evaluator3);
 
+
 //** Assessments */
-assess1 = {'pid': 1, 'evid': 1, 'aNum': 6}; //1
+var object1 = {activities: [1, 2, 3, 4], pid: 1, email: "rhobbs@med.unc.edu", on_device: false};
+var object2 = {activities: [4, 5, 6, 1], pid: 2, email: "jox@med.unc.edu", on_device: true};
+var array = [];
+array.push(object1);
+array.push(object2);
+db.logAssessment(array);
+
+/*assess1 = {'pid': 1, 'evid': 1, 'aNum': 6}; //1
 assess2 = {'pid': 1, 'evid': 1, 'aNum': 7}; //2
 assess3 = {'pid': 1, 'evid': 2, 'aNum': 3}; //3
 assess4 = {'pid': 1, 'evid': 2, 'aNum': 7}; //4
@@ -111,7 +119,7 @@ db.logAssessment(assess4);
 db.logAssessment(assess5);
 
 /** Responses */
-db.logResponse(1,5);
+/*db.logResponse(1,5);
 db.logResponse(2, 3);
 // duplicate assessment: error
-db.logResponse(5, 5);
+db.logResponse(5, 5);*/
