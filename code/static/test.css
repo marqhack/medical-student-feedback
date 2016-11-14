@@ -1,4 +1,4 @@
-#app-container{
+#app-container {
 	background-color: #3853A0;
 	padding: 15px;
 	margin: auto;
@@ -6,21 +6,21 @@
 	max-width: 1000px;
 	min-width: 300px;
 }
-	h1{
+	h1 {
 		font-family: Helvetica, serif;
 		text-align: center;
 		color: #FFFFFF;
 	}
 
-	#page-1{
+	#page-1 {
 
 	}
 
-		#observers-container{
+		#observers-container {
 
 		}
 
-			.observer-info{
+			.observer-info {
 				display:inline-block;
 				background-color: #AAD0F3;
 				border-radius: 10px;
@@ -30,32 +30,36 @@
 				font-family: Arial, sans-serif;
 			}
 
-				.email{
+				.email {
 					/*font-size: 20px;*/
 				}
 
-					input[type=email]{
+					input[type=email] {
 						border: thin solid black;
 						border-radius: 4px;
 						padding: 5px;
 						font-size: 15px;
 					}
 
-				.activities-container{
+				.activities-container {
+					display: flex;
+					flex-direction: row;
+					flex-wrap: wrap;
+					justify-content: space-around;	
 					padding: 5px;
 					margin-top: 10px;
 					margin-bottom: 10px;
 				}
 
-				.active{
+				.active {
 					background-color: #515458;
 					color: #FFFFFF;
 				}
 
-				.checkbox{
+				.checkbox {
 
 				}
-					input[type=checkbox]{
+					input[type=checkbox] {
 						position: relative;
 						visibility: hidden;
 						cursor: pointer;
@@ -64,7 +68,7 @@
 						vertical-align: middle;
 					}
 
-					input[type=checkbox]:after{
+					input[type=checkbox]:after {
 						display: block;
 						content: "NO";
 						position: absolute;
@@ -78,11 +82,56 @@
 						color: #FFFFFF;
 						cursor: pointer;
 					}
-					input[type=checkbox]:checked:after{
+					input[type=checkbox]:checked:after {
 						content: "YES";
 						background: #39C958;
 						color: #FFFFFF;
 					}
+
+
+	#page-2 {
+
+	}
+
+		#survey-container {
+			padding: 10px;
+		}
+
+			.survey {
+				padding: 10px;
+			}
+
+				#observer-name {
+
+				}
+
+				#observer-position {
+
+				}
+
+				.questions {
+					padding: 10px;
+				}
+
+					.question-and-responses {
+						padding: 10px;
+					}
+
+						.question {
+
+						}
+
+						.radio-set {
+
+						}
+
+						.comment {
+							
+						}
+
+							.radio {
+
+							}
 
 	button {
 		background-color: #FFFFFF;
@@ -94,10 +143,11 @@
 		padding: 10px;
 	}
 
-	button:hover{
+	button:hover {
 		background-color: #CFD3D5;
 	}
-	button.active:hover{
+
+	button.active:hover {
 		background-color: #515458;
 	}
 
