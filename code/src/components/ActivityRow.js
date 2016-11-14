@@ -14,7 +14,7 @@ var ActivityRow = React.createClass({
 		return {
 			intern: "off",
 			resident: "off",
-			professional: "off",
+			faculty: "off",
 			patient: "off",
 			self: "on"
 		}
@@ -30,8 +30,8 @@ var ActivityRow = React.createClass({
 		this.setState({resident: e.target.value})
 	},
 
-	onProfessionalChange: function(e) {
-		this.setState({professional: e.target.value})
+	onFacultyChange: function(e) {
+		this.setState({faculty: e.target.value})
 
 	},
 	onPatientChange: function(e) {
