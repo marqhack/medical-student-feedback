@@ -98,7 +98,12 @@
 		}
 
 			.survey {
+				background-color: #AAD0F3;
+				border-radius: 10px;
 				padding: 10px;
+				margin-bottom: 15px;
+				font-size: 20px;
+				font-family: Arial, sans-serif;
 			}
 
 				#observer-name {
@@ -125,13 +130,13 @@
 
 						}
 
-						.comment {
-							
-						}
-
-							.radio {
-
+							.radio-div {
+								display: block;
 							}
+
+						.comment {
+
+						}
 
 	button {
 		background-color: #FFFFFF;

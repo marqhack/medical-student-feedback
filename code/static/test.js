@@ -86,7 +86,7 @@ function render_survey() {
 			radio_set = $('<div class="radio-set"></div>');
 			radio_text = ["0", "1", "2", "3", "4", "5"];
 			radio_text.forEach(function(text, index){
-				$(radio_set).append($('<input class="radio" type=radio name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input>"));
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input></div>"));
 			});
 			text_response = $('<textarea class="comment" id="' + survey.observerId + '-' + question + '"></textarea>');
 			$(question_and_responses).append($(question));
