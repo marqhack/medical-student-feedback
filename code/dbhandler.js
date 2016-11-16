@@ -140,6 +140,13 @@ function addQuestionToEPA(json) {
 }
 
 /**
+ *
+ */
+function bindResponseChoicesToActivity(json) {
+
+}
+
+/**
  *  Add to the Students table. 
  */
 function addStudent(name) {
@@ -149,20 +156,6 @@ function addStudent(name) {
             // no known errors should occur when inserting to Students
             if(err) 
                 console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
-        });
-    });
-}
-
-/**
- *  Add to the Evaluators table. 
- */
-function addEvaluator(json) {
-    db.serialize(function() { 
-        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
-        var run = stmt.run(json['name'], json['email'], json['type'], function callback(err) {
-            // error if email is repeated
-            if(err) 
-                console.log("Error: Evaluator %s is already in the database.", json['name']);  
         });
     });
 }
@@ -204,6 +197,40 @@ function logAssessment(assessment) {
     }
 }
 
+/**
+ *  Checks if a given email matches that of an evaluator in the database. 
+ *  >>Input: req.query['email']: the requested email adress
+ *  >>Output: evid, name, and type of the evaluator. null if an evaluator is not found
+ */
+function checkEmail(req, res) {
+    var email = req.query['email'];
+    db.all("SELECT evid, name, type FROM Evaluators WHERE email=?", email, function(err, rows) {
+        if(rows.length != 0)
+            res.send(JSON.stringify(rows[0]))
+        else
+            res.send(null);
+    });
+}
+
+/**
+ *  Add an evaluator to the Evaluators table. 
+ *  >>Input: req.query['name']: name, req.query['email'] = email, req.query['type'] = professional type
+    >>Output: error if evaluator is already in db (defined by uniqueness on email), nothing otherwise
+ */
+function addEvaluator(req, res) {
+    var name = req.query['name'];
+    var email = req.query['email'];
+    var type = req.query['type'];
+
+    db.serialize(function() { 
+        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
+        var run = stmt.run(name, email, type, function callback(err) {
+            // error if email is repeated
+            if(err)    // needs more clear error specification
+                res.send("Error: Evaluator %s is already in the database.", name);  
+        });
+    });
+}
 
 /**
  *  Given an aid and score, update the respective entry in the assessments table. An error will occur if the entry
@@ -255,3 +282,4 @@ module.exports.addEvaluator = addEvaluator;
 module.exports.logAssessment = logAssessment;
 module.exports.logResponse = logResponse;
 module.exports.getActivities = getActivities;
+module.exports.checkEmail = checkEmail;

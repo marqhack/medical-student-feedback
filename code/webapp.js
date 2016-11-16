@@ -20,7 +20,8 @@ api.use(bodyParser.json( { type: '*/*' }));
 
 
 api.get('/test', db.getActivities);
-
+api.get('/verfEmail', db.checkEmail);
+api.post('/addEvaluator', db.addEvaluator);
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
 api.get('/epalist', function(req, res){
