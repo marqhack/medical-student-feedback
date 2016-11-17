@@ -39,6 +39,8 @@
 						border-radius: 4px;
 						padding: 5px;
 						font-size: 15px;
+						height: 20px;
+						width: 300px;
 					}
 
 				.activities-container {
@@ -106,23 +108,41 @@
 				font-family: Arial, sans-serif;
 			}
 
-				#observer-name {
-
+				.observer-name {
+					margin: 10px;
 				}
+					input[type=text] {
+						border: thin solid black;
+						border-radius: 4px;
+						padding: 5px;
+						height: 20px;
+						font-size: 15px;
+					}
 
-				#observer-position {
-
+				.observer-position {
+					margin-bottom: 10px;
+					margin-left: 10px;
 				}
+					#position {
+						border: thin solid black;
+						border-radius: 4px;
+						font-size: 15px;
+						height: 30px;
+					}
 
 				.questions {
-					padding: 10px;
+					margin: 10px;
 				}
 
 					.question-and-responses {
+						background-color: #E2ECFE;
+						border-radius: 4px;
+						margin-bottom: 5px;
 						padding: 10px;
 					}
 
 						.question {
+							margin-bottom: 10px;
 
 						}
 
@@ -132,10 +152,41 @@
 
 							.radio-div {
 								display: block;
+								margin-bottom: 10px;
 							}
 
-						.comment {
+								input[type=radio] {
+									position: relative;
+									visibility: hidden;
+									cursor: pointer;
+									width: 15px;
+									height: 15px;
+									margin-right: 10px;
+								}
 
+								input[type=radio]:after {
+									display: block;
+									position: absolute;
+									content: "";
+									visibility: visible;
+									height: 15px;
+									width: 15px;
+									border-radius: 10px;
+									border: thin solid #3853A0;
+									background: #FFFFFF;
+									cursor: pointer;
+									vertical-align: middle;
+								}
+
+								input[type=radio]:checked:after {
+									background: #3853A0;
+								}
+
+						.comment {
+							height: 100px;
+							width: 300px;
+							border-radius: 4px;
+							border: thin solid black;
 						}
 
 	button {

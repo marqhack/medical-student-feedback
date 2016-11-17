@@ -81,7 +81,7 @@ function render_survey() {
 		dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
 		questions_container = $('<div class="questions"></div>');
 		survey.questions.forEach(function(question) {
-			question_and_responses = $('<div class="question-and-repsonses"></div>');
+			question_and_responses = $('<div class="question-and-responses"></div>');
 			question = $('<div class="question">' + question + '</div>');
 			radio_set = $('<div class="radio-set"></div>');
 			radio_text = ["0", "1", "2", "3", "4", "5"];
