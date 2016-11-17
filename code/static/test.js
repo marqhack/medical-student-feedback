@@ -80,14 +80,17 @@ function render_observer_panel(){
 	observer_panel = $('<div class="observer-panel">Observers: </div>');
 
 	fake_survey_response.forEach(function(survey){
-		observer_panel.append($('<button class="observer-button" id="observer-'+survey.observerId+'">'+ survey.name +'</button>'));
+		observer_panel.append($('<button class="observer-button inactive" id="observer-'+survey.observerId+'">'+ survey.name +'</button>'));
 	});
 
 	$("#survey-container").append(observer_panel);
-	$(".observer-button").on('click', function(){
+	$(".observer-button.inactive").on('click', function(){
+		$('.observer-button').attr({ 'class': 'observer-button inactive' });
+		$(this).attr({ 'class': 'observer-button active' });
 		var id = this.id;
 		show_survey(id);
 	});
+
 }
 
 function render_survey(id) {
