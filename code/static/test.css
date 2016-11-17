@@ -99,6 +99,15 @@
 			padding: 10px;
 		}
 
+			.observer-panel{
+				font-size: 20px;
+				font-family: Arial, sans-serif;
+				padding: 10px;
+				margin-bottom: 15px;
+				background-color: #AAD0F3;
+				border-radius: 4px;
+			}
+
 			.survey {
 				background-color: #AAD0F3;
 				border-radius: 10px;
