@@ -137,14 +137,15 @@ function render_survey(id) {
 		questions_container = $('<div class="questions"></div>');
 		survey.questions.forEach(function(question) {
 			question_and_responses = $('<div class="question-and-responses"></div>');
-			question = $('<div class="question">' + question + '</div>');
+			question_div = $('<div class="question">' + question + '</div>');
 			radio_set = $('<div class="radio-set"></div>');
 			radio_text = ["0", "1", "2", "3", "4", "5"];
 			radio_text.forEach(function(text, index){
+				console.log(question)
 				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input></div>"));
 			});
 			text_response = $('<textarea class="comment" id="' + survey.observerId + '-' + question + '"></textarea>');
-			$(question_and_responses).append($(question));
+			$(question_and_responses).append($(question_div));
 			$(question_and_responses).append($(radio_set));
 			$(question_and_responses).append($(text_response));
 			$(questions_container).append($(question_and_responses));
