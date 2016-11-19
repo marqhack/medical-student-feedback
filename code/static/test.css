@@ -216,9 +216,11 @@
 
 						.comment {
 							height: 100px;
-							width: 300px;
+							width: 90%;
 							border-radius: 4px;
 							border: thin solid black;
+							font-size: 15px;
+							resize: none;
 						}
 
 	button {
