@@ -12,6 +12,29 @@
 		color: #FFFFFF;
 	}
 
+	#welcome {
+		font-family: Arial, sans-serif;
+		color: #FFFFFF;
+		text-align: center;
+		margin-bottom: 15px;
+		font-size: 20px;
+	}
+
+	#login-page {
+		text-align: center;
+		color: #FFFFFF;
+		font-size: 20px;
+		font-family: Arial, sans-serif;
+	}	
+
+		#login-container {
+
+		}
+
+		#login-button {
+
+		}
+
 	#page-1 {
 
 	}

@@ -10,7 +10,14 @@
       <div id="app-container">
         <h1>Medical Student Feedback</h1>
 
-        <div id="page-1">
+        <div id="login-page">
+          Welcome!
+          <div id="login-container"></div>
+          <input id="student-pid" type="text" placeholder="Student PID">
+          <button id="login-button" type="submit">Login</button>
+        </div>
+
+        <div id="page-1" hidden="true">
           <div id="observers-container"></div>
           <button id="add-observer" type="button">Add Observer</button>
           <button id="submit-observers" type="submit">Continue to Surveys</button>

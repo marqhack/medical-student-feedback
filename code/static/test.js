@@ -1,5 +1,18 @@
 $(document).ready(function() {
 
+	$("#login-button").on('click', function(e){
+		var pid = $("#student-pid").val();
+		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ){
+			alert("Not a valid PID");
+		}else{
+			$("#login-page").attr("hidden", "true");
+			$("#login-page").hide();
+			$("#page-1").show();
+			$("#observers-container").prepend('<div id="welcome">Welcome, ' +pid+'</div>');
+		}
+		
+	});
+
 	// render_observers_panel();
 	$("#page-1").on('click', '.inactive' ,function() {
 		//console.log("inactive clicked");
@@ -83,7 +96,7 @@ function get_observer_info() {
 		info.activities = selected_activities;
 		observer_info.push(info);
 	});
-	//console.log(observer_info);
+	console.log(observer_info);
 }
 
 function render_observer_panel(){
