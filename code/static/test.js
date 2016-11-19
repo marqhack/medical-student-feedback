@@ -15,6 +15,20 @@ $(document).ready(function() {
 		add_observer_div();
 	});
 
+	$("#observers-container").on('click', '.delete-observer', function() {
+		if ($(".observer-info").length == 1) {
+			alert("You must provide information for at least one observer.");
+		} else {
+			$(this).parents(".observer-info").remove();
+		}
+	});
+
+	$("#observers-container").on('blur', 'input[type=email]', function(){
+		if (!validate_email($(this).val())) {
+			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+		}
+	});
+
 	$("#submit-observers").on('click', function() {
 		get_observer_info();
 		$("#page-1").hide();
@@ -45,10 +59,12 @@ function add_observer_div() {
 	
 
 	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
+	var delete_button = $('<div><button class="delete-observer">Delete</button></div');
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
 	$(observer_info_container).append(checkbox);
+	$(observer_info_container).append(delete_button);
 	$("#observers-container").append(observer_info_container);
 }
 
@@ -133,4 +149,9 @@ function show_survey(id){
 	var survey_id = "survey-" + id;
 	$(".survey").hide();
 	$("#"+survey_id).show();
+}
+
+function validate_email(email) {
+    var reg_ex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg_ex.test(email);
 }
