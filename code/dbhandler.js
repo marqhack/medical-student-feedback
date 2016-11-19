@@ -10,9 +10,13 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL, email STRING NOT NULL, type STRING NOT NULL, UNIQUE(email))");
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
-        db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, UNIQUE(aContent))");
-        db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, PRIMARY KEY(epaNum, aNum))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, on_device INTEGER, created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
+        db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, choice1 INTEGER, choice2 INTEGER, choice3 INTEGER, choice4 INTEGER, \
+                choice5 INTEGER, FOREIGN KEY(choice1, choice2, choice3, choice4, choice5) REFERENCES Response_Choices, UNIQUE(aContent))");
+        db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, \
+                PRIMARY KEY(epaNum, aNum))");
+        db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent, UNIQUE(rcContent))");
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, on_device INTEGER, \
+                created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
         //db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, UNIQUE(aid))");
         db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
@@ -46,20 +50,21 @@ function addEpaWithQuestions(json) {
                 addQuestions(json);
             }
         });
-        
+
+        var qArray = [];
         function addQuestions(json) {    
             var counter = 0;
-            var qArray = [];
+            //var qArray = [];
             var questions = "SELECT A.aNum FROM Activities A WHERE A.aContent='";
             for(name in json) {
                 if(counter > 1) {
                     qArray.push(json[name]);
-                    questions = questions + json[name] + "'";
+                    questions = questions + json[name].q + "'";
                     if(counter < (count = Object.keys(json).length) - 1)  
                         questions = questions + " OR A.aContent='";
                     db.serialize(function() {
                         var stmt = db.prepare("INSERT INTO Activities(aContent) VALUES(?)");
-                        var run = stmt.run(json[name], function callback(err) {
+                        var run = stmt.run(json[name].q, function callback(err) {
                             if(err) {
                                 console.log("Error: Repeated Question. Due to numerous EPAs sharing questions, this error can be ignored.");              // will need to figure out error handling, perhaps an event?
                             }
@@ -71,6 +76,9 @@ function addEpaWithQuestions(json) {
                 counter++;
             }
             buildSurvey(json['epaNum'], qArray, questions, json);
+            for(index in qArray) {
+                bindResponseChoicesToActivity(qArray[index]);
+            } 
         }
 
         function buildSurvey(epa, qArray, questions, json) {
@@ -84,7 +92,7 @@ function addEpaWithQuestions(json) {
                     }); 
                 }); 
             });
-        } 
+        }
     });   
 }
 
@@ -142,8 +150,41 @@ function addQuestionToEPA(json) {
 /**
  *
  */
-function bindResponseChoicesToActivity(json) {
+function bindResponseChoicesToActivity(choices) {
+    db.serialize(function() {
+        db.all("SELECT aNum FROM Activities WHERE aContent=?", choices.q, function(err, rows) {
+            //console.log(rows); 
+            for(var propt in choices)
+                if(propt != "q")
+                    addToDb(rows[0].aNum, choices[propt], propt);           
+        });
+    });
 
+    function addToDb(aNum, choice, choiceNum) {
+        db.serialize(function() { 
+            var stmt = db.prepare("INSERT INTO Response_Choices(rcContent) VALUES(?)");
+            var run = stmt.run(choice, function callback(err) {
+                if(err) {
+                    //console.log(err);
+                }
+            });
+            stmt.finalize();
+        });
+
+        db.serialize(function() {
+            db.all("SELECT rcNum FROM Response_Choices WHERE rcContent=?", choice, function(err, rows) {
+                var rcNum = rows[0].rcNum;
+                var query = "UPDATE Activities SET choice" + choiceNum + "=? WHERE aNum=" + aNum;
+                var stmt = db.prepare(query);
+                var run = stmt.run(rcNum, function callback(err) {
+                    if(err) {
+                        //console.log(err);
+                    }                     
+                });  
+                stmt.finalize();
+            });
+         });
+    }
 }
 
 /**
@@ -213,6 +254,40 @@ function checkEmail(req, res) {
 }
 
 /**
+ *  Returns the response choices associated with each activity number listed in the parameter. The name of the
+ *  parameters does not matter, but each must have a numeric value indicating an activity number. 
+ *  >>Input: activity numbers through the req object
+ *  >>Output: array containg activity numbers with their choices, in ascending numerical number of activities,
+ *            having the following format: [{'aNum': #, 'c1Content': c1Content, 'c2Content': c2Content,
+ *            'c3Content': c3Content, 'c4Content': c4Content, 'c5Content': c5Content}, {...so on...}]
+ */ 
+function getActivityWithChoices(req, res) {
+    var query = "";
+    var count = 0;
+    for(var propt in req.query) {
+        query += "SELECT A.aNum AS aNum, C1.rcContent AS c1Content, C2.rcContent AS c2Content, ";
+        query += "C3.rcContent AS c3Content, C4.rcContent AS c4Content, C5.rcContent AS c5Content";
+        query += "\nFROM Activities A, Response_Choices C1, Response_Choices C2, Response_Choices C3, Response_Choices C4, Response_Choices C5";
+        query += "\nWHERE A.aNum=" + req.query[propt] + " AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rcNum AND A.choice4=C4.rcNum AND A.choice5=C5.rcNum";
+        
+        if(count != Object.keys(req.query).length - 1) 
+            query += "\nUNION\n";
+
+        count++;
+    }
+
+    db.all(query, function(err, rows) {
+        if(err)
+            console.log(err);
+        res.send(JSON.stringify(rows));
+
+    });
+    /*SELECT A.aNum, C1.rcNum AS c1, C1.rcContent AS c1Content, C2.rcNum AS c2, C2.rcContent AS c2Content, C3.rcNum AS c3, C3.rcContent AS c3Content, C4.rcNum AS c4, C4.rcContent AS c4Content, C5.rcNum AS c5, C5.rcContent AS c5Content
+FROM Activities A, Response_Choices C1, Response_Choices C2, Response_Choices C3, Response_Choices C4, Response_Choices C5
+WHERE A.aNum=3 AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rcNum AND A.choice4=C4.rcNum AND A.choice5=C5.rcNum*/
+}
+
+/**
  *  Add an evaluator to the Evaluators table. 
  *  >>Input: req.query['name']: name, req.query['email'] = email, req.query['type'] = professional type
     >>Output: error if evaluator is already in db (defined by uniqueness on email), nothing otherwise
@@ -231,6 +306,7 @@ function addEvaluator(req, res) {
         });
     });
 }
+
 
 /**
  *  Given an aid and score, update the respective entry in the assessments table. An error will occur if the entry
@@ -253,7 +329,7 @@ function logResponse(aid, score) {
 }
 
 function getActivities(req, res) {
-    db.all("SELECT * FROM Activities", function(err, rows) {
+    db.all("SELECT aNum, aContent FROM Activities", function(err, rows) {
         res.send(rows);
     });
 }
@@ -283,3 +359,4 @@ module.exports.logAssessment = logAssessment;
 module.exports.logResponse = logResponse;
 module.exports.getActivities = getActivities;
 module.exports.checkEmail = checkEmail;
+module.exports.getActivityWithChoices = getActivityWithChoices;
