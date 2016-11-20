@@ -17,7 +17,6 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent, UNIQUE(rcContent))");
         db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, on_device INTEGER, \
                 created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
-        //db.run("CREATE TABLE IF NOT EXISTS Responses(rid INTEGER PRIMARY KEY AUTOINCREMENT, aid INTEGER, score INTEGER, FOREIGN KEY(aid) REFERENCES Assessments, UNIQUE(aid))");
         db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
 }
@@ -349,6 +348,19 @@ function test(j) {
     console.log(count)     
 }
 
+
+/** For testing purposes only. To be deleted in the future */
+function addEvaluatorNoReq(json) {
+    db.serialize(function() { 
+        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
+        var run = stmt.run(json['name'], json['email'], json['type'], function callback(err) {
+            // error if email is repeated
+            if(err)    // needs more clear error specification
+                res.send("Error: Evaluator %s is already in the database.", name);  
+        });
+    });
+}
+
 module.exports.addEpaWithQuestions = addEpaWithQuestions;
 module.exports.getDB = getDB;
 module.exports.initdb = initdb;
@@ -360,3 +372,6 @@ module.exports.logResponse = logResponse;
 module.exports.getActivities = getActivities;
 module.exports.checkEmail = checkEmail;
 module.exports.getActivityWithChoices = getActivityWithChoices;
+
+/** To be deleted in the future */
+module.exports.addEvaluatorNoReq = addEvaluatorNoReq;
