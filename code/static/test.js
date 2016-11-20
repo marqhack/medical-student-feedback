@@ -38,16 +38,22 @@ $(document).ready(function() {
 
 	$("#observers-container").on('blur', 'input[type=email]', function(){
 		if (!validate_email($(this).val())) {
-			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+			$(this).addClass('invalid');
+		} else {
+			$(this).removeClass('invalid');
 		}
 	});
 
 	$("#submit-observers").on('click', function() {
-		get_observer_info();
-		$("#page-1").hide();
-		$("#page-2").show();
-		render_observer_panel();
-		render_survey();
+		if ($("input[type=email].invalid").length > 0) {
+			alert('Please verify that all emails are valid.');
+		} else {
+			get_observer_info();
+			$("#page-1").hide();
+			$("#page-2").show();
+			render_observer_panel();
+			render_survey();
+		}
 	});
 
 	$("#add-observer").click();

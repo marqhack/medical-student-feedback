@@ -66,6 +66,10 @@
 						width: 300px;
 					}
 
+						.invalid {
+							background-color: #FA8072;
+						}
+
 				.activities-container {
 					display: flex;
 					flex-direction: row;
