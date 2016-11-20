@@ -133,12 +133,12 @@ db.addStudent("Erin Boehlert"); //4
 
 
 /** Evaluators */
-/*evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
+evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
 evaluator2 = {'name': "John Doe", 'email': "jd@med.unc.edu", 'type': 'Faculty'}; //2
 evaluator3 = {'name': "Johnny Knoxville", 'email': "jox@med.unc.edu", 'type': 'Professional'}; //3
-db.addEvaluator(evaluator1);
-db.addEvaluator(evaluator2);
-db.addEvaluator(evaluator3);*/
+db.addEvaluatorNoReq(evaluator1);
+db.addEvaluatorNoReq(evaluator2);
+db.addEvaluatorNoReq(evaluator3);
 
 
 //** Assessments */
