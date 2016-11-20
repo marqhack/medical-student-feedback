@@ -1,5 +1,18 @@
 $(document).ready(function() {
 
+	$("#login-button").on('click', function(e){
+		var pid = $("#student-pid").val();
+		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ){
+			alert("Not a valid PID");
+		}else{
+			$("#login-page").attr("hidden", "true");
+			$("#login-page").hide();
+			$("#page-1").show();
+			$("#observers-container").prepend('<div id="welcome">Welcome, ' +pid+'</div>');
+		}
+		
+	});
+
 	// render_observers_panel();
 	$("#page-1").on('click', '.inactive' ,function() {
 		//console.log("inactive clicked");
@@ -13,6 +26,20 @@ $(document).ready(function() {
 
 	$("#add-observer").on('click', function() {
 		add_observer_div();
+	});
+
+	$("#observers-container").on('click', '.delete-observer', function() {
+		if ($(".observer-info").length == 1) {
+			alert("You must provide information for at least one observer.");
+		} else {
+			$(this).parents(".observer-info").remove();
+		}
+	});
+
+	$("#observers-container").on('blur', 'input[type=email]', function(){
+		if (!validate_email($(this).val())) {
+			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+		}
 	});
 
 	$("#submit-observers").on('click', function() {
@@ -45,10 +72,12 @@ function add_observer_div() {
 	
 
 	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
+	var delete_button = $('<div><button class="delete-observer">Delete</button></div');
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
 	$(observer_info_container).append(checkbox);
+	$(observer_info_container).append(delete_button);
 	$("#observers-container").append(observer_info_container);
 }
 
@@ -67,7 +96,7 @@ function get_observer_info() {
 		info.activities = selected_activities;
 		observer_info.push(info);
 	});
-	//console.log(observer_info);
+	console.log(observer_info);
 }
 
 function render_observer_panel(){
@@ -108,14 +137,15 @@ function render_survey(id) {
 		questions_container = $('<div class="questions"></div>');
 		survey.questions.forEach(function(question) {
 			question_and_responses = $('<div class="question-and-responses"></div>');
-			question = $('<div class="question">' + question + '</div>');
+			question_div = $('<div class="question">' + question + '</div>');
 			radio_set = $('<div class="radio-set"></div>');
 			radio_text = ["0", "1", "2", "3", "4", "5"];
 			radio_text.forEach(function(text, index){
+				console.log(question)
 				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input></div>"));
 			});
 			text_response = $('<textarea class="comment" id="' + survey.observerId + '-' + question + '"></textarea>');
-			$(question_and_responses).append($(question));
+			$(question_and_responses).append($(question_div));
 			$(question_and_responses).append($(radio_set));
 			$(question_and_responses).append($(text_response));
 			$(questions_container).append($(question_and_responses));
@@ -133,4 +163,9 @@ function show_survey(id){
 	var survey_id = "survey-" + id;
 	$(".survey").hide();
 	$("#"+survey_id).show();
+}
+
+function validate_email(email) {
+    var reg_ex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return reg_ex.test(email);
 }
