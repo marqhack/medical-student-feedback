@@ -1,14 +1,14 @@
 $(document).ready(function() {
-
-	$("#login-button").on('click', function(e){
-		var pid = $("#student-pid").val();
-		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ){
-			alert("Not a valid PID");
-		}else{
+	var pid = '';
+	$("#login-button").on('click', function(e) {
+		pid = $("#student-pid").val();
+		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ) {
+			alert("Please enter a valid PID. A PID is a 9 digit number.");
+		} else {
 			$("#login-page").attr("hidden", "true");
 			$("#login-page").hide();
 			$("#page-1").show();
-			$("#observers-container").prepend('<div id="welcome">Welcome, ' +pid+'</div>');
+			$("#observers-container").prepend('<div id="welcome">Welcome, ' + pid + '</div>');
 		}
 		
 	});
@@ -38,16 +38,22 @@ $(document).ready(function() {
 
 	$("#observers-container").on('blur', 'input[type=email]', function(){
 		if (!validate_email($(this).val())) {
-			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+			$(this).addClass('invalid');
+		} else {
+			$(this).removeClass('invalid');
 		}
 	});
 
 	$("#submit-observers").on('click', function() {
-		get_observer_info();
-		$("#page-1").hide();
-		$("#page-2").show();
-		render_observer_panel();
-		render_survey();
+		if ($("input[type=email].invalid").length > 0) {
+			alert('Please verify that all emails are valid.');
+		} else {
+			get_observer_info(pid);
+			$("#page-1").hide();
+			$("#page-2").show();
+			render_observer_panel();
+			render_survey();
+		}
 	});
 
 	$("#add-observer").click();
@@ -81,11 +87,19 @@ function add_observer_div() {
 	$("#observers-container").append(observer_info_container);
 }
 
-function get_observer_info() {
+function get_observer_info(pid) {
 	var observer_info = [];
 	$(".observer-info").each(function() {
+		evaluator_id = '';
+		$.get('api/verfEmail?email=' + $.trim($(this).find($("input[type=email]")).val()) , function(response) {
+			if(response) {
+				console.log(JSON.parse(response).evid);
+			} else {
+				console.log("add to db");
+			}
+		});	
 		var info = {
-			email: ($(this).find($("input[type=email]")).val()),
+			evid: evaluator_id,
 			on_device: ($(this).find($("input[type=checkbox]"))).prop('checked')
 		}
 		var selected_activities = [];
@@ -96,7 +110,11 @@ function get_observer_info() {
 		info.activities = selected_activities;
 		observer_info.push(info);
 	});
-	console.log(observer_info);
+	var survey_request = {
+		pid: pid,
+		observer_info: observer_info
+	}
+	console.log(survey_request);
 }
 
 function render_observer_panel(){
