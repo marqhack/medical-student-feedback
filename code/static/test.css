@@ -1,13 +1,14 @@
 #app-container {
-	background-color: #3853A0;
+	background-color: #397AAC;
 	padding: 15px;
 	margin: auto;
 	border-radius: 10px;
 	max-width: 1000px;
 	min-width: 300px;
 }
+	
 	h1 {
-		font-family: Helvetica, serif;
+		font-family: "Times New Roman", serif;
 		text-align: center;
 		color: #FFFFFF;
 	}
@@ -45,9 +46,10 @@
 
 			.observer-info {
 				display:inline-block;
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 10px;
 				padding: 10px;
+				margin-top: 15px;
 				margin-bottom: 15px;
 				font-size: 20px;
 				font-family: Arial, sans-serif;
@@ -82,7 +84,7 @@
 				}
 
 				.checkbox {
-
+					width: 500px;
 				}
 					input[type=checkbox] {
 						position: relative;
@@ -113,6 +115,16 @@
 						color: #FFFFFF;
 					}
 
+					.delete-observer {
+						float: right;
+						background-color: #FF0000;
+						color: #FFFFFF;
+					}
+
+					.delete-observer:hover {
+						background-color: #FF0000;
+					}
+
 
 	#page-2 {
 
@@ -127,12 +139,12 @@
 				font-family: Arial, sans-serif;
 				padding: 10px;
 				margin-bottom: 15px;
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 4px;
 			}
 
 			.survey {
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 10px;
 				padding: 10px;
 				margin-bottom: 15px;

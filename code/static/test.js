@@ -71,8 +71,8 @@ function add_observer_div() {
 	});
 	
 
-	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
-	var delete_button = $('<div><button class="delete-observer">Delete</button></div');
+	var checkbox = $('<input type="checkbox"><label>Taking survey on this device?</label>');
+	var delete_button = $('<button class="delete-observer">Delete</button>');
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
