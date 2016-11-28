@@ -1,7 +1,7 @@
 $(document).ready(function() {
-
+	var pid; 
 	$("#login-button").on('click', function(e){
-		var pid = $("#student-pid").val();
+		pid = $("#student-pid").val();
 		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ){
 			alert("Not a valid PID");
 		}else{
@@ -42,15 +42,38 @@ $(document).ready(function() {
 		}
 	});
 
+	//redirect to survey page for on device feedback
+	//send emails to observers not taking on device
 	$("#submit-observers").on('click', function() {
-		get_observer_info();
+		var observer_info = get_observer_info();
+
+		//if observer not giving feedback on device,
+		//send email with link to survey
+		for(var i = 0; i< observer_info.length; i++){
+			if(!observer_info[i].on_device){
+				var to = observer_info[i].email;
+				var subject = pid + " requests feedback";
+				var text = "URL TO SURVEY GOES HERE";
+				$.get("http://localhost:3000/sendEmail", {to:to, subject:subject, text:text}, function(data){
+					if(data=="sent"){
+						alert("email sent successfully");
+					}else{
+						alert("error sending email");
+					}
+				});
+			}
+		}
+		
+		
 		$("#page-1").hide();
 		$("#page-2").show();
 		render_observer_panel();
-		render_survey();
+		render_survey();		
+		
 	});
 
 	$("#add-observer").click();
+
 
 });
 
@@ -96,6 +119,7 @@ function get_observer_info() {
 		info.activities = selected_activities;
 		observer_info.push(info);
 	});
+	return observer_info;
 	console.log(observer_info);
 }
 

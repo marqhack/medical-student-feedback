@@ -91,33 +91,7 @@
 						width: 20px;
 						margin-right: 5px;
 						vertical-align: middle;
-						/*position: relative;
-						visibility: hidden;
-						cursor: pointer;
-						width: 55px;
-						height: 30px;
-						vertical-align: middle;*/
 					}
-
-					/*input[type=checkbox]:after {
-						display: block;
-						content: "NO";
-						position: absolute;
-						visibility: visible;
-						height: 30px;
-						line-height: 30px;
-						width: 50px;
-						text-align: center;
-						border-radius: 4px;
-						background: #F29633;
-						color: #FFFFFF;
-						cursor: pointer;
-					}
-					input[type=checkbox]:checked:after {
-						content: "YES";
-						background: #39C958;
-						color: #FFFFFF;
-					}*/
 
 					.delete-observer {
 						float: right;

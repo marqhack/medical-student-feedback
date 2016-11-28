@@ -1,10 +1,24 @@
 var express = require('express');
+var nodemailer = require('nodemailer');
+
+//currently sending email from Gmail
+//needs to be setup to send from server
+var smtpTransport = nodemailer.createTransport("SMTP", {
+    service: "Gmail",
+    auth: {
+        user: "eringraceboehlert@gmail.com",
+        pass: "str@ng3loop"
+    }
+});
+
+
 var bodyParser = require('body-parser');
 var db = require('./dbhandler');
 var path = require("path");
 var app = express();
 var api = express();
 api.use(bodyParser.json( { type: '*/*' })); 
+
 
 // Object returned by call
 // returns an array of epa objects
@@ -98,3 +112,25 @@ app.use(express.static('static'));
 app.listen(3000, function () {
     console.log('Example app listening on port 3000!');
 });
+
+
+//nodemailer email functionality
+app.get('/sendEmail', function(req, res){
+    var mailOptions = {
+        to: req.query.to,
+        subject: req.query.subject,
+        text: req.query.text
+    }
+    console.log(mailOptions);
+    smtpTransport.sendMail(mailOptions, function(error, response){
+        if(error){
+            console.log(error);
+            res.end("error");
+        }else{
+            console.log("Message sent: " + response.message);
+            res.end("sent");
+        }
+    });
+});
+
+
