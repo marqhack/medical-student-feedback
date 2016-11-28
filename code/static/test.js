@@ -110,6 +110,7 @@ function get_observer_info(pid) {
 		evaluator_id = '';
 		var info = {
 			evid: $(this).find($("input[type=email]")).attr("evaluatorid"),
+			email: $(this).find($("input[type=email]")).val(),
 			on_device: ($(this).find($("input[type=checkbox]"))).prop('checked')
 		}
 		var selected_activities = [];
@@ -130,16 +131,19 @@ function get_observer_info(pid) {
 function render_observer_panel(survey_request){
 	survey_response = survey_request.observer_info;
 	console.log(survey_response);
-	var fake_survey_response = [
-    	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
-    	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},
-    	{ "observerId": 3, "name":"Peri Professional", "questions": ["Writing Prescriptions","Physical Exam","Management Exam"]}
-	]
+	var activities = new Set();
+	survey_response.forEach(function(person) {
+		person.activities.forEach(function(activity) {
+			activities.add(activity);
+		});
+	});
+
+	console.log(activities);
 
 	observer_panel = $('<div class="observer-panel">Observers: </div>');
 
-	fake_survey_response.forEach(function(survey){
-		observer_panel.append($('<button class="observer-button inactive" id="observer-'+survey.observerId+'">'+ survey.name +'</button>'));
+	survey_response.forEach(function(survey){
+		observer_panel.append($('<button class="observer-button inactive" id="observer-'+survey.observerId+'">'+ survey.email +'</button>'));
 	});
 
 	$("#survey-container").append(observer_panel);
