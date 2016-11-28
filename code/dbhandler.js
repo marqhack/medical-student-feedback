@@ -314,9 +314,9 @@ function addEvaluator(req, res) {
             console.log("printing within run -- email: " + email);
             // error if email is repeated
             if(err) {   // needs more clear error specification
-                console.log("Error: Evaluator " + email + " is already in the database. This error can be ignored.");  
+                console.log(err); 
             } else {
-                console.log("Seems like the new email was added correctly");
+                console.log("Seems like " + email + " was added correctly");
             }
         });
     });
