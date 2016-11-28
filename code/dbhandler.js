@@ -301,8 +301,12 @@ function addEvaluator(req, res) {
         var run = stmt.run(name, email, type, function callback(err) {
             // error if email is repeated
             if(err)    // needs more clear error specification
-                res.send("Error: Evaluator %s is already in the database.", name);  
+                console.log("Error: Evaluator " + name + " is already in the database. This error can be ignored.");  
         });
+    });
+
+    db.all("SELECT evid, name, type FROM Evaluators WHERE email=?", email, function(err, rows) {
+        res.send(JSON.stringify(rows));
     });
 }
 
