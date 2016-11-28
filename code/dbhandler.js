@@ -8,7 +8,7 @@ var db = new sqlite3.Database("medfeedback.db");
 function initdb() {
     db.serialize(function() {
         db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL)");
-        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL, email STRING NOT NULL, type STRING NOT NULL, UNIQUE(email))");
+        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, email STRING NOT NULL, type STRING, UNIQUE(email))");
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, choice1 INTEGER, choice2 INTEGER, choice3 INTEGER, choice4 INTEGER, \
                 choice5 INTEGER, FOREIGN KEY(choice1, choice2, choice3, choice4, choice5) REFERENCES Response_Choices, UNIQUE(aContent))");
@@ -187,6 +187,17 @@ function bindResponseChoicesToActivity(choices) {
 }
 
 /**
+ *
+ */
+function viewEPAs(req, res) {
+    db.serialize(function() { 
+        db.all("SELECT * FROM EPAs", function(err, rows) {
+            res.send(rows);
+        });
+    });
+}
+
+/**
  *  Add to the Students table. 
  */
 function addStudent(name) {
@@ -292,6 +303,25 @@ WHERE A.aNum=3 AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rc
     >>Output: error if evaluator is already in db (defined by uniqueness on email), nothing otherwise
  */
 function addEvaluator(req, res) {
+    //var name = req.query['name'];
+    var email = req.query['email'];
+    //var type = req.query['type'];
+
+    db.serialize(function() { 
+        var stmt = db.prepare("INSERT INTO Evaluators(email) VALUES(?)");
+        var run = stmt.run(email, function callback(err) {
+            // error if email is repeated
+            if(err)    // needs more clear error specification
+                /*console.log("Error: Evaluator " + name + " is already in the database. This error can be ignored.")*/;  
+        });
+    });
+
+    db.all("SELECT evid FROM Evaluators WHERE email=?", email, function(err, rows) {
+        res.send(JSON.stringify(rows));
+    });
+}
+
+/*function addEvaluator(req, res) {
     var name = req.query['name'];
     var email = req.query['email'];
     var type = req.query['type'];
@@ -308,7 +338,7 @@ function addEvaluator(req, res) {
     db.all("SELECT evid, name, type FROM Evaluators WHERE email=?", email, function(err, rows) {
         res.send(JSON.stringify(rows));
     });
-}
+} */
 
 
 /**
@@ -376,6 +406,6 @@ module.exports.logResponse = logResponse;
 module.exports.getActivities = getActivities;
 module.exports.checkEmail = checkEmail;
 module.exports.getActivityWithChoices = getActivityWithChoices;
-
+module.exports.viewEPAs = viewEPAs;
 /** To be deleted in the future */
 module.exports.addEvaluatorNoReq = addEvaluatorNoReq;
