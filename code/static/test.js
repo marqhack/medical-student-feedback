@@ -39,7 +39,12 @@ $(document).ready(function() {
 					$(email_input).prop("disabled", true);
 					$(confirm_button).prop("disabled", true);
 				} else {
-					confirm("" + email + " was not found, try a different email");
+					if (confirm("" + email + " was not found. Click OK to add this email to the database (you will still need to click Confirm). Click Cancel to try a different email.")) {
+						post_obj = { email: email };
+						console.log(email);
+						$.post('api/addEvaluator', JSON.stringify(post_obj), function() { console.log("succeeded"); }, "JSON");
+					
+					}
 				}
 
 			});
@@ -65,8 +70,6 @@ $(document).ready(function() {
 			get_observer_info(pid);
 			$("#page-1").hide();
 			$("#page-2").show();
-			render_observer_panel();
-			render_survey();
 		}
 	});
 
@@ -121,9 +124,10 @@ function get_observer_info(pid) {
 		observer_info: observer_info
 	}
 	console.log(survey_request);
+	render_observer_panel(survey_request);
 }
 
-function render_observer_panel(){
+function render_observer_panel(survey_request){
 	var fake_survey_response = [
     	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
     	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},
@@ -144,9 +148,11 @@ function render_observer_panel(){
 		show_survey(id);
 	});
 
+	render_survey(survey_request);
+
 }
 
-function render_survey(id) {
+function render_survey(survey_request) {
 	var fake_survey_response = [
     	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
     	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},

@@ -304,15 +304,20 @@ WHERE A.aNum=3 AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rc
  */
 function addEvaluator(req, res) {
     //var name = req.query['name'];
-    var email = req.query['email'];
+    var email = req.body['email'];
+    console.log("at the top of add evaluator -- email: " + email);
     //var type = req.query['type'];
 
     db.serialize(function() { 
         var stmt = db.prepare("INSERT INTO Evaluators(email) VALUES(?)");
         var run = stmt.run(email, function callback(err) {
+            console.log("printing within run -- email: " + email);
             // error if email is repeated
-            if(err)    // needs more clear error specification
-                /*console.log("Error: Evaluator " + name + " is already in the database. This error can be ignored.")*/;  
+            if(err) {   // needs more clear error specification
+                console.log("Error: Evaluator " + email + " is already in the database. This error can be ignored.");  
+            } else {
+                console.log("Seems like the new email was added correctly");
+            }
         });
     });
 
