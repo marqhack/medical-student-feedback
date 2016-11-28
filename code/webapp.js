@@ -22,6 +22,7 @@ api.use(bodyParser.json( { type: '*/*' }));
 api.get('/test', db.getActivities);
 api.get('/verfEmail', db.checkEmail);
 api.get('/fetchActWithChoices', db.getActivityWithChoices);
+api.get('/getSurvey', db.getSurvey);
 api.post('/addEvaluator', db.addEvaluator);
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
@@ -69,9 +70,6 @@ api.post('/profs', function (req, res) {
     profData.push(newProf); 
     
 });
-
-
-
 
 
 

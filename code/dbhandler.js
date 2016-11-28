@@ -372,7 +372,44 @@ function getActivities(req, res) {
     });
 }
 
+function getSurvey(req, res) {
+    var pid = req.query['pid'];
+    var evaluator_id = req.query['evid'];
+    var activities = req.query['activities'].split('-');
+    console.log("pid: " + pid);
+    console.log("evaluator id: " + evaluator_id);
+    console.log("activities: " + activities.join(", "));
 
+    var query = "";
+    var count = 0;
+    for(var activityID in activities) {
+
+        query += "SELECT A.aNum AS aNum, A.aContent AS aContent, C1.rcContent AS c1Content, C2.rcContent AS c2Content, ";
+        query += "C3.rcContent AS c3Content, C4.rcContent AS c4Content, C5.rcContent AS c5Content";
+        query += "\nFROM Activities A, Response_Choices C1, Response_Choices C2, Response_Choices C3, Response_Choices C4, Response_Choices C5";
+        query += "\nWHERE A.aNum=" + activityID + " AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rcNum AND A.choice4=C4.rcNum AND A.choice5=C5.rcNum";
+        
+        if(count != activities.length - 1) 
+            query += "\nUNION\n";
+
+        count++;
+    }
+
+    console.log(query);
+    response = {
+        pid: pid,
+        evid: evaluator_id
+    };
+
+    db.all(query, function(err, rows) {
+        if(err) {
+            console.log(err);
+        } else {
+            response.activities = rows;
+            res.send(JSON.stringify(response));
+        }
+    });
+}
 
 /**
  * Returns the database object so that it can be used to display the database 
@@ -412,5 +449,6 @@ module.exports.getActivities = getActivities;
 module.exports.checkEmail = checkEmail;
 module.exports.getActivityWithChoices = getActivityWithChoices;
 module.exports.viewEPAs = viewEPAs;
+module.exports.getSurvey = getSurvey;
 /** To be deleted in the future */
 module.exports.addEvaluatorNoReq = addEvaluatorNoReq;
