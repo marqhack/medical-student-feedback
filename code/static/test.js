@@ -128,6 +128,8 @@ function get_observer_info(pid) {
 }
 
 function render_observer_panel(survey_request){
+	survey_response = survey_request.observer_info;
+	console.log(survey_response);
 	var fake_survey_response = [
     	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
     	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},
@@ -153,6 +155,7 @@ function render_observer_panel(survey_request){
 }
 
 function render_survey(survey_request) {
+	console.log("from render_survey: " + JSON.stringify(survey_request));
 	var fake_survey_response = [
     	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
     	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},
