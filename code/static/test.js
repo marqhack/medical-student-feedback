@@ -24,6 +24,28 @@ $(document).ready(function() {
 		$(this).attr({ 'class': 'inactive' });
 	});
 
+	$("body").on('click', '.confirm-email', function() {
+		email_input = $(this).prev();
+		confirm_button = $(this);
+		if (!validate_email($(email_input).val())) {
+			$(email_input).addClass('invalid');
+		} else {
+			$(email_input).removeClass('invalid');
+			email = $.trim($(email_input).val());
+			$.get('api/verfEmail?email=' + email , function(response) {
+				if(response) {
+					console.log(JSON.parse(response).evid);
+					$(email_input).attr("evaluatorid", JSON.parse(response).evid);
+					$(email_input).prop("disabled", true);
+					$(confirm_button).prop("disabled", true);
+				} else {
+					confirm("" + email + " was not found, try a different email");
+				}
+
+			});
+		}
+	});
+
 	$("#add-observer").on('click', function() {
 		add_observer_div();
 	});
@@ -33,14 +55,6 @@ $(document).ready(function() {
 			alert("You must provide information for at least one observer.");
 		} else {
 			$(this).parents(".observer-info").remove();
-		}
-	});
-
-	$("#observers-container").on('blur', 'input[type=email]', function(){
-		if (!validate_email($(this).val())) {
-			$(this).addClass('invalid');
-		} else {
-			$(this).removeClass('invalid');
 		}
 	});
 
@@ -66,7 +80,7 @@ function render_activities_table(activities) {
 
 function add_observer_div() {
 	var observer_info_container = $('<div class="observer-info">');
-	var email = $('<div class="email">Email: <input type="email" placeholder="example@xyz.com"></div>');
+	var email = $('<div class="email">Email: <input type="email" placeholder="example@xyz.com"><button class="confirm-email">Confirm Email</button></div>');
 
 	var activities_container = $('<div class="activities-container"></div>');
 	$.get('api/test', function(activities_json) {
@@ -91,20 +105,12 @@ function get_observer_info(pid) {
 	var observer_info = [];
 	$(".observer-info").each(function() {
 		evaluator_id = '';
-		$.get('api/verfEmail?email=' + $.trim($(this).find($("input[type=email]")).val()) , function(response) {
-			if(response) {
-				console.log(JSON.parse(response).evid);
-			} else {
-				console.log("add to db");
-			}
-		});	
 		var info = {
-			evid: evaluator_id,
+			evid: $(this).find($("input[type=email]")).attr("evaluatorid"),
 			on_device: ($(this).find($("input[type=checkbox]"))).prop('checked')
 		}
 		var selected_activities = [];
 		($(this).find($(".active"))).each(function(index, activity) {
-			console.log(activity);
 			selected_activities.push($(activity).prop('id'));
 		});
 		info.activities = selected_activities;
@@ -159,7 +165,6 @@ function render_survey(id) {
 			radio_set = $('<div class="radio-set"></div>');
 			radio_text = ["0", "1", "2", "3", "4", "5"];
 			radio_text.forEach(function(text, index){
-				console.log(question)
 				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input></div>"));
 			});
 			text_response = $('<textarea class="comment" id="' + survey.observerId + '-' + question + '"></textarea>');

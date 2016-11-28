@@ -237,7 +237,7 @@
 		padding: 10px;
 	}
 
-	button:hover {
+	button:hover[:not(.confirm-email)] {
 		background-color: #CFD3D5;
 	}
 
