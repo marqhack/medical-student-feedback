@@ -373,33 +373,47 @@ function getActivities(req, res) {
 }
 
 function getSurvey(req, res) {
+    response = {};
     var pid = req.query['pid'];
     var evaluator_id = req.query['evid'];
+    var evaluator_name;
+    var evaluator_email;
+    var evaluator_type;
     var activities = req.query['activities'].split('-');
     console.log("pid: " + pid);
     console.log("evaluator id: " + evaluator_id);
     console.log("activities: " + activities.join(", "));
 
+    var eval_query = "SELECT evid, email, name, type FROM Evaluators WHERE evid=" + evaluator_id;
+    db.all(eval_query, function(err, rows) {
+        if (err) {
+            console.log(err);
+        } else {
+            response.email = rows[0].email;
+            response.name = rows[0].name;
+            response.type = rows[0].type;
+        }
+    });
+
+    console.log(evaluator_type);
+
     var query = "";
-    var count = 0;
-    for(var activityID in activities) {
+    activities.forEach(function(activityID, index) {
+        console.log("activityID: " + activityID);
 
         query += "SELECT A.aNum AS aNum, A.aContent AS aContent, C1.rcContent AS c1Content, C2.rcContent AS c2Content, ";
         query += "C3.rcContent AS c3Content, C4.rcContent AS c4Content, C5.rcContent AS c5Content";
         query += "\nFROM Activities A, Response_Choices C1, Response_Choices C2, Response_Choices C3, Response_Choices C4, Response_Choices C5";
         query += "\nWHERE A.aNum=" + activityID + " AND A.choice1=C1.rcNum AND A.choice2=C2.rcNum AND A.choice3=C3.rcNum AND A.choice4=C4.rcNum AND A.choice5=C5.rcNum";
         
-        if(count != activities.length - 1) 
+        if(index != activities.length - 1) 
             query += "\nUNION\n";
 
-        count++;
-    }
+    });
 
-    console.log(query);
-    response = {
-        pid: pid,
-        evid: evaluator_id
-    };
+
+    response.pid = pid;
+    response.evid = evaluator_id;
 
     db.all(query, function(err, rows) {
         if(err) {

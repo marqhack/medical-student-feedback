@@ -51,6 +51,11 @@ $(document).ready(function() {
 		}
 	});
 
+	$('body').on('click', '.confirm-selections', function(){
+		parent_container = $(this).parents(".observer-info");
+		confirm_selections(pid, $(parent_container));
+	});
+
 	$("#add-observer").on('click', function() {
 		add_observer_div();
 	});
@@ -67,7 +72,9 @@ $(document).ready(function() {
 		if ($("input[type=email].invalid").length > 0) {
 			alert('Please verify that all emails are valid.');
 		} else {
-			get_observer_info(pid);
+			// get_observer_info(pid);
+			render_observer_panel();
+			render_surveys();
 			$("#page-1").hide();
 			$("#page-2").show();
 		}
@@ -95,13 +102,31 @@ function add_observer_div() {
 	
 
 	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
-	var delete_button = $('<div><button class="delete-observer">Delete</button></div');
+	var delete_button = $('<div><button class="delete-observer">Delete</button></div>');
+	var confirm_selections_button = $('<div><button class="confirm-selections">Confirm Selections</button></div>');
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
 	$(observer_info_container).append(checkbox);
 	$(observer_info_container).append(delete_button);
+	$(observer_info_container).append(confirm_selections_button);
 	$("#observers-container").append(observer_info_container);
+}
+
+function confirm_selections(pid, parent_container) {
+	evaluator_id = $(parent_container).find($("input[type=email]")).attr("evaluatorid");
+	var selected_activities = [];
+	($(parent_container).find($(".active"))).each(function(index, activity) {
+		selected_activities.push($(activity).prop('id'));
+		console.log('button id = ' + $(activity).prop('id'));
+	});
+
+	api_call = 'api/getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+	$.get(api_call, function(response) {
+		$(parent_container).attr('survey', response);
+		console.log(response);
+	});
+	
 }
 
 function get_observer_info(pid) {
@@ -125,62 +150,55 @@ function get_observer_info(pid) {
 		observer_info: observer_info
 	}
 	console.log(survey_request);
-	render_observer_panel(survey_request);
+	render_observer_panel();
 }
 
-function render_observer_panel(survey_request){
-	survey_response = survey_request.observer_info;
-	console.log(survey_response);
-	var activities = new Set();
-	survey_response.forEach(function(person) {
-		person.activities.forEach(function(activity) {
-			activities.add(activity);
-		});
-	});
+function render_observer_panel() {
 
-	console.log(activities);
+	observer_divs = $('.observer-info');
 
 	observer_panel = $('<div class="observer-panel">Observers: </div>');
 
-	survey_response.forEach(function(survey){
-		observer_panel.append($('<button class="observer-button inactive" id="observer-'+survey.observerId+'">'+ survey.email +'</button>'));
+	observer_divs.each(function(){
+		survey = JSON.parse($(this).attr('survey'));
+		observer_panel.append($('<button class="observer-button inactive" id="observer-' + survey.evid + '">' + (survey.name || survey.email) + '</button>'));
 	});
 
 	$("#survey-container").append(observer_panel);
+
 	$(".observer-button.inactive").on('click', function(){
 		$('.observer-button').attr({ 'class': 'observer-button inactive' });
 		$(this).attr({ 'class': 'observer-button active' });
-		var id = this.id;
+		var id = $(this).prop('id').split('-')[1];
 		show_survey(id);
 	});
 
-	render_survey(survey_request);
-
 }
 
-function render_survey(survey_request) {
-	console.log("from render_survey: " + JSON.stringify(survey_request));
-	var fake_survey_response = [
-    	{ "observerId": 1, "name":"Bob Doctor", "questions": ["History-Taking","Physical Exam","Writing Orders"]},
-    	{ "observerId": 2, "name":"Tim Intern", "questions": ["Patient Handover","Physical Exam","Differential Diagnosis"]},
-    	{ "observerId": 3, "name":"Peri Professional", "questions": ["Writing Prescriptions","Physical Exam","Management Exam"]}
-	]
-	
+function render_surveys() {
 
-	fake_survey_response.forEach(function(survey) {
-		individual_container = $('<div class="survey" id="survey-observer-'+survey.observerId+'"></div>');
-		text_field_name = $('<div class="observer-name">Name: <input type="text" value="' + survey.name + '"></input></div>');
+	observer_divs = $('.observer-info');
+
+	observer_divs.each(function() {
+		survey = JSON.parse($(this).attr('survey'));
+		individual_container = $('<div class="survey" id="survey-' + (survey.evid) + '"></div>');
+		text_field_name = $('<div class="observer-name">Name: <input type="text" value="' + (survey.name || "") + '"></input></div>');
 		dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
 		questions_container = $('<div class="questions"></div>');
-		survey.questions.forEach(function(question) {
+		console.log(survey);
+		// extracted_choices = extract_choices(survey, choices_json);
+		survey.activities.forEach(function(activity) {
+		// 	console.log(activity_id);
 			question_and_responses = $('<div class="question-and-responses"></div>');
-			question_div = $('<div class="question">' + question + '</div>');
+			question_div = $('<div class="question">' + activity.aContent + '</div>');
 			radio_set = $('<div class="radio-set"></div>');
-			radio_text = ["0", "1", "2", "3", "4", "5"];
-			radio_text.forEach(function(text, index){
-				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.observerId + '-' + question + '" value="' + index + '">' + text + "</input></div>"));
-			});
-			text_response = $('<textarea class="comment" id="' + survey.observerId + '-' + question + '"></textarea>');
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="0">N/A</input></div>'));
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="1">' + activity.c1Content + "</input></div>"));
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="2">' + activity.c2Content + "</input></div>"));
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="3">' + activity.c3Content + "</input></div>"));
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="4">' + activity.c4Content + "</input></div>"));
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="5">' + activity.c5Content + "</input></div>"));
+			text_response = $('<textarea class="comment" id="' + survey.evid + '-' + activity.aNum + '"></textarea>');
 			$(question_and_responses).append($(question_div));
 			$(question_and_responses).append($(radio_set));
 			$(question_and_responses).append($(text_response));
@@ -195,7 +213,20 @@ function render_survey(survey_request) {
 
 }
 
+function extract_choices(survey_info, choices_json) {
+	extracted_choices = { };
+	activity_ids = new Set(survey_info.activities);
+	JSON.parse(choices_json).forEach(function(activity) {
+		if (activity_ids.has(activity.aNum.toString())) {
+			extracted_choices['' + activity.aNum.toString()] = 'blah';
+		}
+	});
+
+	console.log(extracted_choices);
+}
+
 function show_survey(id){
+	console.log("show survey id: " + id);
 	var survey_id = "survey-" + id;
 	$(".survey").hide();
 	$("#"+survey_id).show();
