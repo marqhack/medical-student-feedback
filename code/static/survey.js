@@ -125,6 +125,7 @@ function add_observer_div() {
 
 	var activities_container = $('<div class="activities-container"></div>');
 	$.get('test', function(activities_json) {
+		console.log(activities_json);
 		activities_json.forEach(function(activity) {
 			//console.log(activity);	
 			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive">' + activity.aContent + '</button>'));

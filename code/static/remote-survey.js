@@ -1,7 +1,7 @@
 $(document).ready(function() {
 	url = $(location).attr('href');
 	console.log(url);
-	query = 'api/getSurvey' + url.split('html')[1];
+	query = '/getSurvey' + url.split('html')[1];
 	console.log(query);
 
 	$.get(query, function(response) {
@@ -18,7 +18,7 @@ function confirm_selections(pid, parent_container) {
 		console.log('button id = ' + $(activity).prop('id'));
 	});
 
-	api_call = 'api/getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+	api_call = '/getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
 		console.log(response);
