@@ -1,5 +1,11 @@
 var pid = '';
 $(document).ready(function() {
+	add_action_listeners();
+
+	$("#add-observer").click();
+});
+
+function add_action_listeners() {
 	$("#login-button").on('click', function(e) {
 		pid = $("#student-pid").val();
 		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ) {
@@ -95,7 +101,7 @@ $(document).ready(function() {
 
 						if(data=="sent") {
 							alert("email sent successfully");
-						} else{
+						} else {
 							alert("error sending email");
 						}
 					});
@@ -106,17 +112,16 @@ $(document).ready(function() {
 		
 		$("#page-1").hide();
 		$("#page-2").show();
-		render_observer_panel();
-		render_surveys();		
+		// render_observer_panel();
+		// render_surveys();		
 	});
 
-	$("#add-observer").click();
-
-
-});
-
-function render_activities_table(activities) {
-	console.log(activities);
+	$("body").on('click', '.observer-button.inactive', function(){
+		$('.observer-button').attr({ 'class': 'observer-button inactive' });
+		$(this).attr({ 'class': 'observer-button active' });
+		var id = $(this).prop('id').split('-')[1];
+		show_survey(id);
+	});
 }
 
 function add_observer_div() {
@@ -126,8 +131,7 @@ function add_observer_div() {
 	var activities_container = $('<div class="activities-container"></div>');
 	$.get('test', function(activities_json) {
 		console.log(activities_json);
-		activities_json.forEach(function(activity) {
-			//console.log(activity);	
+		activities_json.forEach(function(activity) {	
 			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive">' + activity.aContent + '</button>'));
 		});
 	});
@@ -152,16 +156,27 @@ function confirm_selections(pid, parent_container) {
 		console.log('button id = ' + $(activity).prop('id'));
 	});
 
-	api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+	api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + get_selected_activities(parent_container).join('-');
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
-		console.log(response);
+		add_to_observer_tabs(response);
+		render_survey(response);
 
 		($(parent_container).find($(".activity-button"))).each(function(index, activity) {
 			$(activity).prop('disabled', true);
 		});
 	});
 	
+}
+
+function get_selected_activities(observer_container) {
+	var selected_activities = [];
+	($(observer_container).find($(".active"))).each(function(index, activity) {
+		selected_activities.push($(activity).prop('id'));
+		console.log('button id = ' + $(activity).prop('id'));
+	});
+
+	return selected_activities;
 }
 
 function get_observer_info() {
@@ -173,11 +188,8 @@ function get_observer_info() {
 			email: $(this).find($("input[type=email]")).val(),
 			on_device: ($(this).find($("input[type=checkbox]"))).prop('checked')
 		}
-		var selected_activities = [];
-		($(this).find($(".active"))).each(function(index, activity) {
-			selected_activities.push($(activity).prop('id'));
-		});
-		info.activities = selected_activities;
+
+		info.activities = get_selected_activities($(this));
 		observer_info.push(info);
 	});
 
@@ -187,6 +199,11 @@ function get_observer_info() {
 	}
 
 	return observer_info;
+}
+
+function add_to_observer_tabs(survey_obj) {
+	survey_obj = JSON.parse(survey_obj);
+	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.name || survey_obj.email) + '</button>'));
 }
 
 function render_observer_panel() {
@@ -211,41 +228,35 @@ function render_observer_panel() {
 
 }
 
-function render_surveys() {
+function render_survey(survey_obj) {
 
-	observer_divs = $('.observer-info');
-
-	observer_divs.each(function() {
-		survey = JSON.parse($(this).attr('survey'));
-		individual_container = $('<div class="survey" id="survey-' + (survey.evid) + '"></div>');
-		text_field_name = $('<div class="observer-name">Name: <input type="text" value="' + (survey.name || "") + '"></input></div>');
-		dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
-		questions_container = $('<div class="questions"></div>');
-		console.log(survey);
-		// extracted_choices = extract_choices(survey, choices_json);
-		survey.activities.forEach(function(activity) {
-		// 	console.log(activity_id);
-			question_and_responses = $('<div class="question-and-responses"></div>');
-			question_div = $('<div class="question">' + activity.aContent + '</div>');
-			radio_set = $('<div class="radio-set"></div>');
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="0">N/A</input></div>'));
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="1">' + activity.c1Content + "</input></div>"));
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="2">' + activity.c2Content + "</input></div>"));
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="3">' + activity.c3Content + "</input></div>"));
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="4">' + activity.c4Content + "</input></div>"));
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="5">' + activity.c5Content + "</input></div>"));
-			text_response = $('<textarea class="comment" id="' + survey.evid + '-' + activity.aNum + '"></textarea>');
-			$(question_and_responses).append($(question_div));
-			$(question_and_responses).append($(radio_set));
-			$(question_and_responses).append($(text_response));
-			$(questions_container).append($(question_and_responses));
-		});
-		$(individual_container).append($(text_field_name));
-		$(individual_container).append($(dropdown_position));
-		$(individual_container).append($(questions_container));
-		$("#survey-container").append($(individual_container));
-		$(individual_container).attr("hidden", "true");
+	survey_obj = JSON.parse(survey_obj);
+	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
+	text_field_name = $('<div class="observer-name">Name: <input type="text" value="' + (survey_obj.name || "") + '"></input></div>');
+	dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
+	questions_container = $('<div class="questions"></div>');
+	survey_obj.activities.forEach(function(activity) {
+		question_and_responses = $('<div class="question-and-responses"></div>');
+		question_div = $('<div class="question">' + activity.aContent + '</div>');
+		radio_set = $('<div class="radio-set"></div>');
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="0">N/A</input></div>'));
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="1">' + activity.c1Content + "</input></div>"));
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="2">' + activity.c2Content + "</input></div>"));
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="3">' + activity.c3Content + "</input></div>"));
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="4">' + activity.c4Content + "</input></div>"));
+		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="5">' + activity.c5Content + "</input></div>"));
+		text_response = $('<textarea class="comment" id="' + survey_obj.evid + '-' + activity.aNum + '"></textarea>');
+		$(question_and_responses).append($(question_div));
+		$(question_and_responses).append($(radio_set));
+		$(question_and_responses).append($(text_response));
+		$(questions_container).append($(question_and_responses));
 	});
+	$(individual_container).append($(text_field_name));
+	$(individual_container).append($(dropdown_position));
+	$(individual_container).append($(questions_container));
+	$(individual_container).append($('<button id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
+	$(individual_container).attr("hidden", "true");
+	$("#survey-container").append($(individual_container));
 
 }
 
