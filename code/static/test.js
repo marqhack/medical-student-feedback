@@ -39,10 +39,10 @@ $(document).ready(function() {
 					$(email_input).prop("disabled", true);
 					$(confirm_button).prop("disabled", true);
 				} else {
-					if (confirm("" + email + " was not found. Click OK to add this email to the database (you will still need to click Confirm). Click Cancel to try a different email.")) {
+					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
 						console.log(email);
-						$.post('api/addEvaluator', JSON.stringify(post_obj), function() { console.log("succeeded"); }, "JSON");
+						$.post('api/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
 				}
