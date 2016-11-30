@@ -1,5 +1,6 @@
+var pid = '';
 $(document).ready(function() {
-	var pid = '';
+
 	$("#login-button").on('click', function(e) {
 		pid = $("#student-pid").val();
 		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ) {
@@ -68,6 +69,7 @@ $(document).ready(function() {
 		}
 	});
 
+<<<<<<< HEAD
 	$("#submit-observers").on('click', function() {
 		if ($("input[type=email].invalid").length > 0) {
 			alert('Please verify that all emails are valid.');
@@ -78,9 +80,46 @@ $(document).ready(function() {
 			$("#page-1").hide();
 			$("#page-2").show();
 		}
+=======
+	$("#observers-container").on('blur', 'input[type=email]', function(){
+		if (!validate_email($(this).val())) {
+			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+		}
+	});
+
+	//redirect to survey page for on device feedback
+	//send emails to observers not taking on device
+	$("#submit-observers").on('click', function() {
+		var observer_info = get_observer_info();
+
+		//if observer not giving feedback on device,
+		//send email with link to survey
+		for(var i = 0; i< observer_info.length; i++){
+			if(!observer_info[i].on_device){
+				var to = observer_info[i].email;
+				var subject = pid + " requests feedback";
+				var text = "URL TO SURVEY GOES HERE";
+				$.get("http://localhost:3000/sendEmail", {to:to, subject:subject, text:text}, function(data){
+					if(data=="sent"){
+						alert("email sent successfully");
+					}else{
+						alert("error sending email");
+					}
+				});
+			}
+		}
+		
+		
+		$("#page-1").hide();
+		$("#page-2").show();
+		render_observer_panel();
+		render_survey();		
+		
+>>>>>>> css
 	});
 
 	$("#add-observer").click();
+
 
 });
 
@@ -101,9 +140,14 @@ function add_observer_div() {
 	});
 	
 
+<<<<<<< HEAD
 	var checkbox = $('<div class="checkbox"><input type="checkbox">Taking survey on this device?</div>');
 	var delete_button = $('<div><button class="delete-observer">Delete</button></div>');
 	var confirm_selections_button = $('<div><button class="confirm-selections">Confirm Selections</button></div>');
+=======
+	var checkbox = $('<input type="checkbox"><label>Taking survey on this device?</label>');
+	var delete_button = $('<button class="delete-observer">Delete</button>');
+>>>>>>> css
 
 	$(observer_info_container).append(email);
 	$(observer_info_container).append(activities_container);
@@ -145,12 +189,17 @@ function get_observer_info(pid) {
 		info.activities = selected_activities;
 		observer_info.push(info);
 	});
+<<<<<<< HEAD
 	var survey_request = {
 		pid: pid,
 		observer_info: observer_info
 	}
 	console.log(survey_request);
 	render_observer_panel();
+=======
+	return observer_info;
+	console.log(observer_info);
+>>>>>>> css
 }
 
 function render_observer_panel() {
