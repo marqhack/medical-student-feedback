@@ -5,9 +5,9 @@ var nodemailer = require('nodemailer');
 //needs to be setup to send from server
 var smtpTransport = nodemailer.createTransport("SMTP", {
     service: "Gmail",
-    auth: {
-        user: "eringraceboehlert@gmail.com",
-        pass: "str@ng3loop"
+    auth: { 
+        user: "kcirsbboh@gmail.com",
+        pass: "thepasswordispassword"
     }
 });
 
@@ -33,14 +33,14 @@ api.use(bodyParser.json( { type: '*/*' }));
 }); */
 
 
-api.get('/test', db.getActivities);
-api.get('/verfEmail', db.checkEmail);
-api.get('/fetchActWithChoices', db.getActivityWithChoices);
-api.get('/getSurvey', db.getSurvey);
-api.post('/addEvaluator', db.addEvaluator);
+app.get('/test', db.getActivities);
+app.get('/verfEmail', db.checkEmail);
+app.get('/fetchActWithChoices', db.getActivityWithChoices);
+app.get('/getSurvey', db.getSurvey);
+app.post('/addEvaluator', db.addEvaluator);
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
-api.get('/epalist', function(req, res){
+app.get('/epalist', function(req, res){
     var query = db.getDB();
     spillEPAs();
 
@@ -59,7 +59,7 @@ api.get('/epalist', function(req, res){
     }
 });
 
-api.post('/epalist', function(req, res){
+app.post('/epalist', function(req, res){
     var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
     stmt.run(row.pid + 1, "name");
     stmt.finalize();
@@ -75,11 +75,11 @@ var profData = [
     
 ];
 
-api.get('/profs', function (req, res) {
+app.get('/profs', function (req, res) {
     res.send(JSON.stringify(profData));
 });
 
-api.post('/profs', function (req, res) {
+app.post('/profs', function (req, res) {
     var newProf = req.body; 
     profData.push(newProf); 
     
@@ -102,7 +102,7 @@ app.get('/admin', function(req, res){
 
 
 //API root
-api.use(bodyParser.json( { type: '*/*' })); 
+app.use(bodyParser.json( { type: '*/*' })); 
 
 app.use('/api', api)
 app.use(express.static('static'));

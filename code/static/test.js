@@ -32,7 +32,7 @@ $(document).ready(function() {
 		} else {
 			$(email_input).removeClass('invalid');
 			email = $.trim($(email_input).val());
-			$.get('api/verfEmail?email=' + email , function(response) {
+			$.get('verfEmail?email=' + email , function(response) {
 				if(response) {
 					console.log(JSON.parse(response).evid);
 					$(email_input).attr("evaluatorid", JSON.parse(response).evid);
@@ -42,6 +42,7 @@ $(document).ready(function() {
 					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
 						console.log(email);
+						
 						$.post('api/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
@@ -85,7 +86,7 @@ $(document).ready(function() {
 					var to = observer_info[i].email;
 					var subject = pid + " requests feedback";
 					var text = "URL TO SURVEY GOES HERE";
-					$.get("http://localhost:3000/sendEmail", {to:to, subject:subject, text:text}, function(data){
+					$.get("sendEmail", {to:to, subject:subject, text:text}, function(data){
 						if(data=="sent"){
 							alert("email sent successfully");
 						}else{
@@ -122,7 +123,7 @@ function add_observer_div() {
 	var email = $('<div class="email">Email: <input type="email" placeholder="example@xyz.com"><button class="confirm-email">Confirm Email</button></div>');
 
 	var activities_container = $('<div class="activities-container"></div>');
-	$.get('api/test', function(activities_json) {
+	$.get('test', function(activities_json) {
 		activities_json.forEach(function(activity) {
 			//console.log(activity);	
 			activities_container.append($('<button id="' + activity.aNum + '"" class="inactive">' + activity.aContent + '</button>'));
@@ -149,7 +150,7 @@ function confirm_selections(pid, parent_container) {
 		console.log('button id = ' + $(activity).prop('id'));
 	});
 
-	api_call = 'api/getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+	api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
 		console.log(response);
