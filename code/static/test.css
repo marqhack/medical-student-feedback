@@ -1,13 +1,14 @@
 #app-container {
-	background-color: #3853A0;
+	background-color: #397AAC;
 	padding: 15px;
 	margin: auto;
 	border-radius: 10px;
 	max-width: 1000px;
 	min-width: 300px;
 }
+	
 	h1 {
-		font-family: Helvetica, serif;
+		font-family: "Times New Roman", serif;
 		text-align: center;
 		color: #FFFFFF;
 	}
@@ -45,9 +46,10 @@
 
 			.observer-info {
 				display:inline-block;
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 10px;
 				padding: 10px;
+				margin-top: 15px;
 				margin-bottom: 15px;
 				font-size: 20px;
 				font-family: Arial, sans-serif;
@@ -86,35 +88,23 @@
 				}
 
 				.checkbox {
-
+					width: 500px;
 				}
 					input[type=checkbox] {
-						position: relative;
-						visibility: hidden;
-						cursor: pointer;
-						width: 55px;
-						height: 30px;
+						height:25px;
+						width: 20px;
+						margin-right: 5px;
 						vertical-align: middle;
 					}
 
-					input[type=checkbox]:after {
-						display: block;
-						content: "NO";
-						position: absolute;
-						visibility: visible;
-						height: 30px;
-						line-height: 30px;
-						width: 50px;
-						text-align: center;
-						border-radius: 4px;
-						background: #F29633;
+					.delete-observer {
+						float: right;
+						background-color: #FF0000;
 						color: #FFFFFF;
-						cursor: pointer;
 					}
-					input[type=checkbox]:checked:after {
-						content: "YES";
-						background: #39C958;
-						color: #FFFFFF;
+
+					.delete-observer:hover {
+						background-color: #FF0000;
 					}
 
 
@@ -131,12 +121,12 @@
 				font-family: Arial, sans-serif;
 				padding: 10px;
 				margin-bottom: 15px;
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 4px;
 			}
 
 			.survey {
-				background-color: #AAD0F3;
+				background-color: #AAD5F3;
 				border-radius: 10px;
 				padding: 10px;
 				margin-bottom: 15px;
