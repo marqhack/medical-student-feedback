@@ -1,0 +1,19 @@
+{
+	"pid": 123456789,
+	"evaluator_id": 1,
+	"evaluator_name": "Richard Hobbs",
+	"evaluator_type": "Faculty",
+	"responses": [{
+					"activity_id": 1,
+					"choice": 3,
+					"comment": "this will be a string with the comment"
+				}, {
+					"activity_id": 3,
+					"choice": 4,
+					"comment": "if no comment is entered, do you want an empty string or null?"
+				}, {
+					"activity_id": 10,
+					"choice": 0,
+					"comment": null
+				}]
+}
