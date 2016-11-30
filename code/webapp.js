@@ -17,7 +17,7 @@ var db = require('./dbhandler');
 var path = require("path");
 var app = express();
 var api = express();
-api.use(bodyParser.json( { type: '*/*' })); 
+app.use(bodyParser.json( { type: '*/*' })); 
 
 
 // Object returned by call
@@ -104,7 +104,7 @@ app.get('/admin', function(req, res){
 //API root
 app.use(bodyParser.json( { type: '*/*' })); 
 
-app.use('/api', api)
+// app.use('/api', api);
 app.use(express.static('static'));
 
 app.listen(3000, function () {

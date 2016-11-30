@@ -43,7 +43,7 @@ $(document).ready(function() {
 						post_obj = { email: email };
 						console.log(email);
 						
-						$.post('api/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
+						$.post('/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
 				}
