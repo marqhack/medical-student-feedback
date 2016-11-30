@@ -1,5 +1,5 @@
+var pid = '';
 $(document).ready(function() {
-	var pid = '';
 	$("#login-button").on('click', function(e) {
 		pid = $("#student-pid").val();
 		if( pid == '' || pid.length != 9 || !($.isNumeric(pid)) ) {
@@ -94,8 +94,8 @@ $(document).ready(function() {
 					});
 				}
 			}
-			render_observer_panel();
-			render_surveys();
+			// render_observer_panel();
+			// render_surveys();
 			$("#page-1").hide();
 			$("#page-2").show();
 		}
@@ -157,7 +157,7 @@ function confirm_selections(pid, parent_container) {
 	
 }
 
-function get_observer_info(pid) {
+function get_observer_info() {
 	var observer_info = [];
 	$(".observer-info").each(function() {
 		evaluator_id = '';
@@ -180,6 +180,7 @@ function get_observer_info(pid) {
 	}
 	console.log(survey_request);
 	render_observer_panel();
+	render_surveys();
 
 	return observer_info;
 	console.log(observer_info);
