@@ -17,12 +17,13 @@ $(document).ready(function() {
 	// render_observers_panel();
 	$("#page-1").on('click', '.inactive' ,function() {
 		//console.log("inactive clicked");
-		$(this).attr({ 'class': 'active' });
+		$(this).removeClass('inactive');
+		$(this).addClass('active');
 	});
 
 	$("#page-1").on('click', '.active' ,function() {
-		console.log("active clicked");
-		$(this).attr({ 'class': 'inactive' });
+		$(this).removeClass('active');
+		$(this).addClass('inactive');
 	});
 
 	$("body").on('click', '.confirm-email', function() {
@@ -55,6 +56,7 @@ $(document).ready(function() {
 	$('body').on('click', '.confirm-selections', function(){
 		parent_container = $(this).parents(".observer-info");
 		confirm_selections(pid, $(parent_container));
+		$(this).prop('disabled', true);
 	});
 
 	$("#add-observer").on('click', function() {
@@ -127,7 +129,7 @@ function add_observer_div() {
 	$.get('api/test', function(activities_json) {
 		activities_json.forEach(function(activity) {
 			//console.log(activity);	
-			activities_container.append($('<button id="' + activity.aNum + '"" class="inactive">' + activity.aContent + '</button>'));
+			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive">' + activity.aContent + '</button>'));
 		});
 	});
 	
@@ -157,6 +159,10 @@ function confirm_selections(pid, parent_container) {
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
 		console.log(response);
+
+		($(parent_container).find($(".activity-button"))).each(function(index, activity) {
+			$(activity).prop('disabled', true);
+		});
 	});
 	
 }
@@ -244,18 +250,6 @@ function render_surveys() {
 		$(individual_container).attr("hidden", "true");
 	});
 
-}
-
-function extract_choices(survey_info, choices_json) {
-	extracted_choices = { };
-	activity_ids = new Set(survey_info.activities);
-	JSON.parse(choices_json).forEach(function(activity) {
-		if (activity_ids.has(activity.aNum.toString())) {
-			extracted_choices['' + activity.aNum.toString()] = 'blah';
-		}
-	});
-
-	console.log(extracted_choices);
 }
 
 function show_survey(id){
