@@ -235,6 +235,10 @@
 		background-color: #515458;
 	}
 
+	button.active:disabled {
+		opacity: .7;
+	}
+
 
 
 

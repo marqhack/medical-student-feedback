@@ -16,12 +16,13 @@ $(document).ready(function() {
 	// render_observers_panel();
 	$("#page-1").on('click', '.inactive' ,function() {
 		//console.log("inactive clicked");
-		$(this).attr({ 'class': 'active' });
+		$(this).removeClass('inactive');
+		$(this).addClass('active');
 	});
 
 	$("#page-1").on('click', '.active' ,function() {
-		console.log("active clicked");
-		$(this).attr({ 'class': 'inactive' });
+		$(this).removeClass('active');
+		$(this).addClass('inactive');
 	});
 
 	$("body").on('click', '.confirm-email', function() {
@@ -41,8 +42,6 @@ $(document).ready(function() {
 				} else {
 					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
-						console.log(email);
-						
 						$.post('/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
@@ -55,6 +54,7 @@ $(document).ready(function() {
 	$('body').on('click', '.confirm-selections', function(){
 		parent_container = $(this).parents(".observer-info");
 		confirm_selections(pid, $(parent_container));
+		$(this).prop('disabled', true);
 	});
 
 	$("#add-observer").on('click', function() {
@@ -69,44 +69,45 @@ $(document).ready(function() {
 		}
 	});
 
+	$("#observers-container").on('blur', 'input[type=email]', function(){
+		if (!validate_email($(this).val())) {
+			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address');
+		}
+	});
+
+	//redirect to survey page for on device feedback
+	//send emails to observers not taking on device
 	$("#submit-observers").on('click', function() {
+		var observer_info = get_observer_info();
+
 		if ($("input[type=email].invalid").length > 0) {
 			alert('Please verify that all emails are valid.');
 		} else {
-			// get_observer_info(pid);
-
-			var observer_info = get_observer_info();
-
-			//redirect to survey page for on device feedback
-			//send emails to observers not taking on device
 			//if observer not giving feedback on device,
 			//send email with link to survey
 			for(var i = 0; i< observer_info.length; i++){
-				if(!observer_info[i].on_device){
+				if(!observer_info[i].on_device) {
 					var to = observer_info[i].email;
 					var subject = pid + " requests feedback";
 					var text = "URL TO SURVEY GOES HERE";
+
 					$.get("sendEmail", {to:to, subject:subject, text:text}, function(data){
-						if(data=="sent"){
+
+						if(data=="sent") {
 							alert("email sent successfully");
-						}else{
+						} else{
 							alert("error sending email");
 						}
 					});
 				}
 			}
-			// render_observer_panel();
-			// render_surveys();
-			$("#page-1").hide();
-			$("#page-2").show();
 		}
-
-	});
-
-	$("#observers-container").on('blur', 'input[type=email]', function(){
-		if (!validate_email($(this).val())) {
-			alert('Please provide a valid email. ' + $(this).val() + ' is not a valid email address.');
-		}
+		
+		
+		$("#page-1").hide();
+		$("#page-2").show();
+		render_observer_panel();
+		render_surveys();		
 	});
 
 	$("#add-observer").click();
@@ -126,7 +127,7 @@ function add_observer_div() {
 	$.get('test', function(activities_json) {
 		activities_json.forEach(function(activity) {
 			//console.log(activity);	
-			activities_container.append($('<button id="' + activity.aNum + '"" class="inactive">' + activity.aContent + '</button>'));
+			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive">' + activity.aContent + '</button>'));
 		});
 	});
 	
@@ -154,6 +155,10 @@ function confirm_selections(pid, parent_container) {
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
 		console.log(response);
+
+		($(parent_container).find($(".activity-button"))).each(function(index, activity) {
+			$(activity).prop('disabled', true);
+		});
 	});
 	
 }
@@ -179,12 +184,8 @@ function get_observer_info() {
 		pid: pid,
 		observer_info: observer_info
 	}
-	console.log(survey_request);
-	render_observer_panel();
-	render_surveys();
 
 	return observer_info;
-	console.log(observer_info);
 }
 
 function render_observer_panel() {
@@ -245,18 +246,6 @@ function render_surveys() {
 		$(individual_container).attr("hidden", "true");
 	});
 
-}
-
-function extract_choices(survey_info, choices_json) {
-	extracted_choices = { };
-	activity_ids = new Set(survey_info.activities);
-	JSON.parse(choices_json).forEach(function(activity) {
-		if (activity_ids.has(activity.aNum.toString())) {
-			extracted_choices['' + activity.aNum.toString()] = 'blah';
-		}
-	});
-
-	console.log(extracted_choices);
 }
 
 function show_survey(id){

@@ -11,7 +11,6 @@ var smtpTransport = nodemailer.createTransport("SMTP", {
     }
 });
 
-
 var bodyParser = require('body-parser');
 var db = require('./dbhandler');
 var path = require("path");
