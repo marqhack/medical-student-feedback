@@ -10,6 +10,13 @@
       <div id="app-container">
         <center><img src="logo.png" alt="TIME logo" ></center>
         <div id="login-page">
+        <div id="purpose">
+          <span class="header">Mobile Medical Student Assessment</span><br/><br/>
+          <span class="subheader">The goal of this assessment is to assess how close a medical
+          student is to independent functioning (entrustability) for a certain observed activity.</span>
+        </div>
+          <br/>
+          <br/>
           Welcome!
           <div id="login-container"></div>
           <input id="student-pid" type="text" placeholder="Student PID">
@@ -19,12 +26,25 @@
         <div id="page-1" hidden="true">
           <div id="observers-container"></div>
           <button id="add-observer" type="button">Add Observer</button>
-          <button id="submit-observers" type="submit">Continue to Surveys</button>
+          <button id="submit-observers" type="submit" disabled=true>Continue to Surveys</button>
         </div>
 
         <div id="page-2" hidden="true">
           <div class="observer-panel">Observers: </div>
           <div id="survey-container"></div>
+            <div id="patient-instructions" hidden="true">
+             <h4>Patient Instructions for Survey Completion</h4>
+              Thank you for agreeing to provide feedback for our medical students.
+              It is rare that they get to hear directly from patients about their performance,
+              so your input is valued and appreciated!
+              <br/>
+              <br/>
+              All responses are confidential and anonymous and they will not affect your medical
+              care. As you will not share any identifying information for this survey and
+              since results are not shared immediately, your feedback will remain anonymous.
+              <br/>
+              <br/>
+            </div>
             <button id="done" type="submit">Done</button>
           </div>
       </div>
