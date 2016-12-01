@@ -7,6 +7,11 @@
 	min-width: 300px;
 }
 	
+	h1 {
+		text-align: center;
+		color: #FFFFFF;
+	}
+
 	#purpose {
 		width: 700px;
 		margin: auto;

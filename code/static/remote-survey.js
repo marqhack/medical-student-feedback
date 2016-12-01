@@ -38,7 +38,7 @@ function render_survey(survey_obj) {
 	survey.activities.forEach(function(activity) {
 	// 	console.log(activity_id);
 		question_and_responses = $('<div class="question-and-responses"></div>');
-		question_div = $('<div class="question">' + activity.aContent + '</div>');
+		question_div = $('<div class="question">Level of Entrustability for ' + activity.aContent + '</div>');
 		radio_set = $('<div class="radio-set"></div>');
 		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="0">N/A</input></div>'));
 		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey.evid + '-' + activity.aNum + '" value="1">' + activity.c1Content + "</input></div>"));
