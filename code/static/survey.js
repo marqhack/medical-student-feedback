@@ -140,6 +140,7 @@ function add_action_listeners() {
 	$("body").on('click', '.observer-button.inactive', function(){
 		//always render patient survey
 		render_patient_survey();
+		$('#patient-instructions').show();
 
 		$('.observer-button').attr({ 'class': 'observer-button inactive' });
 		$(this).attr({ 'class': 'observer-button active' });
