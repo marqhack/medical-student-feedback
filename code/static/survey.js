@@ -84,19 +84,26 @@ function add_action_listeners() {
 	//redirect to survey page for on device feedback
 	//send emails to observers not taking on device
 	$("#submit-observers").on('click', function() {
-		var observer_info = get_observer_info();
+		var survey_info = get_observer_info();
+		console.log(survey_info);
 
 		if ($("input[type=email].invalid").length > 0) {
 			alert('Please verify that all emails are valid.');
 		} else {
 			//if observer not giving feedback on device,
 			//send email with link to survey
-			for(var i = 0; i< observer_info.length; i++){
-				if(!observer_info[i].on_device) {
-					var to = observer_info[i].email;
-					var subject = pid + " requests feedback";
-					var text = "URL TO SURVEY GOES HERE";
-
+			for(var i = 0; i< survey_info.observer_info.length; i++){
+				if(!survey_info.observer_info[i].on_device) {
+					var url = $(location).attr('href');
+					url = url.replace("survey.html", "remote-survey.html");
+					var evid = survey_info.observer_info[i].evid;
+					var activities = survey_info.observer_info[i].activities.join('-');
+					var linkParams = "?pid=" + pid + "&evid=" + evid
+						 + "&activities=" + activities;
+					var to = survey_info.observer_info[i].email;
+					var	subject = pid + " requests feedback";
+					var text = "Link to survey: " + url + linkParams;
+					
 					$.get("sendEmail", {to:to, subject:subject, text:text}, function(data){
 
 						if(data=="sent") {
@@ -197,8 +204,7 @@ function get_observer_info() {
 		pid: pid,
 		observer_info: observer_info
 	}
-
-	return observer_info;
+	return survey_request;
 }
 
 function add_to_observer_tabs(survey_obj) {
