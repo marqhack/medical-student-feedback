@@ -133,15 +133,13 @@ function add_action_listeners() {
 		
 		$("#page-1").hide();
 		$("#page-2").show();
+		//always render patient survey
+		render_patient_survey();
 		// render_observer_panel();
 		// render_surveys();		
 	});
 
 	$("body").on('click', '.observer-button.inactive', function(){
-		//always render patient survey
-		render_patient_survey();
-		$('#patient-instructions').show();
-
 		$('.observer-button').attr({ 'class': 'observer-button inactive' });
 		$(this).attr({ 'class': 'observer-button active' });
 		var id = $(this).prop('id').split('-')[1];
@@ -305,12 +303,12 @@ function render_patient_survey() {
 	question_and_responses = $('<div class="question-and-responses"></div>');
 	question_div = $('<div class="question">Question:</div>');
 	radio_set = $('<div class="radio-set"></div>');
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="0">N/A</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="1">1 = poorly/incompletely</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="2">2</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="3">3 = average</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="4">4</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" value="5">5 = excellently/completely</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="0">N/A</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="1">1 = poorly/incompletely</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="2">2</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="3">3 = average</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="4">4</input></div>'));
+	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="5">5 = excellently/completely</input></div>'));
 	$(question_and_responses).append($(question_div));
 	$(question_and_responses).append($(radio_set));
 	$(questions_container).append($(question_and_responses));
