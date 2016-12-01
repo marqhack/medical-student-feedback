@@ -126,6 +126,8 @@ function add_action_listeners() {
 					});
 				}
 			}
+
+			$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
 		}
 		
 		
@@ -187,14 +189,14 @@ function confirm_selections(pid, parent_container) {
 	$.get(api_call, function(response) {
 		$(parent_container).attr('survey', response);
 		add_to_observer_tabs(response);
-		render_survey(response);
-
-		
+		render_survey(response);		
 
 		($(parent_container).find($(".activity-button"))).each(function(index, activity) {
 			$(activity).prop('disabled', true);
 		});
 	});
+
+
 	
 }
 
@@ -232,7 +234,6 @@ function get_observer_info() {
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
 	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.name || survey_obj.email) + '</button>'));
-	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
 }
 
 function render_observer_panel() {
@@ -240,6 +241,7 @@ function render_observer_panel() {
 	observer_divs = $('.observer-info');
 
 	observer_panel = $('<div class="observer-panel">Observers: </div>');
+
 
 	observer_divs.each(function(){
 		survey = JSON.parse($(this).attr('survey'));
