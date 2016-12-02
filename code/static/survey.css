@@ -12,23 +12,31 @@
 		color: #FFFFFF;
 	}
 
-	#purpose {
-		width: 700px;
-		margin: auto;
+	#timeLogo {
+		width: 150px;
 	}
 
-	.header {
-		font-family: "Times New Roman", serif;
-		font-size: 30px;
-		padding: 10px;
+	#somLogo {
+		float: right;
+		width: 200px;
+		margin-top: 40px;
+		margin-right: 15px;
+	}
+
+	#mobileLogo {
+		width: 450px;
+	}
+
+	#logos {
+		margin-top: 80px;
 		border-top: thin solid #FFFFFF;
-		border-bottom: thin solid #FFFFFF;
 	}
 
-	.subheader {
-		font-family: Arial, sans-serif;
+	#purpose {
+		max-width: 700px;
+		margin: auto;
+		font-family: Georgia, sans-serif;
 		font-size: 20px;
-		padding: 10px;
 		text-align: center;
 	}
 
@@ -48,7 +56,7 @@
 	}	
 
 		#login-container {
-
+			margin-bottom: 100px;
 		}
 
 		#login-button {

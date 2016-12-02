@@ -8,19 +8,18 @@
   <body>
     <div>
       <div id="app-container">
-        <center><img src="logo.png" alt="TIME logo" ></center>
+        <center><img src="mobileLogo.png" alt="Mobile Medical Student Assessment Logo" id="mobileLogo"></center>
         <div id="login-page">
-        <div id="purpose">
-          <span class="header">Mobile Medical Student Assessment</span><br/><br/>
-          <span class="subheader">The goal of this assessment is to assess how close a medical
-          student is to independent functioning (entrustability) for a certain observed activity.</span>
-        </div>
+          <div id="purpose">
+            The goal of this assessment is to assess how close a medical student is to independent functioning (entrustability) for a certain observed activity.
+          </div>
           <br/>
           <br/>
           Welcome!
-          <div id="login-container"></div>
+          <div id="login-container">
           <input id="student-pid" type="text" placeholder="Student PID">
           <button id="login-button" type="submit">Login</button>
+          </div>
         </div>
 
         <div id="page-1" hidden="true">
@@ -47,7 +46,11 @@
               <br/>
             </div>
             <button id="done" type="submit">Done</button>
-          </div>
+        </div>
+        <div id="logos">
+        <img src="timeLogo.png" alt="TIME logo" id="timeLogo">
+        <img src="somLogo.png" alt="UNC School of Medicine Logo" id="somLogo">
+        </div>
       </div>
     </div>   
   </body>
