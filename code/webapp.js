@@ -36,7 +36,9 @@ app.get('/test', db.getActivities);
 app.get('/verfEmail', db.checkEmail);
 app.get('/fetchActWithChoices', db.getActivityWithChoices);
 app.get('/getSurvey', db.getSurvey);
+app.get('/getStudentName', db.getNameByPID);
 app.post('/addEvaluator', db.addEvaluator);
+app.post('/logAssessment', db.logAssessment);
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
 app.get('/epalist', function(req, res){
