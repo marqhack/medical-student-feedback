@@ -1,20 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta charset="UTF-8" />
-    <title>Survey</title>
-
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
-    
-
+  <link href="survey.css" rel="stylesheet" type="text/css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+  <script src="survey.js"></script>
   </head>
   <body>
     <div>
-      <h3>Survey</h3>
+      <div id="app-container">
+        <center><img src="mobileLogo.png" alt="Mobile Medical Student Assessment Logo" id="mobileLogo"></center>
+        <div id="login-page">
+          <div id="purpose">
+            The goal of this assessment is to assess how close a medical student is to independent functioning (entrustability) for a certain observed activity.
+          </div>
+          <br/>
+          <br/>
+          Welcome!
+          <div id="login-container">
+          <input id="student-pid" type="text" placeholder="Student PID">
+          <button id="login-button" type="submit">Login</button>
+          </div>
+        </div>
 
-      <div id="survey-container" style="margin-top: 50px"></div>
-       <script src="/bundle.js" type="text/javascript"></script> 
+        <div id="page-1" hidden="true">
+          <div id="observers-container"></div>
+          <button id="add-observer" type="button">Add Observer</button>
+          <button id="submit-observers" type="submit" disabled=true>Continue to Surveys</button>
+        </div>
+
+        <div id="page-2" hidden="true">
+          <div class="observer-panel">Observers: </div>
+
+          <div id="survey-container"></div>
+            <div id="patient-instructions" hidden="true">
+             <h4>Patient Instructions for Survey Completion</h4>
+              Thank you for agreeing to provide feedback for our medical students.
+              It is rare that they get to hear directly from patients about their performance,
+              so your input is valued and appreciated!
+              <br/>
+              <br/>
+              All responses are confidential and anonymous and they will not affect your medical
+              care. As you will not share any identifying information for this survey and
+              since results are not shared immediately, your feedback will remain anonymous.
+              <br/>
+              <br/>
+            </div>
+            <button id="done" type="submit">Done</button>
+        </div>
+        <div id="logos">
+        <img src="timeLogo.png" alt="TIME logo" id="timeLogo">
+        <img src="somLogo.png" alt="UNC School of Medicine Logo" id="somLogo">
+        </div>
+      </div>
     </div>   
   </body>
 </html>

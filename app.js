@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var routes = require('./epa-tracker/routes/index');
-var survey = require('./survey/webapp');
+var survey = require('./survey/eval');
 
 var app = express();
 
@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, './epa-tracker/public')));
 
 app.use('/', routes);
-app.use('/survey', survey);
+app.use('/survey', survey); 
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

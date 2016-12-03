@@ -90,10 +90,8 @@ app.post('/profs', function (req, res) {
 
 
 
-//App root
-app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname+'/static/index.html'));
-});
+
+
 
 
 //App admin page
@@ -105,8 +103,10 @@ app.get('/admin', function(req, res){
 //API root
 app.use(bodyParser.json( { type: '*/*' })); 
 
+ 
 // app.use('/api', api);
-app.use(express.static('static'));
+//app.use(express.static( path.join(__dirname+'static') ));
+app.use(express.static( 'static' ));
 
 
 
