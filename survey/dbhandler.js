@@ -1,7 +1,8 @@
 var bodyParser = require('body-parser');
 var sqlite3 = require('sqlite3').verbose();
-var db = new sqlite3.Database("medfeedback.db");
-
+var path = require('path');
+var dbPath = path.resolve(__dirname, 'medFeedback.db')
+var db = new sqlite3.Database(dbPath);
 /**
  * Intialize the database, creating the tables if they do not already exist. 
  */
