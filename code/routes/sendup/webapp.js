@@ -106,8 +106,8 @@ app.use(bodyParser.json( { type: '*/*' }));
 // app.use('/api', api);
 app.use(express.static('static'));
 
-app.listen(8080, function () {
-    console.log('Listening on port 8080!');
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
 });
 
 
