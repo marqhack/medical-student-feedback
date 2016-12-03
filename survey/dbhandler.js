@@ -7,17 +7,17 @@ var db = new sqlite3.Database("medfeedback.db");
  */
 function initdb() {
     db.serialize(function() {
-        db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING NOT NULL)");
-        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, name STRING, email STRING NOT NULL, type STRING, UNIQUE(email))");
+        db.run("CREATE TABLE IF NOT EXISTS Students(pid INTEGER PRIMARY KEY, firstName STRING NOT NULL, lastName STRING NOT NULL)");
+        db.run("CREATE TABLE IF NOT EXISTS Evaluators(evid INTEGER PRIMARY KEY AUTOINCREMENT, firstName STRING, lastName STRING, email STRING NOT NULL, type STRING, UNIQUE(email))");
         db.run("CREATE TABLE IF NOT EXISTS EPAs(epaNum INTEGER PRIMARY KEY, activity STRING NOT NULL)");
         db.run("CREATE TABLE IF NOT EXISTS Activities(aNum INTEGER PRIMARY KEY AUTOINCREMENT, aContent STRING NOT NULL, choice1 INTEGER, choice2 INTEGER, choice3 INTEGER, choice4 INTEGER, \
                 choice5 INTEGER, FOREIGN KEY(choice1, choice2, choice3, choice4, choice5) REFERENCES Response_Choices, UNIQUE(aContent))");
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, \
                 PRIMARY KEY(epaNum, aNum))");
         db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent, UNIQUE(rcContent))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, on_device INTEGER, \
-                created DATE NOT NULL, completed DATE DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
-        db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, completed DATE DEFAULT NULL, comment STRING DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, \
+                FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
+        //db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
 }
 
@@ -200,10 +200,10 @@ function viewEPAs(req, res) {
 /**
  *  Add to the Students table. 
  */
-function addStudent(name) {
+function addStudent(pid, fn, ln) {
     db.serialize(function() { 
-        var stmt = db.prepare("INSERT INTO Students(name) VALUES(?)");
-        var run = stmt.run(name, function callback(err) {
+        var stmt = db.prepare("INSERT INTO Students(pid, firstName, lastName) VALUES(?,?,?)");
+        var run = stmt.run(pid, fn, ln, function callback(err) {
             // no known errors should occur when inserting to Students
             if(err) 
                 console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
@@ -215,7 +215,7 @@ function addStudent(name) {
  *  Input: Object with the following properties: 
  *         {activities: [x1, x2,...,x3], pid: #, email: email, on_device: false};
  */
-function logAssessment(assessment) {
+/*function logAssessment(assessment) {
     var response = [];
     for(i = 0; i < assessment.length; i++) {
         var current = assessment[i];
@@ -246,7 +246,7 @@ function logAssessment(assessment) {
               console.log("Error: The email did not match an evaluator in the database.");  
         });        
     }
-}
+}*/
 
 /**
  *  Checks if a given email matches that of an evaluator in the database. 
@@ -255,11 +255,27 @@ function logAssessment(assessment) {
  */
 function checkEmail(req, res) {
     var email = req.query['email'];
-    db.all("SELECT evid, name, type FROM Evaluators WHERE email=?", email, function(err, rows) {
-        if(rows.length != 0)
+    db.all("SELECT evid, firstName, lastName, type FROM Evaluators WHERE email=?", email, function(err, rows) {
+        if(rows != null && rows.length != 0)
             res.send(JSON.stringify(rows[0]))
         else
             res.send(null);
+    });
+}
+
+/**
+ *  Checks whether a student is in the system, and returns his/her name if so. 
+ *  >>Input: req.query['email']: the requested email adress
+ *  >>Output: evid, name, and type of the evaluator. null if an evaluator is not found
+ */
+function getNameByPID(req, res) {
+    db.all("SELECT firstName, lastName FROM Students WHERE pid=?", req.query['pid'], function(err, rows) {
+        if(rows != null && rows.length != 0)
+            res.send(JSON.stringify(rows[0]))
+        else {
+            console.log("Access denied for student with PID " + req.query['pid']);
+            res.send(null);
+        }
     });
 }
 
@@ -319,6 +335,7 @@ function addEvaluator(req, res) {
                 console.log("Seems like " + email + " was added correctly");
             }
         });
+        stmt.finalize();
     });
 
     db.all("SELECT evid FROM Evaluators WHERE email=?", email, function(err, rows) {
@@ -326,45 +343,45 @@ function addEvaluator(req, res) {
     });
 }
 
-/*function addEvaluator(req, res) {
-    var name = req.query['name'];
-    var email = req.query['email'];
-    var type = req.query['type'];
-
-    db.serialize(function() { 
-        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
-        var run = stmt.run(name, email, type, function callback(err) {
-            // error if email is repeated
-            if(err)    // needs more clear error specification
-                console.log("Error: Evaluator " + name + " is already in the database. This error can be ignored.");  
-        });
-    });
-
-    db.all("SELECT evid, name, type FROM Evaluators WHERE email=?", email, function(err, rows) {
-        res.send(JSON.stringify(rows));
-    });
-} */
-
-
 /**
  *  Given an aid and score, update the respective entry in the assessments table. An error will occur if the entry
  *  is a duplicate (a duplicate is defined as the same student being evaluated on the same EPA more than once by the same
  *  evaluator in a given day). 
  */
-function logResponse(aid, score) {
-    var currentdate = new Date();
+function logAssessment(req, res) {
+    var currentdate = new Date(); // will have to become date time
     currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
-    db.serialize(function() {
-        var stmt = db.prepare("UPDATE Assessments SET score=?, completed=? WHERE aid=?");
-        var run = stmt.run(score, currentdate, aid, function callback(err) {
-            if(err) {
-                console.log("Error: Duplicate Assessment.");  
-                //console.log(err);
-            }
+    req.body['responses'].forEach(function(activity) {     
+        enterToDB(req.body['pid'], req.body['evaluator_id'], activity['activity_id'], activity['choice'], currentdate, activity['comment']);
+    });   
+
+
+    function enterToDB(pid, evid, aNum, choiceNum, date, comment) {
+        db.serialize(function() { 
+            var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, score, completed, comment) VALUES(?,?,?,?,?,?)");
+            var run = stmt.run(pid, evid, aNum, choiceNum, date, comment, function callback(err) {
+                if(err) 
+                    console.log("Unexpected error in inserting a new Assessment."); 
+            });
+            stmt.finalize();
         });
-        stmt.finalize();            
+    }
+    db.all("SELECT * FROM Evaluators where evid=?", req.body['evaluator_id'], function(err, rows) {
+        if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
+            var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + req.body['evaluator_id']);
+            var run = stmt.run(req.body['evaluator_fname'], req.body['evaluator_lname'], req.body['evaluator_type'], function callback(err) {
+            if(err) 
+                console.log("Unexpected error in inserting an evaluator."); 
+            });
+            stmt.finalize();
+        }
     });
-}
+
+    /** Send evaluation over to other team */
+    function sendAssessment() {
+
+    }
+} 
 
 function getActivities(req, res) {
     db.all("SELECT aNum, aContent FROM Activities", function(err, rows) {
@@ -439,17 +456,56 @@ function test(j) {
 }
 
 
-/** For testing purposes only. To be deleted in the future */
+/** Functions for testing purposes only. To be deleted in the future */
+
+
 function addEvaluatorNoReq(json) {
     db.serialize(function() { 
-        var stmt = db.prepare("INSERT INTO Evaluators(name, email, type) VALUES(?, ?, ?)");
-        var run = stmt.run(json['name'], json['email'], json['type'], function callback(err) {
+        var stmt = db.prepare("INSERT INTO Evaluators(firstName, lastName, email, type) VALUES(?,?,?,?)");
+        var run = stmt.run(json['fn'], json['ln'], json['email'], json['type'], function callback(err) {
             // error if email is repeated
             if(err)    // needs more clear error specification
                 res.send("Error: Evaluator %s is already in the database.", name);  
         });
+        stmt.finalize();
     });
 }
+
+// log a new assessment to db
+function logAssessmentNoReq(json) {
+    var currentdate = new Date();
+    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+    json['responses'].forEach(function(activity) {     
+        enterToDB(json['pid'], json['evaluator_id'], activity['activity_id'], activity['choice'], currentdate, activity['comment']);
+    });   
+
+
+    function enterToDB(pid, evid, aNum, choiceNum, date, comment) {
+        db.serialize(function() { 
+            var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, score, completed, comment) VALUES(?,?,?,?,?,?)");
+            var run = stmt.run(pid, evid, aNum, choiceNum, date, comment, function callback(err) {
+                if(err) 
+                    console.log("Unexpected error in inserting a new Assessment."); 
+            });
+            stmt.finalize();
+        });
+    }
+    db.all("SELECT * FROM Evaluators where evid=?", json['evaluator_id'], function(err, rows) {
+        if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
+            var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + json['evaluator_id']);
+            var run = stmt.run(json['evaluator_fname'], json['evaluator_lname'], json['evaluator_type'], function callback(err) {
+            if(err) 
+                console.log("Unexpected error in inserting an evaluator."); 
+            });
+            stmt.finalize();
+        }
+    });
+
+    /** Send evaluation over to other team */
+    function sendAssessment() {
+
+    }
+} 
 
 module.exports.addEpaWithQuestions = addEpaWithQuestions;
 module.exports.getDB = getDB;
@@ -458,11 +514,13 @@ module.exports.addQuestionToEPA = addQuestionToEPA;
 module.exports.addStudent = addStudent;
 module.exports.addEvaluator = addEvaluator;
 module.exports.logAssessment = logAssessment;
-module.exports.logResponse = logResponse;
+//module.exports.logResponse = logResponse;
 module.exports.getActivities = getActivities;
 module.exports.checkEmail = checkEmail;
 module.exports.getActivityWithChoices = getActivityWithChoices;
 module.exports.viewEPAs = viewEPAs;
 module.exports.getSurvey = getSurvey;
+module.exports.getNameByPID = getNameByPID;
 /** To be deleted in the future */
 module.exports.addEvaluatorNoReq = addEvaluatorNoReq;
+module.exports.logAssessmentNoReq = logAssessmentNoReq;

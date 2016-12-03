@@ -113,36 +113,48 @@ epawquest4 = {'epaNum': 2, 'question':'Differential Diagnosis'}; //error
 epawquest5 = {'epaNum': 1, 'question':'New q for EPA1'}; //error
 epawquest6 = {'epaNum': 1, 'question':'Testing'}; //5--
 epawquest7 = {'epaNum': 15, 'question':'Management plan'}; // error
-/*db.addQuestionToEPA(epawquest1);
-db.addQuestionToEPA(epawquest2);
-db.addQuestionToEPA(epawquest3);
-db.addQuestionToEPA(epawquest4);
-db.addQuestionToEPA(epawquest5);
-db.addQuestionToEPA(epawquest6);
-db.addQuestionToEPA(epawquest7);*/
 //EPA is not in db yet--error.
 epawquest2 = {'epaNum': 30, 'question':'3rd q for epa3'}; // correctly threw error! --
 db.addQuestionToEPA(epawquest2);
 
 
 /** Students */
-db.addStudent("Martin Porras"); //1
-db.addStudent("Marquis Hackett"); //2
-db.addStudent("Tyler Klose"); //3
-db.addStudent("Erin Boehlert"); //4
+db.addStudent(720529523,'Martin', 'Porras'); //1
+db.addStudent(123456789,'Marquis', 'Hackett'); //2
+db.addStudent(123678904,'Tyler', 'Klose'); //3
+db.addStudent(126432578,'Erin', 'Boehlert'); //4
 
 
 /** Evaluators */
-evaluator1 = {'name': "Rick Hobbs", 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
-evaluator2 = {'name': "John Doe", 'email': "jd@med.unc.edu", 'type': 'Faculty'}; //2
-evaluator3 = {'name': "Johnny Knoxville", 'email': "jox@med.unc.edu", 'type': 'Professional'}; //3
+evaluator1 = {'fn': 'Rick', 'ln': 'Hobbs', 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
+evaluator2 = {'fn': 'John', 'ln': 'Doe', 'email': "jd@med.unc.edu", 'type': 'Faculty'}; //2
+evaluator3 = {'fn': 'Johnny', 'ln': 'Knoxville', 'email': "jox@med.unc.edu", 'type': 'Professional'}; //3
 db.addEvaluatorNoReq(evaluator1);
 db.addEvaluatorNoReq(evaluator2);
 db.addEvaluatorNoReq(evaluator3);
 
 
 //** Assessments */
-/*var object1 = {activities: [1, 2, 3, 4], pid: 1, email: "rhobbs@med.unc.edu", on_device: false};
+var assess = [];
+//*aid: 1, commentID: 1; aid:2, commentId: -- */
+obj = {'pid': 720529523, 'evaluator_id': 1, 'evaluator_fname': 'Rick', 'evaluator_lname': 'Hobbs', 'evaluator_type': 'Faculty', 'responses': [{'activity_id': 1, 'choice': 3, 'comment': 'Rick\'s comment'}, {'activity_id': 3, 'choice': 5, 'comment': null}]}
+//*aid: 3, commentID: --; aid:4, commentId: 4 */
+obj2 = {'pid': 123456789, 'evaluator_id': 2, 'evaluator_fname': 'John', 'evaluator_lname': 'Doe', 'evaluator_type': 'Resident', 'responses': [{'activity_id': 5, 'choice': 2, 'comment': null}, {'activity_id': 3, 'choice': 4, 'comment': 'Doe\'s comment on activity 3'}]}
+// with new evaluator
+newev = {'fn': null, 'ln': null, 'email': 'newguy@newguy.com', 'type': null}
+db.addEvaluatorNoReq(newev);
+//*aid: 5, commentID: 5 */
+obj3 = {'pid': 720529523, 'evaluator_id': 4, 'evaluator_fname': 'New', 'evaluator_lname': 'Guy', 'evaluator_type': 'Resident', 'responses': [{'activity_id': 6, 'choice': 1, 'comment': 'Quite bad'}]};
+
+assess.push(obj);
+assess.push(obj2);
+assess.push(obj3);
+
+for(i = 0; i < assess.length; i++) {
+	db.logAssessmentNoReq(assess[i]);
+}
+
+/*var object1 = {activities: [1, 2, 3, 4], pid: 1, em2il: "rhobbs@med.unc.edu", on_device: false};
 var object2 = {activities: [4, 5, 6, 1], pid: 2, email: "jox@med.unc.edu", on_device: true};
 var array = [];
 array.push(object1);

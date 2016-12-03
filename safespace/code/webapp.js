@@ -1,23 +1,10 @@
 var express = require('express');
-var nodemailer = require('nodemailer');
-
-//currently sending email from Gmail
-//needs to be setup to send from server
-var smtpTransport = nodemailer.createTransport("SMTP", {
-    service: "Gmail",
-    auth: { 
-        user: "kcirsbboh@gmail.com",
-        pass: "thepasswordispassword"
-    }
-});
-
 var bodyParser = require('body-parser');
 var db = require('./dbhandler');
 var path = require("path");
-var app = express.Router();
-
-app.use(bodyParser.json( { type: '*/*' })); 
-
+var app = express();
+var api = express();
+api.use(bodyParser.json( { type: '*/*' })); 
 
 // Object returned by call
 // returns an array of epa objects
@@ -32,16 +19,11 @@ app.use(bodyParser.json( { type: '*/*' }));
 }); */
 
 
-app.get('/test', db.getActivities);
-app.get('/verfEmail', db.checkEmail);
-app.get('/fetchActWithChoices', db.getActivityWithChoices);
-app.get('/getSurvey', db.getSurvey);
-app.get('/getStudentName', db.getNameByPID);
-app.post('/addEvaluator', db.addEvaluator);
-app.post('/logAssessment', db.logAssessment);
+
+
 
 // format: json['epaNum'] = epa#, json['qNum'] = q#, json['qContent'] = question content
-app.get('/epalist', function(req, res){
+api.get('/epalist', function(req, res){
     var query = db.getDB();
     spillEPAs();
 
@@ -60,7 +42,7 @@ app.get('/epalist', function(req, res){
     }
 });
 
-app.post('/epalist', function(req, res){
+api.post('/epalist', function(req, res){
     var stmt = db.prepare("UPDATE medFeedback INSERT INTO students VALUES(?, ?)");
     stmt.run(row.pid + 1, "name");
     stmt.finalize();
@@ -76,16 +58,14 @@ var profData = [
     
 ];
 
-app.get('/profs', function (req, res) {
+api.get('/profs', function (req, res) {
     res.send(JSON.stringify(profData));
 });
 
-app.post('/profs', function (req, res) {
+api.post('/profs', function (req, res) {
     var newProf = req.body; 
     profData.push(newProf); 
-    
 });
-
 
 
 
@@ -103,30 +83,11 @@ app.get('/admin', function(req, res){
 
 
 //API root
-app.use(bodyParser.json( { type: '*/*' })); 
+api.use(bodyParser.json( { type: '*/*' })); 
 
-// app.use('/api', api);
+app.use('/api', api)
 app.use(express.static('static'));
 
-
-
-//nodemailer email functionality
-app.get('/sendEmail', function(req, res){
-    var mailOptions = {
-        to: req.query.to,
-        subject: req.query.subject,
-        text: req.query.text
-    }
-    console.log(mailOptions);
-    smtpTransport.sendMail(mailOptions, function(error, response){
-        if(error){
-            console.log(error);
-            res.end("error");
-        }else{
-            console.log("Message sent: " + response.message);
-            res.end("sent");
-        }
-    });
+app.listen(3000, function () {
+    console.log('Example app listening on port 3000!');
 });
-
-module.exports = app;
