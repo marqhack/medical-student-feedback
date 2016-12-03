@@ -9,35 +9,10 @@ var nodemailer = require('nodemailer');
 
 router.use(express.static( path.join(__dirname,'static') ));
 
-
+// Send home page
 router.get('/', function(req, res, next) {
-  res.send("response from survey");
-}); 
-
-router.get('/survey', function(req, res, next) {
   res.sendfile(path.join(__dirname+'/static/survey.html')); 
 });
-
-router.get('/survey.js', function(req, res, next) {
-  res.sendfile(path.join(__dirname+'/static/survey.js')); 
-});
-
-router.get('/survey.css', function(req, res, next) {
-  res.sendfile(path.join(__dirname+'/static/survey.css')); 
-});
-
-router.get('/logo.png', function(req, res, next) {
-  res.sendfile(path.join(__dirname+'/static/logo.png')); 
-});
-
-router.get('remote', function(req, res, next) {
-  res.sendFile(path.join(__dirname+ '/static/remote-survey.html'));
-});
-
-router.get('/remote-survey.js', function(req, res, next) {
-  res.sendFile(path.join(__dirname+ '/static/remote-survey.js'));
-});
-
 
 // Functions for database interactions
 router.get('/test', db.getActivities);
