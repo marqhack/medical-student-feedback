@@ -1,0 +1,79 @@
+<div ng-controller="adviserCtrl">
+  <div class="container-fluid">
+    <div class="row block">
+      <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <button type="button" id="adviserHelp" class="glyphicon glyphicon-info-sign btn btn-link" data-toggle="modal" data-target="#helpModal" ng-click="displayHelp($event);"></button>
+        <h1 align="center">
+          {{adviser}}
+        </h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12 col-md-10 col-md-offset-1">
+        <ul class="tab">
+          <li class="tabitem" ng-click="changeFilter(0)">All Students</li>
+          <div ng-repeat="gradyear in gradyears">
+            <li class="tabitem" ng-click="changeFilter(gradyear)">Year {{gradyear}}</li>
+          </div>
+        </ul>
+
+        <table class="table table-bordered table-hover" style="margin-top: 15px">
+          <tr>
+            <th class="table-category" ng-click="sortBy('lastName')">Student Name</th>
+            <th class="table-category" ng-click="sortBy('email')">Email</th>
+            <th class="table-category" ng-click="sortBy('year')" style="text-align: center;">Year</th>
+            <th class="table-category" ng-click="sortBy('average')" style="text-align: center;">Average EPA</th>
+            <th class="table-category" ng-click="sortBy('improved')" style="text-align: center;">
+              Improved <span class="glyphicon glyphicon-arrow-up" style="color: #388E3C;"></span>
+            </th>
+            <th class="table-category" ng-click="sortBy('regressed')" style="text-align: center;">
+              Regressed <span class="glyphicon glyphicon-arrow-down" style="color: #D32F2F;"></span>
+            </th>
+          </tr>
+          <tr ng-repeat="advisee in advisees | filter: {year: curfilter} |orderBy:property:reverse">
+            <td><a href="/#/{{advisee.uid}}">{{advisee.lname + ', ' + advisee.fname}}</a></td>
+            <td>{{advisee.email}}</td>
+            <td style="text-align: center;">{{advisee.year}}</td >
+            <td style="text-align: center;">{{advisee.average}}</td >
+            <td ng-class="advisee.improved >= threshold ? 'urgent-green' : ''" style="text-align: center;">
+              <div ng-if="advisee.improved >= threshold">
+                <b>{{advisee.improved}}</b>
+              </div>
+              <div ng-if="advisee.improved < threshold">
+                {{advisee.improved}}
+              </div>
+            </td>
+            <td ng-class="advisee.regressed >= threshold ? 'urgent-red' : ''" style="text-align: center;">
+              <div ng-if="advisee.regressed >= threshold">
+                <b>{{advisee.regressed}}</b>
+              </div>
+              <div ng-if="advisee.regressed < threshold">
+                {{advisee.regressed}}
+              </div>
+            </td>
+          </tr>
+        </table>
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <div id="helpModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Help</h4>
+        </div>
+        <div class="modal-body">
+          {{helpText}}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
