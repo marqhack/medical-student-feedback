@@ -48,7 +48,7 @@ function add_action_listeners() {
 				} else {
 					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
-						$.post('/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
+						$.post('/addEvaluatorNoReq', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
 				}
@@ -147,6 +147,13 @@ function add_action_listeners() {
 		
 	});
 
+	$("body").on('click', '.survey-submit', function() {
+		this_survey = $(this).parents('.survey');
+		survey_response = collect_response(this_survey);
+		console.log(survey_response);
+		$.post('/logAssessment', JSON.stringify(survey_response), function(){ console.log("i think it was logged successfully"); }, "JSON");
+	});
+
 
 }
 
@@ -232,7 +239,7 @@ function get_observer_info() {
 
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
-	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.name || survey_obj.email) + '</button>'));
+	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.last_name || survey_obj.email) + '</button>'));
 }
 
 function render_observer_panel() {
@@ -244,7 +251,7 @@ function render_observer_panel() {
 
 	observer_divs.each(function(){
 		survey = JSON.parse($(this).attr('survey'));
-		observer_panel.append($('<button class="observer-button inactive" id="observer-' + survey.evid + '">' + (survey.name || survey.email) + '</button>'));
+		observer_panel.append($('<button class="observer-button inactive" id="observer-' + survey.evid + '">' + (survey.last_name || survey.email) + '</button>'));
 	});
 
 	$("#survey-container").append(observer_panel);
@@ -262,11 +269,11 @@ function render_survey(survey_obj) {
 
 	survey_obj = JSON.parse(survey_obj);
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
-	text_field_name = $('<div class="observer-name">Name: <input type="text" value="' + (survey_obj.name || "") + '"></input></div>');
+	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '"></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '"></input></div>');
 	dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
-		question_and_responses = $('<div class="question-and-responses"></div>');
+		question_and_responses = $('<div class="question-and-responses" activity_number=' + activity.aNum + '></div>');
 		question_div = $('<div class="question">Level of Entrustability for ' + activity.aContent + '</div>');
 		radio_set = $('<div class="radio-set"></div>');
 		$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + survey_obj.evid + '-' + activity.aNum + '" value="0">N/A</input></div>'));
@@ -284,7 +291,7 @@ function render_survey(survey_obj) {
 	$(individual_container).append($(text_field_name));
 	$(individual_container).append($(dropdown_position));
 	$(individual_container).append($(questions_container));
-	$(individual_container).append($('<button id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
+	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
 	$(individual_container).attr("hidden", "true");
 	$("#survey-container").append($(individual_container));
 
@@ -329,4 +336,23 @@ function show_survey(id){
 function validate_email(email) {
     var reg_ex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg_ex.test(email);
+}
+
+function collect_response(survey_jquery) {
+	survey_response = {};
+	question_responses = [];
+	survey_response.pid = pid;
+	survey_response.evaluator_id = $(survey_jquery).prop('id').split('-')[1];
+	survey_response.evaluator_fname = $(survey_jquery).find('.first-name').val();
+	survey_response.evaluator_lname = $(survey_jquery).find('.last-name').val();
+	survey_response.evaluator_type = $(survey_jquery).find('#position').val();
+	$(survey_jquery).find('.question-and-responses').each(function() {
+		answer = {};
+		answer.activity_id = $(this).attr('activity_number');
+		answer.choice = $(this).find('input[type=radio]:checked').val();
+		answer.comment = $(this).find('.comment').val();
+		question_responses.push(answer);
+	});
+	survey_response.responses = question_responses;
+	return survey_response;
 }
