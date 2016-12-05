@@ -160,7 +160,9 @@ function add_action_listeners() {
 		$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
 	});
 
-
+	$("body").on('click', '#submit-patient', function() {
+		collect_patient_response();
+	});
 }
 
 function add_observer_div() {
@@ -362,5 +364,13 @@ function collect_response(survey_jquery) {
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
+	$(survey_jquery).empty();
+	$(survey_jquery).append('<p>Thank you for your feedback!</p>');
 	return survey_response;
+}
+
+function collect_patient_response() {
+	console.log($('#survey-patient'));
+	$('#survey-patient').empty();
+	$('#survey-patient').append('<p>Thank you for your feedback!</p>');
 }
