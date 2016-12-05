@@ -1,8 +1,10 @@
 var bodyParser = require('body-parser');
-var sqlite3 = require('sqlite3').verbose();
+var sqlite3 = require('sqlite3').verbose(); 
 var path = require('path');
 var dbPath = path.resolve(__dirname, 'medFeedback.db')
 var db = new sqlite3.Database(dbPath);
+
+
 /**
  * Intialize the database, creating the tables if they do not already exist. 
  */
@@ -402,13 +404,14 @@ function getSurvey(req, res) {
     console.log("evaluator id: " + evaluator_id);
     console.log("activities: " + activities.join(", "));
 
-    var eval_query = "SELECT evid, email, name, type FROM Evaluators WHERE evid=" + evaluator_id;
+    var eval_query = "SELECT evid, email, firstName, lastName type FROM Evaluators WHERE evid=" + evaluator_id;
     db.all(eval_query, function(err, rows) {
         if (err) {
             console.log(err);
         } else {
             response.email = rows[0].email;
-            response.name = rows[0].name;
+            response.first_name = rows[0].firstName;
+            response.last_name = rows[0].lastName;
             response.type = rows[0].type;
         }
     });
@@ -495,9 +498,10 @@ function logAssessmentNoReq(json) {
         if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
             var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + json['evaluator_id']);
             var run = stmt.run(json['evaluator_fname'], json['evaluator_lname'], json['evaluator_type'], function callback(err) {
-            if(err) 
-                console.log("Unexpected error in inserting an evaluator."); 
-            });
+                            if(err) {
+                                 console.log("Unexpected error in updating an evaluator."); 
+                            }
+                        });
             stmt.finalize();
         }
     });
