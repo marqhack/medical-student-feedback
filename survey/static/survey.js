@@ -39,7 +39,7 @@ function add_action_listeners() {
 		} else {
 			$(email_input).removeClass('invalid');
 			email = $.trim($(email_input).val());
-			$.get('verfEmail?email=' + email , function(response) {
+			$.get('./verfEmail?email=' + email , function(response) {
 				if(response) {
 					console.log(JSON.parse(response).evid);
 					$(email_input).attr("evaluatorid", JSON.parse(response).evid);
@@ -48,7 +48,7 @@ function add_action_listeners() {
 				} else {
 					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
-						$.post('/addEvaluatorNoReq', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
+						$.post('./addEvaluator', post_obj, function() { $(confirm_button).click(); }, "JSON");
 					
 					}
 				}
@@ -122,7 +122,7 @@ function add_action_listeners() {
 					var	subject = pid + " requests feedback";
 					var text = "Link to survey: " + url + linkParams;
 					
-					$.get("sendEmail", {to:to, subject:subject, text:text}, function(data){
+					$.get("./sendEmail", {to:to, subject:subject, text:text}, function(data){
 
 						if(data=="sent") {
 							alert("email sent successfully");
@@ -157,7 +157,7 @@ function add_action_listeners() {
 		this_survey = $(this).parents('.survey');
 		survey_response = collect_response(this_survey);
 		console.log(survey_response);
-		$.post('/logAssessment', JSON.stringify(survey_response), function(){ console.log("i think it was logged successfully"); }, "JSON");
+		$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
 	});
 
 
@@ -168,7 +168,7 @@ function add_observer_div() {
 	var email = $('<div class="email">Email: <input type="email" placeholder="example@xyz.com"><button class="confirm-email">Confirm Email</button></div>');
 
 	var activities_container = $('<div class="activities-container"></div>');
-	$.get('test', function(activities_json) {
+	$.get('./test', function(activities_json) {
 		console.log(activities_json);
 		activities_json.forEach(function(activity) {	
 			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive" disabled = true>' + activity.aContent + '</button>'));
