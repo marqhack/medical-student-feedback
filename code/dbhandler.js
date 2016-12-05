@@ -384,7 +384,7 @@ function logAssessment(req, res) {
 } 
 
 function getActivities(req, res) {
-    db.all("SELECT aNum, aContent FROM Activities", function(err, rows) {
+    db.all("SELECT aNum, aContent FROM Activities ORDER BY aNum", function(err, rows) {
         res.send(rows);
     });
 }
