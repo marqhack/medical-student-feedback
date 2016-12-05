@@ -401,7 +401,7 @@ function getSurvey(req, res) {
     console.log("evaluator id: " + evaluator_id);
     console.log("activities: " + activities.join(", "));
 
-    var eval_query = "SELECT evid, email, firstName, lastName type FROM Evaluators WHERE evid=" + evaluator_id;
+    var eval_query = "SELECT evid, email, firstName, lastName, type FROM Evaluators WHERE evid=" + evaluator_id;
     db.all(eval_query, function(err, rows) {
         if (err) {
             console.log(err);
