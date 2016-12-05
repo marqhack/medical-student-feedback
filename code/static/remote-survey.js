@@ -34,6 +34,7 @@ function confirm_selections(pid, parent_container) {
 }
 
 function render_survey(survey_obj) {
+	console.log(survey_obj);
 	survey_obj = JSON.parse(survey_obj);
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
 	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '"></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '"></input></div>');
@@ -62,7 +63,6 @@ function render_survey(survey_obj) {
 	$(individual_container).append($(dropdown_position));
 	$(individual_container).append($(questions_container));
 	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
-	$(individual_container).attr("hidden", "true");
 	$("#survey-container").append($(individual_container));
 }
 

@@ -59,20 +59,20 @@ function add_action_listeners() {
 			//and confirm selections button once email is confirmed
 			$('.activity-button').prop('disabled', false);
 			$('input[type=checkbox]').prop('disabled', false);
-			$('.confirm-selections').prop('disabled', false);
+			// $('.confirm-selections').prop('disabled', false);
 		}
 
 
 	});
 
-	$('body').on('click', '.confirm-selections', function(){
-		parent_container = $(this).parents(".observer-info");
-		confirm_selections(pid, $(parent_container));
-		$(this).prop('disabled', true);
+	// $('body').on('click', '.confirm-selections', function(){
+	// 	parent_container = $(this).parents(".observer-info");
+	// 	confirm_selections(pid, $(parent_container));
+	// 	$(this).prop('disabled', true);
 
-		//enable continue to surveys button
-		$('#submit-observers').prop('disabled', false);
-	});
+	// 	//enable continue to surveys button
+	// 	$('#submit-observers').prop('disabled', false);
+	// });
 
 	$("#add-observer").on('click', function() {
 		add_observer_div();
@@ -103,6 +103,12 @@ function add_action_listeners() {
 		} else {
 			//if observer not giving feedback on device,
 			//send email with link to survey
+
+			$('.observer-info').filter(function(index) {
+				return ($("input[type=checkbox]:checked", this).length == 1);
+			}).each(function () {
+				confirm_selections(pid, $(this));
+			});
 			
 			for(var i = 0; i< survey_info.observer_info.length; i++){
 				if(!survey_info.observer_info[i].on_device) {
@@ -170,7 +176,7 @@ function add_observer_div() {
 	});
 
 	
-	var confirm_selections_button = $('<div><button class="confirm-selections" disabled=true>Confirm Selections</button></div>');
+	// var confirm_selections_button = $('<div><button class="confirm-selections" disabled=true>Confirm Selections</button></div>');
 	var checkbox = $('<input type="checkbox" disabled=true><label>Taking survey on this device?</label>');
 	var delete_button = $('<button class="delete-observer">Delete</button>');
 
@@ -179,7 +185,7 @@ function add_observer_div() {
 	$(observer_info_container).append(activities_container);
 	$(observer_info_container).append(checkbox);
 	$(observer_info_container).append(delete_button);
-	$(observer_info_container).append(confirm_selections_button);
+	// $(observer_info_container).append(confirm_selections_button);
 	$("#observers-container").append(observer_info_container);
 }
 
