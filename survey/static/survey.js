@@ -112,8 +112,8 @@ function add_action_listeners() {
 			
 			for(var i = 0; i< survey_info.observer_info.length; i++){
 				if(!survey_info.observer_info[i].on_device) {
-					var url = $(location).attr('href');
-					url = url.replace("survey.html", "remote-survey.html");
+					var url = $(location).attr('href').split('survey/')[0];
+					url = url + 'survey/remote-survey.html';
 					var evid = survey_info.observer_info[i].evid;
 					var activities = survey_info.observer_info[i].activities.join('-');
 					var linkParams = "?pid=" + pid + "&evid=" + evid
@@ -365,7 +365,7 @@ function collect_response(survey_jquery) {
 	});
 	survey_response.responses = question_responses;
 	$(survey_jquery).empty();
-	$(survey_jquery).append('<p>Thank you for your feedback!</p>');
+	$(survey_jquery).append('<p style="text-align: center;">Thank you for your feedback!</p>');
 	return survey_response;
 }
 

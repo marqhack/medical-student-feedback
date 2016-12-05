@@ -1,8 +1,7 @@
+var pid;
 $(document).ready(function() {
 	url = $(location).attr('href');
-	console.log(url);
-	query = '/getSurvey' + url.split('html')[1];
-	console.log(query);
+	query = './getSurvey' + url.split('html')[1];
 
 	$.get(query, function(response) {
 		render_survey(response);
@@ -12,30 +11,13 @@ $(document).ready(function() {
 		this_survey = $(this).parents('.survey');
 		survey_response = collect_response(this_survey);
 		console.log(survey_response);
-		$.post('/logAssessment', JSON.stringify(survey_response), function(){ console.log("i think it was logged successfully"); }, "JSON");
+		$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
 	});
 });
 
-
-function confirm_selections(pid, parent_container) {
-	evaluator_id = $(parent_container).find($("input[type=email]")).attr("evaluatorid");
-	var selected_activities = [];
-	($(parent_container).find($(".active"))).each(function(index, activity) {
-		selected_activities.push($(activity).prop('id'));
-		console.log('button id = ' + $(activity).prop('id'));
-	});
-
-	api_call = '/getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
-	$.get(api_call, function(response) {
-		$(parent_container).attr('survey', response);
-		console.log(response);
-	});
-	
-}
-
 function render_survey(survey_obj) {
-	console.log(survey_obj);
 	survey_obj = JSON.parse(survey_obj);
+	pid = survey_obj.pid;
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
 	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '"></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '"></input></div>');
 	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
@@ -66,13 +48,6 @@ function render_survey(survey_obj) {
 	$("#survey-container").append($(individual_container));
 }
 
-function show_survey(id){
-	console.log("show survey id: " + id);
-	var survey_id = "survey-" + id;
-	$(".survey").hide();
-	$("#"+survey_id).show();
-}
-
 function collect_response() {
 	survey_response = {};
 	question_responses = [];
@@ -89,5 +64,7 @@ function collect_response() {
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
+	$('.survey').empty();
+	$('.survey').append('<p style="text-align: center;">Thank you for your feedback!</p>');
 	return survey_response;
 }

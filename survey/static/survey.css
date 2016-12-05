@@ -114,6 +114,9 @@
 					margin-top: 10px;
 					margin-bottom: 10px;
 				}
+					 .activity-button {
+					 	width: 400px;
+					 }
 
 				.active {
 					background-color: #515458;
