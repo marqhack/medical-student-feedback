@@ -48,7 +48,7 @@ function add_action_listeners() {
 				} else {
 					if (confirm("" + email + " was not found. Click OK to add this email to the database. Click Cancel to try a different email.")) {
 						post_obj = { email: email };
-						$.post('/addEvaluatorNoReq', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
+						$.post('/addEvaluator', JSON.stringify(post_obj), function() { $(confirm_button).click(); }, "JSON");
 					
 					}
 				}
@@ -239,6 +239,7 @@ function get_observer_info() {
 
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
+	console.log(survey_obj);
 	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.last_name || survey_obj.email) + '</button>'));
 }
 
@@ -266,10 +267,12 @@ function render_observer_panel() {
 }
 
 function render_survey(survey_obj) {
-
 	survey_obj = JSON.parse(survey_obj);
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
 	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '"></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '"></input></div>');
+	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
+		$(text_field_name).find('input[type=text]').prop('disabled', true);
+	}
 	dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
@@ -294,7 +297,6 @@ function render_survey(survey_obj) {
 	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
 	$(individual_container).attr("hidden", "true");
 	$("#survey-container").append($(individual_container));
-
 }
 
 function render_patient_survey() {
