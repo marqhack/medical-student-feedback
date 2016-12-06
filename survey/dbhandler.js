@@ -18,7 +18,7 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, \
                 PRIMARY KEY(epaNum, aNum))");
         db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent, UNIQUE(rcContent))");
-        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER, evid INTEGER, aNum INTEGER, score INTEGER, completed DATE DEFAULT NULL, comment STRING DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, \
+        db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER NOT NULL, evid INTEGER NOT NULL, aNum INTEGER NOT NULL, score INTEGER NOT NULL, completed DATETIME NOT NULL, comment STRING DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, \
                 FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
         //db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
@@ -353,7 +353,8 @@ function addEvaluator(req, res) {
  */
 function logAssessment(req, res) {
     var currentdate = new Date(); // will have to become date time
-    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate() + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
+    console.log(currentdate);
     req.body['responses'].forEach(function(activity) {     
         enterToDB(req.body['pid'], req.body['evaluator_id'], activity['activity_id'], activity['choice'], currentdate, activity['comment']);
     });   
@@ -368,23 +369,34 @@ function logAssessment(req, res) {
             });
             stmt.finalize();
         });
-    }
-    db.all("SELECT * FROM Evaluators where evid=?", req.body['evaluator_id'], function(err, rows) {
-        if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
-            var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + req.body['evaluator_id']);
-            var run = stmt.run(req.body['evaluator_fname'], req.body['evaluator_lname'], req.body['evaluator_type'], function callback(err) {
-            if(err) 
-                console.log("Unexpected error in inserting an evaluator."); 
-            });
-            stmt.finalize();
-        }
-    });
 
+        db.all("SELECT * FROM Evaluators where evid=?", req.body['evaluator_id'], function(err, rows) {
+            if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
+                var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + req.body['evaluator_id']);
+                var run = stmt.run(req.body['evaluator_fname'], req.body['evaluator_lname'], req.body['evaluator_type'], function callback(err) {
+                if(err) 
+                    console.log("Unexpected error in inserting an evaluator."); 
+                });
+                stmt.finalize();
+            }
+        });
+
+        sendAssessment(pid, evid, aNum, choiceNum, date, comment);
+            
+        
+
+    }
     /** Send evaluation over to other team */
-    function sendAssessment() {
-
+    function sendAssessment(pid, evid, aNum, choiceNum, date, comment) {
+        db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
+            rows.forEach(function(epa) {
+                var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examDate: date, newval: choiceNum, comments: comment};
+                console.log(post_obj);
+            });
+        });
     }
-} 
+}
+
 
 function getActivities(req, res) {
     db.all("SELECT aNum, aContent FROM Activities ORDER BY aNum", function(err, rows) {
@@ -482,7 +494,7 @@ function addEvaluatorNoReq(json) {
 // log a new assessment to db
 function logAssessmentNoReq(json) {
     var currentdate = new Date();
-    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
+    currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate() + " " + currentdate.getHours() + ":" + currentdate.getMinutes() + ":" + currentdate.getSeconds();
     json['responses'].forEach(function(activity) {     
         enterToDB(json['pid'], json['evaluator_id'], activity['activity_id'], activity['choice'], currentdate, activity['comment']);
     });   
