@@ -4,6 +4,8 @@ var path = require('path');
 var dbPath = path.resolve(__dirname, 'medFeedback.db')
 var db = new sqlite3.Database(dbPath);
 
+var request = require('request');
+
 
 /**
  * Intialize the database, creating the tables if they do not already exist. 
@@ -17,12 +19,115 @@ function initdb() {
                 choice5 INTEGER, FOREIGN KEY(choice1, choice2, choice3, choice4, choice5) REFERENCES Response_Choices, UNIQUE(aContent))");
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, \
                 PRIMARY KEY(epaNum, aNum))");
-        db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent, UNIQUE(rcContent))");
+        db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent STRING NOT NULL, UNIQUE(rcContent))");
+        db.run("CREATE TABLE IF NOT EXISTS Patient_Questions(pqNum INTEGER PRIMARY KEY AUTOINCREMENT, pqContent STRING NOT NULL, choice1 STRING NOT NULL, choice2 STRING NOT NULL, choice3 STRING, \
+                choice4 STRING, choice5 STRING, UNIQUE(pqContent))");
         db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER NOT NULL, evid INTEGER NOT NULL, aNum INTEGER NOT NULL, score INTEGER NOT NULL, completed DATETIME NOT NULL, comment STRING DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, \
                 FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");
-        //db.run("CREATE TABLE IF NOT EXISTS Comments(aid INTEGER PRIMARY KEY, comment STRING NOT NULL, FOREIGN KEY(aid) REFERENCES Assessments)");
     });
+    db.serialize(function() { 
+        var stmt = db.prepare("INSERT INTO Evaluators(evid, firstName, lastName, email, type) VALUES(?,?,?,?,?)");
+        var run = stmt.run(0, "patient", "feedback", "ptntfdbck", "na", function callback(err) {
+            // error if email is repeated
+            if(err && err['errno'] != 19)    
+                console.log("Error initializing database: " + err);
+        });
+        stmt.finalize();
+    });
+    db.serialize(function() { 
+        var stmt = db.prepare("INSERT INTO Evaluators(evid, firstName, lastName, email, type) VALUES(?,?,?,?,?)");
+        var run = stmt.run(1, "student", "feedback", "stdntfdback", "na", function callback(err) {
+            // error if email is repeated
+            if(err && err['errno'] != 19)    // needs more clear error specification
+                console.log("Error initializing database: " + err);
+        });
+        stmt.finalize();
+    });
+    initPatientQuestTable();
+
+    function initPatientQuestTable() {
+        db.serialize(function() { 
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2, choice3) VALUES(?,?,?,?)");
+            var run = stmt.run("Student cleaned hands with either soap or hand sanitizer before performing a physical exam?", "yes", "no", "uncertain", function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+            var quest = [];
+            quest.push({q: "How well did this student do at being friendly, kind or compassionate?", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.push({q: "How well was this student able to obtain the full story of your current illness/visit?", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.push({q: "How well did this student consider or address barriers you might have to medical care? This may include financial, time, transportation, other daily struggles that limit your health.", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.push({q: "How well did this student seem to perform the physical exam?", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.push({q: "How well was the student able to discuss the plan for your medical care?", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.push({q: "How well did this student listen to your concerns and/or allow you to ask all your questions?", choice1: "poorly/incompletely", choice2: "", choice3: "average", choice4: "", choice5: "excellently/completely"});
+            quest.forEach(function(question) {
+                insertQW5Choices(question);
+            });
+
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent) VALUES(?)");
+            var run = stmt.run("What did this student do well?", function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent) VALUES(?)");
+            var run = stmt.run("What suggestions/advice can you share to help this student improve performance?", function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2) VALUES(?,?,?)");
+            var run = stmt.run("If Spanish, did this patient use an interpreter?", "yes", "no", function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2) VALUES(?,?,?)");
+            var run = stmt.run("If used an interpreter, did student direct more attention to the patient or interpreter?", "patient", "interpreter", function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2, choice3, choice4, choice5) VALUES(?,?,?,?,?,?)");
+            var run = stmt.run("If student spoke Spanish, how would you rate the student's Spanish skills?", "Minimal - few words", "Basic - basic phrases, some medical terms, clearly still learning", 
+                               "Advanced - complex sentences, terms, concepts, can function without interpreter, though can tell non-native speaker", "Fluent - no difference from native speaker and trusted to provide care in Spanish",
+                               function callback(err) {
+                // error if email is repeated
+                if(err && err['errno'] != 19)    // needs more clear error specification
+                    console.log("Error initializing database: " + err);
+            });
+            stmt.finalize();
+
+
+
+            
+
+        });
+
+        function insertQW5Choices(json) {
+            db.serialize(function() { 
+                var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2, choice3, choice4, choice5) VALUES(?,?,?,?,?,?)");
+                var run = stmt.run(json['q'], json['choice1'], json['choice2'], json['choice3'], json['choice4'], json['choice5'], function callback(err) {
+                if(err && err['errno'] != 19)
+                    console.log("Error initializing database: " + err);
+                });
+                stmt.finalize();
+            });
+        }
+    }
 }
+
+//initdb();
 
 /**
  * Function that adds a brand new EPA along with its set of questions to the database. 
@@ -391,7 +496,15 @@ function logAssessment(req, res) {
         db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
             rows.forEach(function(epa) {
                 var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examDate: date, newval: choiceNum, comments: comment};
-                console.log(post_obj);
+                request.post(
+    './new/exam',
+    { json: post_obj },
+    function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            console.log(body)
+        }
+    }
+);
             });
         });
     }
