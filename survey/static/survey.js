@@ -132,15 +132,20 @@ function add_action_listeners() {
 					});
 				}
 			}
-
-			$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
 		}
 		
 		
 		$("#page-1").hide();
 		$("#page-2").show();
+
 		//always render patient survey
-		render_patient_survey();
+		if($("#render-patient-survey").prop('checked')) {
+			console.log('patient checkbox is checked');
+			$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
+			render_patient_survey();
+		} else {
+			console.log('apparently its not checked');
+		}
 		// render_observer_panel();
 		// render_surveys();		
 	});

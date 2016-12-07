@@ -148,6 +148,16 @@
 					}
 
 
+			#page-1 > label {
+				font-size: 17px;
+				font-family: Arial, sans-serif;
+			}
+
+			#add-observer {
+				float: right;
+			}
+
+
 	#page-2 {
 		padding: 10px;
 	}
