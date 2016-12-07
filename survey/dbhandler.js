@@ -495,16 +495,19 @@ function logAssessment(req, res) {
     function sendAssessment(pid, evid, aNum, choiceNum, date, comment) {
         db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
             rows.forEach(function(epa) {
-                var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examDate: date, newval: choiceNum, comments: comment};
-                request.post(
-    './new/exam',
-    { json: post_obj },
-    function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            console.log(body)
-        }
-    }
-);
+                console.log("sending assessment to the other team");
+                var post_obj = {student: 47, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum, comments: comment};
+                console.log(post_obj);
+                request.post({ url: 'http://medtrack.cs.unc.edu/new/exam', json: post_obj },
+                    function (error, response, body) {
+                        if (!error && response.statusCode == 200) {
+                            console.log('no error');
+                            console.log(body);
+                        } else {
+                            console.log(error);
+                        }
+                    }
+                );
             });
         });
     }
