@@ -109,10 +109,14 @@
 					display: flex;
 					flex-direction: row;
 					flex-wrap: wrap;
-					justify-content: space-around;	
-					padding: 5px;
+					justify-content: space-between;	
+					padding-left: 50px;
+					padding-right: 50px;
+					padding-top: 5px;
+					padding-bottom: 5px;
 					margin-top: 10px;
 					margin-bottom: 10px;
+					align-items: left;
 				}
 					 .activity-button {
 					 	width: 400px;
