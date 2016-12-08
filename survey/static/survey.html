@@ -24,7 +24,7 @@
 
         <div id="page-1" hidden="true">
           <div id="observers-container"></div>
-          <input id="render-patient-survey" type="checkbox"><label>The patient will be performing an evaluation</label>
+          <input id="render-patient-survey" type="checkbox"><label id="patient_checkbox">The patient will be performing an evaluation</label>
           <button id="add-observer" type="button">Add Observer</button>
           <br/>
           <br/>
@@ -34,6 +34,12 @@
         </div>
 
         <div id="page-2" hidden="true">
+          <div id="purpose">
+            The goal of this assessment is to assess how close a medical student is to independent functioning (entrustability) for a certain observed activity.
+            <br/>
+            <br/>
+            Please select your name or email from the list of observers to begin. 
+          </div>
           <div class="observer-panel">Observers: </div>
 
           <div id="survey-container"></div>

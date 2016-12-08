@@ -35,9 +35,11 @@
 	#purpose {
 		max-width: 700px;
 		margin: auto;
+		margin-bottom: 30px;
 		font-family: Georgia, sans-serif;
 		font-size: 20px;
 		text-align: center;
+		color: #FFFFFF;
 	}
 
 	#welcome {
@@ -153,8 +155,9 @@
 
 
 			#page-1 > label {
-				font-size: 17px;
+				font-size: 20px;
 				font-family: Arial, sans-serif;
+				color: #FFFFFF;
 			}
 
 			#add-observer {

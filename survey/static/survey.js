@@ -115,8 +115,15 @@ function add_action_listeners() {
 				//always render patient survey
 				if($("#render-patient-survey").prop('checked')) {
 					console.log('patient checkbox is checked');
-					$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
-					render_patient_survey();
+					$('.observer-panel').append($('<button class="observer-button inactive" id="observer-0">Patient</button>'));
+						
+					//making api call to getPatientQuestions
+					api_call = 'getPatientQuestions';
+					$.get(api_call, function(response) {
+						render_patient_survey(response);
+					});
+
+					//render_patient_survey();
 				} else {
 					console.log('apparently its not checked');
 				}
@@ -261,31 +268,36 @@ function get_observer_info() {
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj); 
 	console.log(survey_obj); 
-	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (survey_obj.last_name || survey_obj.email) + '</button>'));
+	if(survey_obj.last_name != null){
+		tab_name = survey_obj.last_name;
+	}else{
+		tab_name = survey_obj.email;
+	}
+	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (tab_name) + '</button>'));
 }
 
-function render_observer_panel() {
+// function render_observer_panel() {
 
-	observer_divs = $('.observer-info');
+// 	observer_divs = $('.observer-info');
 
-	observer_panel = $('<div class="observer-panel">Observers: </div>');
+// 	observer_panel = $('<div class="observer-panel">Observers: </div>');
 
 
-	observer_divs.each(function(){
-		survey = JSON.parse($(this).attr('survey'));
-		observer_panel.append($('<button class="observer-button inactive" id="observer-' + survey.evid + '">' + (survey.last_name || survey.email) + '</button>'));
-	});
+// 	observer_divs.each(function(){
+// 		survey = JSON.parse($(this).attr('survey'));
+// 		observer_panel.append($('<button class="observer-button inactive" id="observer-' + survey.evid + '">' + (survey.last_name || survey.email) + '</button>'));
+// 	});
 
-	$("#survey-container").append(observer_panel);
+// 	$("#survey-container").append(observer_panel);
 
-	$(".observer-button.inactive").on('click', function(){
-		$('.observer-button').attr({ 'class': 'observer-button inactive' });
-		$(this).attr({ 'class': 'observer-button active' });
-		var id = $(this).prop('id').split('-')[1];
-		show_survey(id);
-	});
+// 	$(".observer-button.inactive").on('click', function(){
+// 		$('.observer-button').attr({ 'class': 'observer-button inactive' });
+// 		$(this).attr({ 'class': 'observer-button active' });
+// 		var id = $(this).prop('id').split('-')[1];
+// 		show_survey(id);
+// 	});
 
-}
+// }
 
 function render_survey(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
@@ -320,28 +332,40 @@ function render_survey(survey_obj) {
 	$("#survey-container").append($(individual_container));
 }
 
-function render_patient_survey() {
-	//survey_obj = JSON.parse(survey_obj);
-	individual_container = $('<div class="survey" id="survey-patient"></div>');
+function render_patient_survey(survey_obj) {
+	console.log(survey_obj);
+	patient_evid = 0;
+	individual_container = $('<div class="survey" id="survey-' + (patient_evid) + '"></div>');
 	instructions_container = $('#patient-instructions');
 	instructions_container.show();
 	questions_container = $('<div class="questions"></div>');
 	//retrieve patient questions from a survey object
 
+	survey_obj.forEach(function(question) {
+		question_and_responses = $('<div class="question-and-responses" question_number=' + question.pqNum + '></div>');
+		question_div = $('<div class="question">' + question.pqContent +'</div>');
+		radio_set = $('<div class="radio-set"></div>');
+		if(question.choice1 != null){
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="1">' + question.choice1 + '</input></div>'));
+		}
+		if(question.choice2 != null){
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="2">' + question.choice2 + '</input></div>'));
+		}
+		if(question.choice3 != null){
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="3">' + question.choice3 + '</input></div>'));
+		}
+		if(question.choice4 != null){
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="4">' + question.choice4 + '</input></div>'));
+		}
+		if(question.choice5 != null){
+			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="5">' + question.choice5 + '</input></div>'));
+		}
+		$(question_and_responses).append($(question_div));
+		$(question_and_responses).append($(radio_set));
+		$(questions_container).append($(question_and_responses));
+	});
 
-	//current: hard coded survey --->
-	question_and_responses = $('<div class="question-and-responses"></div>');
-	question_div = $('<div class="question">Question:</div>');
-	radio_set = $('<div class="radio-set"></div>');
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="0">N/A</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="1">1 = poorly/incompletely</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="2">2</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="3">3 = average</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="4">4</input></div>'));
-	$(radio_set).append($('<div class="radio-div"><input type="radio" name="answer" value="5">5 = excellently/completely</input></div>'));
-	$(question_and_responses).append($(question_div));
-	$(question_and_responses).append($(radio_set));
-	$(questions_container).append($(question_and_responses));
+
 	$(individual_container).append($(instructions_container));
 	$(individual_container).append($(questions_container));
 	$(individual_container).append($('<button id="submit-patient">Submit survey for Patient</button>'));
@@ -404,7 +428,8 @@ function collect_response(survey_jquery) {
 }
 
 function collect_patient_response() {
-	console.log($('#survey-patient'));
-	$('#survey-patient').empty();
-	$('#survey-patient').append('<p>Thank you for your feedback!</p>');
+
+	console.log($('#survey-0'));
+	$('#survey-0').empty();
+	$('#survey-0').append('<p>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
 }
