@@ -106,11 +106,7 @@ function initdb() {
                 if(err && err['errno'] != 19)    // needs more clear error specification
                     console.log("Error initializing database: " + err);
             });
-            stmt.finalize();
-
-
-
-            
+            stmt.finalize();        
 
         });
 
@@ -320,43 +316,6 @@ function addStudent(pid, fn, ln) {
 }
 
 /**
- *  Input: Object with the following properties: 
- *         {activities: [x1, x2,...,x3], pid: #, email: email, on_device: false};
- */
-/*function logAssessment(assessment) {
-    var response = [];
-    for(i = 0; i < assessment.length; i++) {
-        var current = assessment[i];
-        for(f = 0; f < current.activities.length; f++)
-            enterToDB(current.pid, current.email, current.activities[f], current.on_device ? 1 : 0)
-        
-    }
-    
-    function enterToDB(pid, email, aNum, on_device) {
-        var currentdate = new Date();
-        currentdate = currentdate.getFullYear() + "-" + (currentdate.getMonth() + 1) + "-" + currentdate.getDate();
-
-        db.all("SELECT evid, type FROM Evaluators WHERE email=?", email, function(err, rows) {
-            if(rows != null && rows.length != 0) {
-                var evid = rows[0].evid;
-                var type = rows[0].type;
-                db.serialize(function() {
-                    var stmt = db.prepare("INSERT INTO Assessments(pid, evid, aNum, on_device, created) VALUES(?, ?, ?, ?, ?)");
-                    var run = stmt.run(pid, evid, aNum, on_device, currentdate,  function callback(err) {
-                        if(err) {
-                            console.log("An unknown (for now) error has occurred. Please restart the application and try again in a couple of minutes.");  
-                            console.log(err);
-                        }
-                    });
-                });             
-            }
-            else 
-              console.log("Error: The email did not match an evaluator in the database.");  
-        });        
-    }
-}*/
-
-/**
  *  Checks if a given email matches that of an evaluator in the database. 
  *  >>Input: req.query['email']: the requested email adress
  *  >>Output: evid, name, and type of the evaluator. null if an evaluator is not found
@@ -493,10 +452,14 @@ function logAssessment(req, res) {
     }
     /** Send evaluation over to other team */
     function sendAssessment(pid, evid, aNum, choiceNum, date, comment) {
+        // if assessment is NA, don't send it
+        if(choiceNum == 0)
+            return;
         db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
             rows.forEach(function(epa) {
                 console.log("sending assessment to the other team");
-                var post_obj = {student: 47, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum, comments: comment};
+                // student hard coded for now
+                var post_obj = {student: 47, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum == 5 ? 4: 4, comments: comment};
                 console.log(post_obj);
                 request.post({ url: 'http://medtrack.cs.unc.edu/new/exam', json: post_obj },
                     function (error, response, body) {
@@ -513,13 +476,24 @@ function logAssessment(req, res) {
     }
 }
 
-
+/**
+ *
+ */
 function getActivities(req, res) {
     db.all("SELECT aNum, aContent FROM Activities ORDER BY aNum", function(err, rows) {
         res.send(rows);
     });
 }
 
+function getPatientQuestions(req, res) {
+    db.all("SELECT * FROM Patient_Questions", function(err, rows) {
+        res.send(rows);
+    });
+}
+
+/**
+ *
+ */
 function getSurvey(req, res) {
     response = {};
     var pid = req.query['pid'];
@@ -658,6 +632,7 @@ module.exports.getActivityWithChoices = getActivityWithChoices;
 module.exports.viewEPAs = viewEPAs;
 module.exports.getSurvey = getSurvey;
 module.exports.getNameByPID = getNameByPID;
+module.exports.getPatientQuestions = getPatientQuestions;
 /** To be deleted in the future */
 module.exports.addEvaluatorNoReq = addEvaluatorNoReq; 
 module.exports.logAssessmentNoReq = logAssessmentNoReq; 

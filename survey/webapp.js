@@ -36,6 +36,7 @@ app.get('/test', db.getActivities);
 app.get('/verfEmail', db.checkEmail);
 app.get('/fetchActWithChoices', db.getActivityWithChoices);
 app.get('/getSurvey', db.getSurvey);
+app.get('/getPatientQuestions', db.getPatientQuestions);
 app.get('/getStudentName', db.getNameByPID);
 app.post('/addEvaluator', db.addEvaluator);
 app.post('/logAssessment', db.logAssessment);

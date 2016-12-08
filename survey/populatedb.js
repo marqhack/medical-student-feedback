@@ -153,28 +153,3 @@ assess.push(obj3);
 for(i = 0; i < assess.length; i++) {
 	db.logAssessmentNoReq(assess[i]);
 }
-
-/*var object1 = {activities: [1, 2, 3, 4], pid: 1, em2il: "rhobbs@med.unc.edu", on_device: false};
-var object2 = {activities: [4, 5, 6, 1], pid: 2, email: "jox@med.unc.edu", on_device: true};
-var array = [];
-array.push(object1);
-array.push(object2);
-db.logAssessment(array);*/
-
-/*assess1 = {'pid': 1, 'evid': 1, 'aNum': 6}; //1
-assess2 = {'pid': 1, 'evid': 1, 'aNum': 7}; //2
-assess3 = {'pid': 1, 'evid': 2, 'aNum': 3}; //3
-assess4 = {'pid': 1, 'evid': 2, 'aNum': 7}; //4
-// repeated
-assess5 = {'pid': 1, 'evid': 1, 'aNum': 6}; //5
-db.logAssessment(assess1);
-db.logAssessment(assess2);
-db.logAssessment(assess3);
-db.logAssessment(assess4);
-db.logAssessment(assess5);
-
-/** Responses */
-/*db.logResponse(1,5);
-db.logResponse(2, 3);
-// duplicate assessment: error
-db.logResponse(5, 5);*/

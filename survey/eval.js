@@ -19,6 +19,7 @@ router.get('/test', db.getActivities);
 router.get('/verfEmail', db.checkEmail);
 router.get('/fetchActWithChoices', db.getActivityWithChoices);
 router.get('/getSurvey', db.getSurvey);
+router.get('/getPatientQuestions', db.getPatientQuestions);
 router.post('/addEvaluator', db.addEvaluator);
 router.get('/getStudentName', db.getNameByPID);
 router.post('/logAssessment', db.logAssessment);
