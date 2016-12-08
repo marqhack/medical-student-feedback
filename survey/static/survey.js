@@ -92,56 +92,38 @@ function add_action_listeners() {
 		var survey_info = get_observer_info();
 		console.log(survey_info);
 
+		continue_to_surveys = true;
+
 		if ($("input[type=email].invalid").length > 0) {
 			alert('Please verify that all emails are valid.');
 		} else {
 			//if observer not giving feedback on device,
 			//send email with link to survey
 
-			$('.observer-info').filter(function(index) {
-				return ($("input[type=checkbox]:checked", this).length == 1);
-			}).each(function () {
-				confirm_selections(pid, $(this));
-			});
-			
-			for(var i = 0; i< survey_info.observer_info.length; i++){
-				if(!survey_info.observer_info[i].on_device) {
-					var url = $(location).attr('href').split('survey/')[0];
-					url = url + 'survey/remote-survey.html';
-					var evid = survey_info.observer_info[i].evid;
-					var activities = survey_info.observer_info[i].activities.join('-');
-					var linkParams = "?pid=" + pid + "&evid=" + evid
-						 + "&activities=" + activities;
-					var to = survey_info.observer_info[i].email;
-					var	subject = pid + " requests feedback";
-					var text = "Link to survey: " + url + linkParams;
-					
-					$.get("./sendEmail", {to:to, subject:subject, text:text}, function(data){
+			$('.observer-info').each(function () {
+				if(confirm_selections(pid, $(this)) == false) {
+					continue_to_surveys = false;
 
-						if(data=="sent") {
-							alert("email sent successfully");
-						} else {
-							alert("error sending email");
-						}
-					});
 				}
-			}
-		}
-		
-		
-		$("#page-1").hide();
-		$("#page-2").show();
+			});
 
-		//always render patient survey
-		if($("#render-patient-survey").prop('checked')) {
-			console.log('patient checkbox is checked');
-			$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
-			render_patient_survey();
-		} else {
-			console.log('apparently its not checked');
-		}
-		// render_observer_panel();
-		// render_surveys();		
+			if (continue_to_surveys) {
+				$("#page-1").hide();
+				$("#page-2").show();
+			
+
+				//always render patient survey
+				if($("#render-patient-survey").prop('checked')) {
+					console.log('patient checkbox is checked');
+					$('.observer-panel').append($('<button class="observer-button inactive" id="observer-patient">Patient</button>'));
+					render_patient_survey();
+				} else {
+					console.log('apparently its not checked');
+				}
+				// render_observer_panel();
+				// render_surveys();	
+			}	
+		};
 	});
 
 	$("body").on('click', '.observer-button.inactive', function(){
@@ -202,19 +184,42 @@ function confirm_selections(pid, parent_container) {
 		console.log('button id = ' + $(activity).prop('id'));
 	});
 
-	api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + get_selected_activities(parent_container).join('-');
-	$.get(api_call, function(response) {
-		$(parent_container).attr('survey', response);
-		add_to_observer_tabs(response);
-		render_survey(response);		
+	selected_activities = get_selected_activities(parent_container);
+	if (selected_activities.length != 0) {
+		if (!$(parent_container).attr('processed')) {
+			if ($(parent_container).find($('input[type=checkbox]')).prop('checked')) {
+				api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+				$.get(api_call, function(response) {
+					$(parent_container).attr('survey', response);
+					add_to_observer_tabs(response);
+					render_survey(response);		
 
-		($(parent_container).find($(".activity-button"))).each(function(index, activity) {
-			$(activity).prop('disabled', true);
-		});
-	});
+					($(parent_container).find($(".activity-button"))).each(function(index, activity) {
+						$(activity).prop('disabled', true);
+					});
+				});
+			} else {
+				url = $(location).attr('href').split('survey/')[0] + 'survey/remote-survey.html?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+				to = $(parent_container).find($("input[type=email]")).val();
+				subject = pid + " requests feedback";
+				text = "Link to survey: " + url;
+				
+				$.get("./sendEmail", {to:to, subject:subject, text:text}, function(data){
 
+					if(data=="sent") {
+						alert("email sent successfully");
+					} else {
+						alert("error sending email");
+					}
+				});
+			}
 
-	
+			$(parent_container).attr('processed', true);
+		}
+	} else {
+		alert("Each observer must have at least one activity marked as \"observed\"");
+		return false;
+	}
 }
 
 function get_selected_activities(observer_container) {
@@ -224,6 +229,11 @@ function get_selected_activities(observer_container) {
 		console.log('button id = ' + $(activity).prop('id'));
 	});
 
+	if (selected_activities.length == 0) {
+
+	} else {
+
+	}
 	return selected_activities;
 }
 
@@ -376,8 +386,8 @@ function collect_response(survey_jquery) {
     	}
 
     	if (key == 'responses') {
-    		$.each(value, function(key2, value2) {
-    			if (value2 == undefined) {
+    		value.forEach(function(activity) {
+    			if (activity.choice == undefined || activity.choice == null) {
     				is_completed = false;
     			}
     		});
