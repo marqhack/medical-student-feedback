@@ -465,7 +465,7 @@ function collect_patient_response(survey_jquery) {
 		if(answer.comment == undefined){
 			answer.comment = "";
 		}else{
-			answer.choice = 0;
+			answer.choice = "0";
 		}
 		question_responses.push(answer);
 	});
