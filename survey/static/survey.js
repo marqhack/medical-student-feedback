@@ -153,7 +153,13 @@ function add_action_listeners() {
 	});
 
 	$("body").on('click', '#submit-patient', function() {
-		collect_patient_response();
+		patient_survey = $(this).parents('.survey');
+		survey_response = collect_patient_response(patient_survey);
+		if (survey_response != false) {
+			$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
+		} else {
+			alert('Survey is not complete. Make sure you have filled in your name, selected a position, and evaluated each activity.');
+		}
 	});
 }
 
@@ -268,7 +274,7 @@ function get_observer_info() {
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj); 
 	console.log(survey_obj); 
-	if(survey_obj.last_name != null){
+	if(survey_obj.last_name != null || survey_obj.last_name != undefined){
 		tab_name = survey_obj.last_name;
 	}else{
 		tab_name = survey_obj.email;
@@ -306,7 +312,7 @@ function render_survey(survey_obj) {
 	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
 		$(text_field_name).find('input[type=text]').prop('disabled', true);
 	} 
-	dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Patient</option></select>')
+	dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
 		question_and_responses = $('<div class="question-and-responses" activity_number=' + activity.aNum + '></div>');
@@ -427,9 +433,47 @@ function collect_response(survey_jquery) {
 	}
 }
 
-function collect_patient_response() {
+function collect_patient_response(survey_jquery) {
+	survey_response = {};
+	question_responses = [];
+	survey_response.pid = pid;
+	survey_response.evaluator_id = 0;
 
-	console.log($('#survey-0'));
-	$('#survey-0').empty();
-	$('#survey-0').append('<p>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
+	$(survey_jquery).find('.question-and-responses').each(function() {
+		answer = {};
+
+		//activity_id is being used in place of question_number
+		//evid of 0 will notify db handler to query patient_responses table
+		//instead of activities table
+		answer.activity_id = $(this).attr('question_number');
+
+		answer.choice = $(this).find('input[type=radio]:checked').val();
+		answer.comment = "";
+		question_responses.push(answer);
+	});
+	survey_response.responses = question_responses;
+	console.log(survey_response);
+	is_completed = true;
+	$.each(survey_response, function(key, value) {
+		console.log(value);
+		
+
+		if(key == 'responses') {
+			value.forEach(function(question) {
+				if(question.choice == undefined || question.choice == null) {
+					is_completed = false;
+				}
+			});
+		}
+	});
+
+	if(is_completed) {
+		console.log(survey_response);
+		$(survey_jquery).empty();
+		$(survey_jquery).append('<p>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
+		return survey_response;
+	}else{
+		return false;
+	}
+
 }

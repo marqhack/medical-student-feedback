@@ -90,8 +90,8 @@ function initdb() {
             });
             stmt.finalize();
 
-            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2) VALUES(?,?,?)");
-            var run = stmt.run("If used an interpreter, did student direct more attention to the patient or interpreter?", "patient", "interpreter", function callback(err) {
+            var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2, choice3) VALUES(?,?,?, ?)");
+            var run = stmt.run("If used an interpreter, did student direct more attention to the patient or interpreter?", "patient", "interpreter", "N/A", function callback(err) {
                 // error if email is repeated
                 if(err && err['errno'] != 19)    // needs more clear error specification
                     console.log("Error initializing database: " + err);
@@ -101,7 +101,7 @@ function initdb() {
             var stmt = db.prepare("INSERT INTO Patient_Questions(pqContent, choice1, choice2, choice3, choice4, choice5) VALUES(?,?,?,?,?,?)");
             var run = stmt.run("If student spoke Spanish, how would you rate the student's Spanish skills?", "Minimal - few words", "Basic - basic phrases, some medical terms, clearly still learning", 
                                "Advanced - complex sentences, terms, concepts, can function without interpreter, though can tell non-native speaker", "Fluent - no difference from native speaker and trusted to provide care in Spanish",
-                               function callback(err) {
+                               "N/A", function callback(err) {
                 // error if email is repeated
                 if(err && err['errno'] != 19)    // needs more clear error specification
                     console.log("Error initializing database: " + err);
@@ -445,7 +445,11 @@ function logAssessment(req, res) {
             }
         });
 
+        
         sendAssessment(pid, evid, aNum, choiceNum, date, comment);
+        
+
+        
             
         
 
