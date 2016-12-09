@@ -20,7 +20,7 @@ function initdb() {
         db.run("CREATE TABLE IF NOT EXISTS Survey(epaNum INTEGER, aNum INTEGER, FOREIGN KEY(epaNum) REFERENCES EPAs, FOREIGN KEY(aNum) REFERENCES Activities, \
                 PRIMARY KEY(epaNum, aNum))");
         db.run("CREATE TABLE IF NOT EXISTS Response_Choices(rcNum INTEGER PRIMARY KEY AUTOINCREMENT, rcContent STRING NOT NULL, UNIQUE(rcContent))");
-        db.run("CREATE TABLE IF NOT EXISTS Patient_Questions(pqNum INTEGER PRIMARY KEY AUTOINCREMENT, pqContent STRING NOT NULL, choice1 STRING NOT NULL, choice2 STRING NOT NULL, choice3 STRING, \
+        db.run("CREATE TABLE IF NOT EXISTS Patient_Questions(pqNum INTEGER PRIMARY KEY AUTOINCREMENT, pqContent STRING NOT NULL, choice1 STRING, choice2 STRING, choice3 STRING, \
                 choice4 STRING, choice5 STRING, UNIQUE(pqContent))");
         db.run("CREATE TABLE IF NOT EXISTS Assessments(aid INTEGER PRIMARY KEY AUTOINCREMENT, pid INTEGER NOT NULL, evid INTEGER NOT NULL, aNum INTEGER NOT NULL, score INTEGER NOT NULL, completed DATETIME NOT NULL, comment STRING DEFAULT NULL, FOREIGN KEY(pid) REFERENCES Students, \
                 FOREIGN KEY(evid) REFERENCES Evaluators, FOREIGN KEY(aNum) References Activities)");

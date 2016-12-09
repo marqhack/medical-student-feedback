@@ -351,24 +351,34 @@ function render_patient_survey(survey_obj) {
 		question_and_responses = $('<div class="question-and-responses" question_number=' + question.pqNum + '></div>');
 		question_div = $('<div class="question">' + question.pqContent +'</div>');
 		radio_set = $('<div class="radio-set"></div>');
-		if(question.choice1 != null){
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="1">' + question.choice1 + '</input></div>'));
-		}
-		if(question.choice2 != null){
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="2">' + question.choice2 + '</input></div>'));
-		}
-		if(question.choice3 != null){
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="3">' + question.choice3 + '</input></div>'));
-		}
-		if(question.choice4 != null){
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="4">' + question.choice4 + '</input></div>'));
-		}
-		if(question.choice5 != null){
-			$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="5">' + question.choice5 + '</input></div>'));
-		}
+		
 		$(question_and_responses).append($(question_div));
-		$(question_and_responses).append($(radio_set));
+		if(question.choice1 == null){
+			text_response = $('<textarea class ="comment" id="' + patient_evid + '-' + question.pqNum + '"</textarea>');
+			$(question_and_responses).append($(text_response));
+		}else{
+			if(question.choice1 != null){
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="1">' + question.choice1 + '</input></div>'));
+			}
+			if(question.choice2 != null){
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="2">' + question.choice2 + '</input></div>'));
+			}
+			if(question.choice3 != null){
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="3">' + question.choice3 + '</input></div>'));
+			}
+			if(question.choice4 != null){
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="4">' + question.choice4 + '</input></div>'));
+			}
+			if(question.choice5 != null){
+				$(radio_set).append($('<div class="radio-div"><input type="radio" name="' + patient_evid + '-' + question.pqNum + '" value="5">' + question.choice5 + '</input></div>'));
+			}
+			$(question_and_responses).append($(radio_set));
+		}		
+		
+		
 		$(questions_container).append($(question_and_responses));
+					
+		
 	});
 
 
@@ -447,8 +457,16 @@ function collect_patient_response(survey_jquery) {
 		//instead of activities table
 		answer.activity_id = $(this).attr('question_number');
 
+
 		answer.choice = $(this).find('input[type=radio]:checked').val();
-		answer.comment = "";
+		answer.comment = $(this).find('.comment').val();
+		//if radio button, set comment to null
+		//else if text response, set choice to 0
+		if(answer.comment == undefined){
+			answer.comment = "";
+		}else{
+			answer.choice = 0;
+		}
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
