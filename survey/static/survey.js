@@ -158,7 +158,7 @@ function add_action_listeners() {
 		if (survey_response != false) {
 			$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
 		} else {
-			alert('Survey is not complete. Make sure you have filled in your name, selected a position, and evaluated each activity.');
+			alert('Survey is not complete. Make sure you have answered each question.');
 		}
 	});
 }
@@ -488,7 +488,7 @@ function collect_patient_response(survey_jquery) {
 	if(is_completed) {
 		console.log(survey_response);
 		$(survey_jquery).empty();
-		$(survey_jquery).append('<p>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
+		$(survey_jquery).append('<p style="text-align: center;>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
 		return survey_response;
 	}else{
 		return false;

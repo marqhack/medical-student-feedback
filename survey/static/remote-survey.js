@@ -23,7 +23,7 @@ function render_survey(survey_obj) {
 	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
 		$(text_field_name).find('input[type=text]').prop('disabled', true);
 	}
-	dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Resident</option><option>Faculty</option><option>Patient</option></select>')
+	dropdown_position = $('<div class="observer-position">Position: <select id="position"><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
 		question_and_responses = $('<div class="question-and-responses" activity_number=' + activity.aNum + '></div>');
