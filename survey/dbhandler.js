@@ -488,6 +488,8 @@ function getSurvey(req, res) {
         if (err) {
             console.log(err);
         } else {
+            response.pid = pid;
+            response.evid = rows[0].evid;
             response.email = rows[0].email;
             response.first_name = rows[0].firstName;
             response.last_name = rows[0].lastName;
@@ -507,9 +509,6 @@ function getSurvey(req, res) {
             query += "\nUNION\n";
 
     });
-
-    response.pid = pid;
-    response.evid = evaluator_id;
 
     db.all(query, function(err, rows) {
         if(err) {
