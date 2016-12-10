@@ -35,6 +35,9 @@ function add_action_listeners() {
 		confirm_button = $(this);
 		if (!validate_email($(email_input).val())) {
 			$(email_input).addClass('invalid');
+		} else if(is_duplicate_email($(email_input).val())) {
+			alert('You have already entered that email.');
+			$(email_input).addClass('invalid');
 		} else {
 			$(email_input).removeClass('invalid');
 			email = $.trim($(email_input).val());
@@ -407,6 +410,19 @@ function show_survey(id){
 function validate_email(email) {
     var reg_ex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return reg_ex.test(email);
+}
+
+function is_duplicate_email(email) {
+	is_duplicate = false;
+	$('input[type=email]').filter(function(index) {
+		return $(this).prop('disabled') == true;
+	}).each(function() {
+		if (email == $(this).val()) {
+			is_duplicate = true;
+		}
+	});
+
+	return is_duplicate;
 }
 
 function collect_response(survey_jquery) {
