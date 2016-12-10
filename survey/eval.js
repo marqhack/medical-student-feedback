@@ -11,7 +11,7 @@ router.use(express.static( path.join(__dirname,'static') ));
 
 // Send home page
 router.get('/', function(req, res, next) {
-  res.sendfile(path.join(__dirname+'/static/survey.html')); 
+  res.sendFile(path.join(__dirname+'/static/survey.html')); 
 });
 
 // Functions for database interactions
