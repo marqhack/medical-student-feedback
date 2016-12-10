@@ -21,7 +21,6 @@ function add_action_listeners() {
 
 	// render_observers_panel();
 	$("#page-1").on('click', '.inactive' ,function() {
-		//console.log("inactive clicked");
 		$(this).removeClass('inactive');
 		$(this).addClass('active');
 	});
@@ -41,7 +40,6 @@ function add_action_listeners() {
 			email = $.trim($(email_input).val());
 			$.get('./verfEmail?email=' + email , function(response) {
 				if(response) {
-					console.log(JSON.parse(response).evid);
 					$(email_input).attr("evaluatorid", JSON.parse(response).evid);
 					$(email_input).prop("disabled", true);
 					$(confirm_button).prop("disabled", true);
@@ -90,7 +88,6 @@ function add_action_listeners() {
 	//send emails to observers not taking on device
 	$("#submit-observers").on('click', function() {
 		var survey_info = get_observer_info();
-		console.log(survey_info);
 
 		continue_to_surveys = true;
 
@@ -114,7 +111,6 @@ function add_action_listeners() {
 
 				//always render patient survey
 				if($("#render-patient-survey").prop('checked')) {
-					console.log('patient checkbox is checked');
 					$('.observer-panel').append($('<button class="observer-button inactive" id="observer-0">Patient</button>'));
 						
 					//making api call to getPatientQuestions
@@ -124,8 +120,6 @@ function add_action_listeners() {
 					});
 
 					//render_patient_survey();
-				} else {
-					console.log('apparently its not checked');
 				}
 				// render_observer_panel();
 				// render_surveys();	
@@ -169,7 +163,6 @@ function add_observer_div() {
 
 	var activities_container = $('<div class="activities-container"></div>');
 	$.get('./test', function(activities_json) {
-		console.log(activities_json);
 		activities_json.forEach(function(activity) {	
 			activities_container.append($('<button id="' + activity.aNum + '"" class="activity-button inactive" disabled = true>' + activity.aContent + '</button>'));
 		});
@@ -194,7 +187,6 @@ function confirm_selections(pid, parent_container) {
 	var selected_activities = [];
 	($(parent_container).find($(".active"))).each(function(index, activity) {
 		selected_activities.push($(activity).prop('id'));
-		console.log('button id = ' + $(activity).prop('id'));
 	});
 
 	selected_activities = get_selected_activities(parent_container);
@@ -202,8 +194,10 @@ function confirm_selections(pid, parent_container) {
 		if (!$(parent_container).attr('processed')) {
 			if ($(parent_container).find($('input[type=checkbox]')).prop('checked')) {
 				api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+				console.log(api_call);
 				$.get(api_call, function(response) {
-					$(parent_container).attr('survey', response);
+					console.log('after api call: ' + response);
+					// $(parent_container).attr('survey', response);
 					add_to_observer_tabs(response);
 					render_survey(response);		
 
@@ -239,7 +233,6 @@ function get_selected_activities(observer_container) {
 	var selected_activities = [];
 	($(observer_container).find($(".active"))).each(function(index, activity) {
 		selected_activities.push($(activity).prop('id'));
-		console.log('button id = ' + $(activity).prop('id'));
 	});
 
 	if (selected_activities.length == 0) {
@@ -272,8 +265,7 @@ function get_observer_info() {
 }
 
 function add_to_observer_tabs(survey_obj) {
-	survey_obj = JSON.parse(survey_obj); 
-	console.log(survey_obj); 
+	survey_obj = JSON.parse(survey_obj);  
 	if(survey_obj.last_name != null || survey_obj.last_name != undefined){
 		tab_name = survey_obj.last_name;
 	}else{
@@ -339,7 +331,6 @@ function render_survey(survey_obj) {
 }
 
 function render_patient_survey(survey_obj) {
-	console.log(survey_obj);
 	patient_evid = 0;
 	individual_container = $('<div class="survey" id="survey-' + (patient_evid) + '"></div>');
 	instructions_container = $('#patient-instructions');
@@ -390,7 +381,6 @@ function render_patient_survey(survey_obj) {
 }
 
 function show_survey(id){
-	console.log("show survey id: " + id);
 	$(".survey").hide();	
 	var survey_id = "survey-" + id;
 	$("#"+survey_id).show();
@@ -417,10 +407,8 @@ function collect_response(survey_jquery) {
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
-	console.log(survey_response);
 	is_completed = true;
 	$.each(survey_response, function(key, value) {
-		console.log(value);
     	if (value == null || value == '' || value == "Select Position") {
     		is_completed = false;
     	}
@@ -470,12 +458,8 @@ function collect_patient_response(survey_jquery) {
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
-	console.log(survey_response);
 	is_completed = true;
 	$.each(survey_response, function(key, value) {
-		console.log(value);
-		
-
 		if(key == 'responses') {
 			value.forEach(function(question) {
 				if(question.choice == undefined || question.choice == null) {
@@ -485,12 +469,11 @@ function collect_patient_response(survey_jquery) {
 		}
 	});
 
-	if(is_completed) {
-		console.log(survey_response);
+	if (is_completed) {
 		$(survey_jquery).empty();
 		$(survey_jquery).append('<p style="text-align: center;>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
 		return survey_response;
-	}else{
+	} else{
 		return false;
 	}
 
