@@ -397,7 +397,7 @@ function logAssessment(req, res) {
             stmt.finalize();
         });
 
-        if(evid != 0) {
+        if(evid != 0 && evid != 1) {
             db.all("SELECT * FROM Evaluators where evid=?", req.body['evaluator_id'], function(err, rows) {
                 if(rows[0].firstName == null && rows[0].lastName == null && rows[0].type == null) {
                     var stmt = db.prepare("UPDATE Evaluators SET firstName=?, lastName=?, type=? WHERE evid=" + req.body['evaluator_id']);
@@ -407,11 +407,19 @@ function logAssessment(req, res) {
                     });
                     stmt.finalize();
                 }
+                else if(rows[0].type != req.body['evaluator_type']) {
+                    var stmt = db.prepare("UPDATE Evaluators SET type=? WHERE evid=" + req.body['evaluator_id']);
+                    var run = stmt.run(req.body['evaluator_type'], function callback(err) {
+                    if(err) 
+                        console.log("Unexpected error in updating an evaluator's type."); 
+                    });
+                    stmt.finalize();
+                }
             });
 
             sendAssessment(pid, evid, aNum, choiceNum, date, comment);
         }
-        // patient feedback
+        // patient, student feedback
         else 
             sendAssessment(pid, evid, aNum, choiceNum, date, comment);
     }
@@ -422,11 +430,10 @@ function logAssessment(req, res) {
         if(choiceNum == 0 && evid != 0)
             return;
 
-        if(evid != 0) {
+        if(evid != 0 && evid != 1) {
             db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
                 rows.forEach(function(epa) {
                     console.log("Sending assessment to the epa tracker");
-                    // student hard coded for now
                     var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum == 5 ? 4: 4, comments: comment};
                     console.log(post_obj);
                     request.post({ url: 'http://medtrack.cs.unc.edu/new/exam', json: post_obj },
