@@ -1,6 +1,6 @@
 /**
- * Module to populate and test the database functions in dbhandler.js. Only the EPAs section below
- * will be kept for building the database with EPAs and their questions for the final production.
+ * Module to build the database with its EPAs and activities
+ * @author Martin Porras
  *
  */
 
@@ -10,8 +10,6 @@ var db = require('./dbhandler');
 
 db.initdb();
 var epa = [];
-
-//{q: '', 1: '', 2: '', 3: '', 4: '', 5: ''}
 
 // activity indeces: 1, 2, 3
 epajson1 = {'epaNum': 1, 'activity': 'Gather a history and perform a physical examination',   
@@ -91,65 +89,4 @@ epa.push(epajson15);
 
 for(i = 0; i < epa.length; i++) {
 	db.addEpaWithQuestions(epa[i]);
-}
-
-
-
-/** Testing of addQuestionEoEPA */
-epawquest1 = {'epaNum': 1, 'question':'New q for EPA1'}; //14--
-epawquest2 = {'epaNum': 11, 'question':'New q for EPA1'}; //14--  
-epawquest3 = {'epaNum': 2, 'question':'Writing orders'}; //7--
-epawquest4 = {'epaNum': 8, 'question':'Review of literature'}; //11-- 
-/*db.addQuestionToEPA(epawquest1);
-db.addQuestionToEPA(epawquest2);
-db.addQuestionToEPA(epawquest3);
-db.addQuestionToEPA(epawquest4);*/
-
-// repeated questions
-epawquest1 = {'epaNum': 4, 'question':'Writing orders'};  //error 
-epawquest2 = {'epaNum': 8, 'question':'Review of literature'}; //error
-epawquest3 = {'epaNum': 6, 'question':'Review of literature'}; //11--
-epawquest4 = {'epaNum': 2, 'question':'Differential Diagnosis'}; //error
-epawquest5 = {'epaNum': 1, 'question':'New q for EPA1'}; //error
-epawquest6 = {'epaNum': 1, 'question':'Testing'}; //5--
-epawquest7 = {'epaNum': 15, 'question':'Management plan'}; // error
-//EPA is not in db yet--error.
-epawquest2 = {'epaNum': 30, 'question':'3rd q for epa3'}; // correctly threw error! --
-db.addQuestionToEPA(epawquest2);
-
-
-/** Students */
-db.addStudent(720529523,'Martin', 'Porras'); //1
-db.addStudent(123456789,'Marquis', 'Hackett'); //2
-db.addStudent(123678904,'Tyler', 'Klose'); //3
-db.addStudent(126432578,'Erin', 'Boehlert'); //4
-
-
-/** Evaluators */
-evaluator1 = {'fn': 'Rick', 'ln': 'Hobbs', 'email': "rhobbs@med.unc.edu", 'type': 'Professional'}; //1
-evaluator2 = {'fn': 'John', 'ln': 'Doe', 'email': "jd@med.unc.edu", 'type': 'Faculty'}; //2
-evaluator3 = {'fn': 'Johnny', 'ln': 'Knoxville', 'email': "jox@med.unc.edu", 'type': 'Professional'}; //3
-db.addEvaluatorNoReq(evaluator1);
-db.addEvaluatorNoReq(evaluator2);
-db.addEvaluatorNoReq(evaluator3);
-
-
-//** Assessments */
-var assess = [];
-//*aid: 1, commentID: 1; aid:2, commentId: -- */
-obj = {'pid': 720529523, 'evaluator_id': 1, 'evaluator_fname': 'Rick', 'evaluator_lname': 'Hobbs', 'evaluator_type': 'Faculty', 'responses': [{'activity_id': 1, 'choice': 3, 'comment': 'Rick\'s comment'}, {'activity_id': 3, 'choice': 5, 'comment': null}]}
-//*aid: 3, commentID: --; aid:4, commentId: 4 */
-obj2 = {'pid': 123456789, 'evaluator_id': 2, 'evaluator_fname': 'John', 'evaluator_lname': 'Doe', 'evaluator_type': 'Resident', 'responses': [{'activity_id': 5, 'choice': 2, 'comment': null}, {'activity_id': 3, 'choice': 4, 'comment': 'Doe\'s comment on activity 3'}]}
-// with new evaluator
-newev = {'fn': null, 'ln': null, 'email': 'newguy@newguy.com', 'type': null}
-db.addEvaluatorNoReq(newev);
-//*aid: 5, commentID: 5 */
-obj3 = {'pid': 720529523, 'evaluator_id': 4, 'evaluator_fname': 'New', 'evaluator_lname': 'Guy', 'evaluator_type': 'Resident', 'responses': [{'activity_id': 6, 'choice': 1, 'comment': 'Quite bad'}]};
-
-assess.push(obj);
-assess.push(obj2);
-assess.push(obj3);
-
-for(i = 0; i < assess.length; i++) {
-	db.logAssessmentNoReq(assess[i]);
 }
