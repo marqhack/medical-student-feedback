@@ -316,14 +316,11 @@ function add_to_observer_tabs(survey_obj) {
 function render_survey(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
-	if (survey_obj.evid != 1) {
-		text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '" required></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '" required></input></div>'); 
-		if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
-			$(text_field_name).find('input[type=text]').prop('disabled', true);
-		} 
-
-		dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
-	}
+	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '" required></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '" required></input></div>'); 
+	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
+		$(text_field_name).find('input[type=text]').prop('disabled', true);
+	} 
+	dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
 		question_and_responses = $('<div class="question-and-responses" activity_number=' + activity.aNum + '></div>');
@@ -341,10 +338,12 @@ function render_survey(survey_obj) {
 		$(question_and_responses).append($(text_response));
 		$(questions_container).append($(question_and_responses));
 	});
-	if (survey_obj.evid != 1) {
-		$(individual_container).append($(text_field_name));
-		$(individual_container).append($(dropdown_position));
+	if (survey_obj.evid == 1) {
+		$(text_field_name).prop('hidden', 'true');
+		$(dropdown_position).prop('hidden', 'true');
 	}
+	$(individual_container).append($(text_field_name));
+	$(individual_container).append($(dropdown_position));
 	$(individual_container).append($(questions_container));
 	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit</button>'));
 	$(individual_container).attr("hidden", "true");
@@ -432,7 +431,7 @@ function collect_response(survey_jquery) {
 	survey_response.evaluator_id = $(survey_jquery).prop('id').split('-')[1];
 	survey_response.evaluator_fname = $(survey_jquery).find('.first-name').val();
 	survey_response.evaluator_lname = $(survey_jquery).find('.last-name').val();
-	survey_response.evaluator_type = $(survey_jquery).find('#position').val();
+	survey_response.evaluator_type = (survey_response.evaluator_id == 1) ? 'na' : $(survey_jquery).find('#position').val();
 	$(survey_jquery).find('.question-and-responses').each(function() {
 		answer = {};
 		answer.activity_id = $(this).attr('activity_number');
