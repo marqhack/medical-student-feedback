@@ -100,11 +100,15 @@ function add_action_listeners() {
 			$('.observer-info').each(function () {
 				if(confirm_selections(pid, $(this)) == false) {
 					continue_to_surveys = false;
-
 				}
 			});
 
 			if (continue_to_surveys) {
+				$.get('getSurvey?pid=' + pid + '&evid=1&activities=' + get_all_selected_activities().join('-'), function(response) {
+					add_to_observer_tabs(response);
+					render_survey(response);
+				});
+
 				$("#page-1").hide();
 				$("#page-2").show();
 			
@@ -243,6 +247,15 @@ function get_selected_activities(observer_container) {
 	return selected_activities;
 }
 
+function get_all_selected_activities() {
+	var all_selected_activities = new Set();
+	$('.activity-button.active').each(function(index, activity) {
+		all_selected_activities.add($(activity).prop('id'));
+	});
+
+	return Array.from(all_selected_activities);
+}
+
 function get_observer_info() {
 	var observer_info = [];
 	$(".observer-info").each(function() {
@@ -266,9 +279,11 @@ function get_observer_info() {
 
 function add_to_observer_tabs(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);  
-	if(survey_obj.last_name != null || survey_obj.last_name != undefined){
+	if (survey_obj.evid == 1) {
+		tab_name = 'Self Evaluation';
+	} else if (survey_obj.last_name != null || survey_obj.last_name != undefined) {
 		tab_name = survey_obj.last_name;
-	}else{
+	} else {
 		tab_name = survey_obj.email;
 	}
 	$(".observer-panel").append($('<button class="observer-button inactive" id="observer-' + survey_obj.evid + '">' + (tab_name) + '</button>'));
@@ -300,11 +315,14 @@ function add_to_observer_tabs(survey_obj) {
 function render_survey(survey_obj) {
 	survey_obj = JSON.parse(survey_obj);
 	individual_container = $('<div class="survey" id="survey-' + (survey_obj.evid) + '"></div>');
-	text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '" required></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '" required></input></div>'); 
-	if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
-		$(text_field_name).find('input[type=text]').prop('disabled', true);
-	} 
-	dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
+	if (survey_obj.evid != 1) {
+		text_field_name = $('<div class="observer-name">First Name: <input class="first-name" type="text" value="' + (survey_obj.first_name || "") + '" required></input>Last Name: <input class="last-name" type="text" value="' + (survey_obj.last_name || "") + '" required></input></div>'); 
+		if ((survey_obj.first_name != null) && (survey_obj.last_name != null)) {
+			$(text_field_name).find('input[type=text]').prop('disabled', true);
+		} 
+
+		dropdown_position = $('<div class="observer-position">Position: <select id="position" required><option>Select Position</option><option>Resident</option><option>Faculty/Staff</option><option>Attending</option></select>')
+	}
 	questions_container = $('<div class="questions"></div>');
 	survey_obj.activities.forEach(function(activity) {
 		question_and_responses = $('<div class="question-and-responses" activity_number=' + activity.aNum + '></div>');
@@ -322,10 +340,12 @@ function render_survey(survey_obj) {
 		$(question_and_responses).append($(text_response));
 		$(questions_container).append($(question_and_responses));
 	});
-	$(individual_container).append($(text_field_name));
-	$(individual_container).append($(dropdown_position));
+	if (survey_obj.evid != 1) {
+		$(individual_container).append($(text_field_name));
+		$(individual_container).append($(dropdown_position));
+	}
 	$(individual_container).append($(questions_container));
-	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit survey for ' + (survey_obj.name || survey_obj.email) + '</button>'));
+	$(individual_container).append($('<button class="survey-submit" id="submit-' + survey_obj.evid + '">Submit</button>'));
 	$(individual_container).attr("hidden", "true");
 	$("#survey-container").append($(individual_container));
 }
@@ -375,7 +395,7 @@ function render_patient_survey(survey_obj) {
 
 	$(individual_container).append($(instructions_container));
 	$(individual_container).append($(questions_container));
-	$(individual_container).append($('<button id="submit-patient">Submit survey for Patient</button>'));
+	$(individual_container).append($('<button id="submit-patient">Submit</button>'));
 	$(individual_container).attr("hidden", "true");
 	$("#survey-container").append($(individual_container));
 }
