@@ -198,9 +198,7 @@ function confirm_selections(pid, parent_container) {
 		if (!$(parent_container).attr('processed')) {
 			if ($(parent_container).find($('input[type=checkbox]')).prop('checked')) {
 				api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
-				console.log(api_call);
 				$.get(api_call, function(response) {
-					console.log('after api call: ' + response);
 					// $(parent_container).attr('survey', response);
 					add_to_observer_tabs(response);
 					render_survey(response);		
