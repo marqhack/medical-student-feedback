@@ -504,7 +504,7 @@ function collect_patient_response(survey_jquery) {
 
 	if (is_completed) {
 		$(survey_jquery).empty();
-		$(survey_jquery).append('<p style="text-align: center;>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
+		$(survey_jquery).append('<p style="text-align: center";>Thank you for your feedback! Please wash your hands after handing the device back to the student.</p>');
 		return survey_response;
 	} else{
 		return false;
