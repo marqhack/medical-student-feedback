@@ -201,8 +201,10 @@ function confirm_selections(pid, parent_container) {
 		if (!$(parent_container).attr('processed')) {
 			if ($(parent_container).find($('input[type=checkbox]')).prop('checked')) {
 				api_call = 'getSurvey?pid=' + pid + '&evid=' + evaluator_id + '&activities=' + selected_activities.join('-');
+				console.log("api call: " + api_call);
 				$.get(api_call, function(response) {
 					// $(parent_container).attr('survey', response);
+					console.log("add to observer: " + response);
 					add_to_observer_tabs(response);
 					render_survey(response);		
 
@@ -279,7 +281,9 @@ function get_observer_info() {
 }
 
 function add_to_observer_tabs(survey_obj) {
-	survey_obj = JSON.parse(survey_obj);  
+	console.log('survey_obj: ' + survey_obj);
+	survey_obj = JSON.parse(survey_obj); 
+	 
 	if (survey_obj.evid == 1) {
 		tab_name = 'Self Evaluation';
 	} else if (survey_obj.last_name != null || survey_obj.last_name != undefined) {

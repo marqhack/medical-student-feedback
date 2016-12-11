@@ -10,8 +10,11 @@ $(document).ready(function() {
 	$("body").on('click', '.survey-submit', function() {
 		this_survey = $(this).parents('.survey');
 		survey_response = collect_response(this_survey);
-		console.log(survey_response);
-		$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
+		if (survey_response != false) {
+			$.post('./logAssessment', survey_response, function(){ console.log("i think it was logged successfully"); }, "JSON");
+		} else {
+			alert('Survey is not complete. Make sure you have filled in your name, selected a position, and evaluated each activity.');
+		}
 	});
 });
 
@@ -64,7 +67,29 @@ function collect_response() {
 		question_responses.push(answer);
 	});
 	survey_response.responses = question_responses;
-	$('.survey').empty();
-	$('.survey').append('<p style="text-align: center;">Thank you for your feedback!</p>');
-	return survey_response;
+	is_completed = true;
+	$.each(survey_response, function(key, value) {
+    	if (value == null || value == '' || value == "Select Position") {
+    		is_completed = false;
+    	}
+
+    	if (key == 'responses') {
+    		value.forEach(function(activity) {
+    			if (activity.choice == undefined || activity.choice == null) {
+    				is_completed = false;
+    			}
+    		});
+    	}
+	});
+	 
+	if (is_completed){
+		$('.survey').empty();
+		$('.survey').append('<p style="text-align: center;">Thank you for your feedback!</p>');
+		return survey_response;
+	} else {
+		return false;
+	}
+
+
+	
 }
