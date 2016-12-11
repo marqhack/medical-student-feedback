@@ -1,0 +1,589 @@
+{
+  "EPAs" : [
+    {
+      "id" : "1",
+      "title" : "Getting Patient History",
+      "criteria" : [
+        {
+          "mainCriteria" : "Information gathering and physical exam maneuvers:",
+          "subCriteria" : [
+            "Obtains a complete and accurate history in an organized fashion.",
+            "Identifies pertinent history elements in common presenting situations, symptoms, complaints, disease states (acute and chronic).",
+            "Obtains focused, pertinent histories in urgent, emergent, and consultation settings.",
+            "Identifies and uses alternate sources of information to obtain history when needed, including from family members, primary care physicians, living facilities, and pharmacies.",
+            "Performs a complete and accurate physical exam in logical and fluid sequence.",
+            "Performs a clinically relevant, focused physical exam pertinent to the setting and focus of the patient visit.",
+            "Identifies, describes, and documents abnormal physical exam findings."
+          ]
+        },
+        {
+          "mainCriteria" : "Scientific foundation and/or reasoning skills:",
+          "subCriteria" : [
+            "Demonstrates clinical reasoning in gathering focused information relevant to a patient’s care.",
+            "Links current findings to those from previous patients.",
+            "Uses analytic reasoning and activation of prior knowledge to guide process."
+          ]
+        },
+        {
+          "mainCriteria" : "Patient-centered skills:",
+          "subCriteria" : [
+            "Demonstrates patient-centered interview skills (attentive to patient verbal and nonverbal cues, patient/ family culture, social determinants of health, need for interpretive or adaptive services; demonstrates active listening skills).",
+            "Demonstrates patient-centered examination techniques that reflect respect for patient privacy, comfort, and safety (that is, explaining physical exam maneuvers, telling the patient what the physician is doing at each step, keeping patients covered during the examination)."
+          ]
+        }
+      ]
+    },
+
+    {
+      "id" : "2",
+      "title" : "Prioritize a differential diagnosis following a clinical encounter",
+      "criteria" : [
+        {
+          "mainCriteria" : " Can link current findings to prior data in approaching a patient assessment.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Gathers pertinent information from many sources and proposes a relevant differential diagnosis that is neither too broad nor too narrow.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Can usually integrate current and emerging information to continuously update the differential diagnosis.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : " Understands limits of knowledge and personal strengths and weaknesses.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Understands when to consult supervisors and team members for endorsement and verification of a working diagnosis and for developing a tailored management plan.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Can usually articulate a management plan based on the well-reasoned differential and working diagnoses.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Has insight into limitations and is comfortable with ambiguity.",
+          "subCriteria" : [
+            "Can respond to questions and challenges from patients and team members.",
+            "Is comfortable seeking assistance from other members of the health care team."
+          ]
+        },
+        {
+          "mainCriteria" : "Provides complete and succinct documentation so that other providers have evidence of their clinical reasoning to ensure continuity of care.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "3",
+      "title" : "Recommend and interpret common diagnostic and screening tests",
+      "criteria" : [
+        {
+          "mainCriteria" : "Recommends reliable, cost-effective tests when indicated for screening or evaluating patients with common acute or chronic conditions.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Is able to explain how the results of each test will influence diagnosis, management, and health-risk stratification and subsequent evaluation.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Incorporates knowledge of sensitivity and specificity and pre-test and post-test probabilities along with patient risk factors in recommending tests.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Consistently discusses diagnostic plans with the patient, and provides evidence that patient preferences have been solicited and factored into decision making.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Includes in the rationale for recommendations some consideration of costs and patient resources.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Correctly interprets abnormal laboratory and imaging findings for common tests.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Identifies critical values and responds correctly and with commensurate urgency by (a) initiating confirmatory or corrective measures or (b) notifying the health care team for assistance in recognition of his or her own limitations.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : " Is able to distinguish common, insignificant abnormalities from clinically important abnormalities.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "4",
+      "title" : "Enter and discuss orders and prescriptions",
+      "criteria" : [
+        {
+          "mainCriteria" : "Is able to filter and synthesize information (e.g., history, signs, symptoms) to identify or clarify the condition(s) they are addressing with their orders/prescriptions.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Recognizes patterns and takes into account the “big picture” when ordering diagnostics and/or therapeutics.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Considers patient’s preferences in placing orders.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Communicates recommendations to patients, families, and the health care team.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Recognizes limitations and seeks help in a manner that places the needs of patients above one’s own sense of autonomy.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates flexibility in thinking; accepts questions as learning opportunities and considers other possibilities.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Has a parsimonious, reasoned approach to placing orders (e.g., waits for contingent results before ordering more tests).",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Routinely reflects on how the results of a test will influence clinical decision making and, conversely, on the potential consequences of not doing a test.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Articulates the risks and benefits of what they are ordering (e.g., drugs, tests).",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Considers the costs of their orders and the patient’s ability and willingness to proceed with the plan. Can adapt plan based on the patient’s unique demographic, cognitive, physical, cultural, socioeconomic, or situational needs.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Engages in bidirectional communication with patients, their families, and members of the health care team.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Uses treatment guidelines and algorithms consistently but recognizes or asks for help when the patient’s condition requires deviation from them.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Responds to the EHR’s safety alerts and understands the rationale for them.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Uses electronic resources to fill in gaps in knowledge and inform safe order writing and entry (e.g., drug-drug interactions, treatment guidelines).",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "5",
+      "title" : "Document a clinical encounter in the patient record",
+      "criteria" : [
+        {
+          "mainCriteria" : "Adjusts and adapts communication and documentation to audience, context, or purpose.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Provides documentation that is comprehensive and contains important information without unnecessary details or redundancies.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Provides documentation that includes institutionally required elements (e.g., date, time, and signature).",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Creates legible handwritten documentation.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Enters documentation in a timely manner to make it readily available to other team members.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Communicates in a bidirectional manner, allowing solicitation of patient preferences, which are recorded in the note.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Documents clinical reasoning in notes, and interpretation of laboratory values is typically accurate.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Engages in help-seeking behavior to fill gaps in knowledge, skill, and experience, enabling the development and documentation of management plans aligned with the patient’s needs.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates a general understanding of documentation systems that leads to the identification of opportunities to engage with others in system improvement.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Documents one’s role(s) in all team care activities in the patient record.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "6",
+      "title" : "Provide an oral presentation of a clinical encounter",
+      "criteria" : [
+        {
+          "mainCriteria" : "Can filter, synthesize, and prioritize information and recognize patterns, resulting in a concise, well organized, and accurate presentation.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Engages in bidirectional communication that ensures a shared understanding of a presentation.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Avoids medical jargon.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Adjusts the presentation for the receiver of information (e.g., faculty, patient/family, team members) and for the context of the presentation (e.g., emergent versus ambulatory).",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Actively engages patient, family, and other team members in the presentation.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Does not shy away from difficult or stressful issues in obtaining or presenting the information.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Can efficiently tell a story and make an argument to support the plan.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Acknowledges gaps in knowledge base and/or skills in managing a given patient presentation or condition and seeks help.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Reflects on areas of uncertainty and seeks additional information.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Acknowledges gaps in information without becoming defensive or confabulating information.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Respects patient privacy and confidentiality by demonstrating situational awareness when discussing patients.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates a level of confidence commensurate with knowledge and skills that puts others at ease (e.g., less certain in emergent settings and more comfortable in an ambulatory setting).",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "7",
+      "title" : "Form clinical questions and retrieve evidence to advance patient care",
+      "criteria" : [
+        {
+          "mainCriteria" : "Routinely identifies the need to ask for help or seek new information in the context of the clinical setting, based on awareness of one’s own knowledge gaps and patient needs.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Maintains a sufficient biophysical, clinical, epidemiological, and social-behavioral scientific knowledge base that can be translated to patient care activities.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Asks relevant clinical questions:",
+          "subCriteria" : [
+            "Develops well-formed, focused, pertinent clinical question based on clinical scenarios, real-time care of a patient or a panel of patients.",
+            "Demonstrates curiosity, objectivity, scientific reasoning.",
+            "Is able to focus cognitive processes on discerning relevant factors, identifying the unknowns, and developing knowledge for generating a solution via just-in-time-learning."
+          ]
+        },
+        {
+          "mainCriteria" : "Retrieves and assesses evidence:",
+          "subCriteria" : [
+            "Demonstrates awareness and early skill in appraisal of sources and content of medical information.",
+            "Uses info technology to gather and assess information.",
+            "Acquires a manageable volume of information.",
+            "Assesses applicability/generalizability of the information."
+          ]
+        },
+        {
+          "mainCriteria" : "Reports or applies evidence to effect change or improvement:",
+          "subCriteria" : [
+            "Applies findings by communicating with team and with patient, and changes approach to patient care if necessary",
+            "Reflects on the process by which questions are identified and answered and seeks to improve (may need guidance in understanding subtleties of the evidence). "
+          ]
+        }
+      ]
+    },
+
+    {
+      "id" : "8",
+      "title" : "Give or receive a patient handover to transition care responsibility",
+      "criteria" : [
+        {
+          "mainCriteria" : "Uses a template for the handover communication but can adapt based on patient, audience, setting, or context, including patient disabilities or language barriers.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Generally documents patient information without errors of omission and/or commission.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Consistently transfers information regarding content, accuracy, efficiency, and synthesis.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Organizes and prioritizes information for handover communications.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Provides key aspects of the ideal handover to the recipient, including verbalizing the patient’s illness severity and/or providing action planning and/or contingency planning.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates situation awareness of both the team’s total work load and the circumstances of the individual to whom one is transferring care.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates awareness of known threats to handover communication (e.g., interruptions and distractions) by paying attention to the timing and location of the handover communication.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "9",
+      "title" : "Collaborate as a member of an interprofessional team",
+      "criteria" : [
+        {
+          "mainCriteria" : "Acts as an active and integrated member of the team who in most situations prioritizes team goals over one’s own professional goals.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Understands the roles of other team members, seeks their counsel, actively listens to their recommendations, and incorporates them into practice.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Typically communicates in a bidirectional manner and keeps all team members informed and up to date.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Modifies and adapts communication content and style based on audience, venue, receiver preference, or type of message.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "In most situations, is able to read one’s own emotions and anticipates and reads the emotions of others.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Maintains a professional demeanor in all but the most trying of circumstances.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Actively engages with the patient and other team members to coordinate care and provide for seamless transitions between care providers and from one setting to another.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "10",
+      "title" : " Recognize a patient requiring urgent or emergent care and initiate evaluation and management",
+      "criteria" : [
+        {
+          "mainCriteria" : "Recognizes age appropriateness of, trends in, and variations of patients’ vital signs.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Actively listens to and elicits feedback from team members (e.g., nursing, family members) regarding concerns about patient deterioration to determine next steps.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Adheres to institutional procedures and protocols regarding escalation of patient care.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Uses the health care team members according to their roles and responsibilities to increase task efficiency in dealing with urgent or emergent patient conditions.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Gathers, filters, prioritizes, and connects pieces of information (e.g., vital signs, focused physical exam, pertinent medical history, recent test or procedures, medications) to form a patient-specific differential diagnosis, initiate interventions, and drive testing decisions.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Initiates interventions and tests with frequent reassessment to determine level of help needed and to anticipate next steps.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Interprets common test results to anticipate and respond to early clinical deterioration.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Understands and recognizes personal limitations, emotions, and personal biases and seeks help when needed.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates bidirectional communication with health care team and family regarding goals of care and treatment plan that leads to shared decision making.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Provides a focused and concise presentation of accurate patient information to responding members of the health care team.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Completes documentation in the medical record of the clinical encounter.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Seeks guidance and feedback from supervisors after the clinical encounter.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "11",
+      "title" : "Obtain informed consent for tests and/or procedures",
+      "criteria" : [
+        {
+          "mainCriteria" : "Understands the importance of informed consent to rapport building and shared decision making.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates an understanding of the elements of informed consent generally (indications, contraindications, risks, benefits, alternatives) and the specifics of these elements for the procedures for which consent is being sought.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Provides complete information to patients and families.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Avoids medical jargon in communicating with patients and families.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Uses bidirectional communication to both inform patients and families and seek their input and questions.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Solicits patient/family preferences to engage them in shared decision making.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Recognizes emotional cues in others (e.g., fear, anger, anxiety) and can address them in real time or seek help from others on the health care team.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates confidence commensurate with skills.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Seeks guidance from superiors around areas of uncertainty.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : " Documents the informed consent in a complete and timely fashion.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "12",
+      "title" : "Perform general procedures of a physician",
+      "criteria" : [
+        {
+          "mainCriteria" : "Demonstrates the necessary preparation required for performance of procedures.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates and applies understanding of key issues in performing procedures, such as:",
+          "subCriteria" : [
+            "Patient-specific factors",
+            "Indications",
+            "Contraindications",
+            "Risks",
+            "Benefits",
+            "Alternatives"
+          ]
+        },
+        {
+          "mainCriteria" : "Knows and takes steps to mitigate complications of procedures.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates reliable mechanical skills in performing procedures in most situations and knows when to seek help for procedures or situations beyond the learner’s abilities.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Uses universal precautions and aseptic technique consistently.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Demonstrates patient-centered skills in performing procedures:",
+          "subCriteria" : [
+            "Avoids medical jargon such that patients are able to verbalize understanding of the procedure.",
+            "Participates in shared decision making with patients about procedures.",
+            "Has confidence commensurate with level of knowledge and skill that puts patients at ease.",
+            "Simultaneously pays attention to both the procedure and the patient’s emotional response."
+          ]
+        },
+        {
+          "mainCriteria" : "Creates required documentation that is usually complete and timely.",
+          "subCriteria" : []
+        }
+      ]
+    },
+
+    {
+      "id" : "13",
+      "title" : "Identify system failures and contribute to a culture of safety and improvement",
+      "criteria" : [
+        {
+          "mainCriteria" : "Identifies real and potential errors.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Performs common safety behaviors (e.g., universal precautions, hand washing).",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Understands the importance of error prevention both to individual patients and to systems.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Takes responsibility for one’s role in errors.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Takes time to “slow down” and reflect on one’s work.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Still relies on external sources of information to understand one’s population of patients.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Reports real and/or potential errors when they occur using the system reporting structure.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Participates in improvement activities voluntarily",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Speaks up when concerned about a potential error, even if that means questioning or challenging a supervisor.",
+          "subCriteria" : []
+        },
+        {
+          "mainCriteria" : "Recognizes one’s own symptoms of fatigue and moderates behavior or seeks help.",
+          "subCriteria" : []
+        }
+      ]
+    }
+
+  ]
+}

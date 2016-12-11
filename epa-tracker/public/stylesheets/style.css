@@ -1,0 +1,150 @@
+.tab {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Style the links inside the list items */
+.tabitem {
+  float: left;
+  display: inline-block;
+  color: black;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  transition: 0.3s;
+  font-size: 14px;
+}
+
+.tabitem:hover{
+  cursor: pointer;
+  color: blue;
+  text-decoration: underline;
+}
+
+body{
+  background-color: #7BAFD4;
+}
+
+.table.test-data > tbody > tr > td {
+  padding: 4px;
+  vertical-align: middle;
+  border: none;
+}
+
+.table.test-data {
+  position: relative;
+  top: 15px;
+  left: 5%;
+  width: 90%;
+}
+
+.table.test-data tr {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+}
+
+.table.test-data .test-name{
+  width: 70%;
+  text-align: left;
+}
+
+.table.test-data .test-score{
+  width: 10%;
+}
+
+.table.test-data .test-delta{
+  width: 10%;
+}
+
+.table.test-data .test-comment{
+  width: 10%;
+}
+
+.table-category {
+    font-size: 17px;
+}
+
+.table-category:hover {
+    cursor: pointer;
+    background-color: black;
+    color: white;
+}
+
+.glyphicon.glyphicon-sort{
+  transform: rotate(90deg);
+}
+
+.glyphicon.glyphicon-info-sign{
+  float: right;
+}
+
+#deltas .glyphicon.glyphicon-arrow-up {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  font-size: 170px;
+  color: #388E3C;
+}
+
+#deltas .glyphicon.glyphicon-arrow-down {
+  padding-top: 10px;
+  padding-bottom: 20px;
+  font-size: 170px;
+  color: #D32F2F;
+}
+
+#deltas .epa-count {
+  font-size: 35px;
+}
+
+.urgent-red {
+  background-color: rgba(211, 47, 47, .6); ;
+
+}
+
+.urgent-green {
+  background-color : rgba(56, 142, 60, .6);
+}
+
+.block{
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+
+.col-md-10{
+  padding-top: 15px;
+  padding-bottom: 15px;
+  background-color: #E1F5FE;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.detail-exam{
+  font-size:16px;
+  text-align: center;
+}
+
+.flex-container{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 15px -15px 15px -15px;
+}
+
+.flex-item{
+  background-color: #E1F5FE;
+  width: 41%;
+  padding: 5px;
+  margin: 0px 10px 0px 10px;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+@media all and (max-width: 991px){
+  .flex-item{
+    background-color: #E1F5FE;
+    width: 100%;
+    padding: 5px;
+    margin: 15px 0px 15px 0px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+}
