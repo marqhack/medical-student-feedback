@@ -482,14 +482,11 @@ function getPatientQuestions(req, res) {
  */
 function getSurvey(req, res) {
     response = {};
-    var pid = req.query['pid'];
-    var evaluator_id = req.query['evid'];
-    var evaluator_name;
-    var evaluator_email;
-    var evaluator_type;
-    var activities = req.query['activities'].split('-');
+    pid = req.query['pid'];
+    evaluator_id = req.query['evid'];
+    activities = req.query['activities'].split('-');
 
-    var eval_query = "SELECT evid, email, firstName, lastName, type FROM Evaluators WHERE evid=" + evaluator_id;
+    eval_query = "SELECT evid, email, firstName, lastName, type FROM Evaluators WHERE evid=" + evaluator_id;
 
     db.all(eval_query, function(err, rows) {
         if (err) {
@@ -504,7 +501,7 @@ function getSurvey(req, res) {
         }
     });
 
-    var query = "";
+    query = "";
     activities.forEach(function(activityID, index) {
 
         query += "SELECT A.aNum AS aNum, A.aContent AS aContent, C1.rcContent AS c1Content, C2.rcContent AS c2Content, ";

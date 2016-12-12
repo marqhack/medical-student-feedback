@@ -58,22 +58,30 @@ function add_action_listeners() {
 
 			//enable activity selection buttons, on_device checkbox,
 			//and confirm selections button once email is confirmed
-			$('.activity-button').prop('disabled', false);
-			$('input[type=checkbox]').prop('disabled', false);
-			// $('.confirm-selections').prop('disabled', false);
+			parent_container = $(this).parents('.observer-info');
+			$(parent_container).find('.activity-button').each(function() {
+				$(this).prop('disabled', false);
+			});
+			$(parent_container).find('input[type=checkbox]').prop('disabled', false);
+			$(parent_container).find('.confirm-selections').prop('disabled', false);
 		}
 
 
 	});
 
-	// $('body').on('click', '.confirm-selections', function(){
-	// 	parent_container = $(this).parents(".observer-info");
-	// 	confirm_selections(pid, $(parent_container));
-	// 	$(this).prop('disabled', true);
-
-	// 	//enable continue to surveys button
-	// 	$('#submit-observers').prop('disabled', false);
-	// });
+	$('body').on('click', '.confirm-selections', function(){
+		parent_container = $(this).parents(".observer-info");
+		if (confirm_selections(pid, $(parent_container)) != false) {
+			$(parent_container).find('button').each(function() {
+				$(this).prop('disabled', true);
+			});
+			$(parent_container).find('input[type=checkbox]').prop('disabled', true);
+	
+	
+			//enable continue to surveys button
+			$('#submit-observers').prop('disabled', false);
+		}
+	});
 
 	$("#add-observer").on('click', function() {
 		add_observer_div();
@@ -100,11 +108,10 @@ function add_action_listeners() {
 			//if observer not giving feedback on device,
 			//send email with link to survey
 
-			$('.observer-info').each(function () {
-				if(confirm_selections(pid, $(this)) == false) {
-					continue_to_surveys = false;
-				}
-			});
+			if($('.confirm-email:enabled').length > 0 || $('.confirm-selections:enabled').length > 0) {
+				continue_to_surveys = false;
+				alert('Please check that all emails and selections have been confirmed.');
+			}
 
 			if (continue_to_surveys) {
 				$.get('getSurvey?pid=' + pid + '&evid=1&activities=' + get_all_selected_activities().join('-'), function(response) {
@@ -176,7 +183,7 @@ function add_observer_div() {
 	});
 
 	
-	// var confirm_selections_button = $('<div><button class="confirm-selections" disabled=true>Confirm Selections</button></div>');
+	var confirm_selections_button = $('<div><button class="confirm-selections" disabled=true>Confirm Selections</button></div>');
 	var checkbox = $('<input type="checkbox" disabled=true><label>Taking survey on this device?</label>');
 	var delete_button = $('<button class="delete-observer">Delete</button>');
 
@@ -185,7 +192,7 @@ function add_observer_div() {
 	$(observer_info_container).append(activities_container);
 	$(observer_info_container).append(checkbox);
 	$(observer_info_container).append(delete_button);
-	// $(observer_info_container).append(confirm_selections_button);
+	$(observer_info_container).append(confirm_selections_button);
 	$("#observers-container").append(observer_info_container);
 }
 

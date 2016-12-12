@@ -153,6 +153,10 @@
 						background-color: #FF0000;
 					}
 
+					.delete-observer:disabled {
+						opacity: .7;
+					}
+
 
 			#page-1 > label {
 				font-size: 20px;
