@@ -481,7 +481,7 @@ function getPatientQuestions(req, res) {
  * on the activities being tested.
  */
 function getSurvey(req, res) {
-    response = {};
+    //response = {};
     var pid = req.query['pid'];
     var evaluator_id = req.query['evid'];
     var evaluator_name;
@@ -495,15 +495,10 @@ function getSurvey(req, res) {
         if (err) {
             console.log(err);
         } else {
-            response.pid = pid;
-            response.evid = rows[0].evid;
-            response.email = rows[0].email;
-            response.first_name = rows[0].firstName;
-            response.last_name = rows[0].lastName;
-            response.type = rows[0].type;
+            test(pid, rows[0].evid, rows[0].email, rows[0].firstName, rows[0].lastName, rows[0].type, res);
         }
     });
-
+    function test(pid, evid, email, firstName, lastName, type, res) {
     var query = "";
     activities.forEach(function(activityID, index) {
 
@@ -521,10 +516,18 @@ function getSurvey(req, res) {
         if(err) {
             console.log(err);
         } else {
+            response = {};
+            response.pid = pid;
+            response.evid = evid;
+            response.email = email;
+            response.first_name = firstName;
+            response.last_name = lastName;
+            response.type = type;
             response.activities = rows;
             res.send(JSON.stringify(response));
         }
     });
+}
 }
 
 module.exports.addEpaWithQuestions = addEpaWithQuestions;
