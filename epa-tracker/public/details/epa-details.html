@@ -1,6 +1,5 @@
-<div ng-controller="epa-details-controller">
+<div ng-controller="detailsCtrl">
   <div class="container-fluid">
-
     <div class = "row">
       <div class="col-xs-12 col-md-10 col-md-offset-1">
         <button type="button" id="headerHelp" class="glyphicon glyphicon-info-sign btn btn-link" data-toggle="modal" data-target="#helpModal" ng-click="displayHelp($event);"></button>
@@ -29,16 +28,20 @@
           <div class ="col-xs-12 col-md-6">
             <h3 align="center">Your Recent Assessments</h3>
             <table class="table test-data">
+              <th class="details-table-category">Exam Title/Date</th>
+              <th class="details-table-category" style="text-align: center;">Score</th>
+              <th class="details-table-category" style="text-align: center;">Delta</th>
+              <th class="details-table-category" style="text-align: center;">Comments</th>
               <tr ng-repeat="test in testInfo">
                 <td class="test-name">
                   {{test.title}}
                   <br>
                   {{test.examdate}}
                 </td>
-                <td class="test-score">
+                <td class="test-score" style="text-align: center;">
                   {{test.newval}}
                 </td>
-                <td class="test-delta">
+                <td class="test-delta" style="text-align: center;">
                   <div ng-if="test.delta == 'up'">
                     <span class="glyphicon glyphicon-arrow-up" style="font-size: 20px; color: #388E3C"></span>
                   </div>
@@ -49,8 +52,8 @@
                     <span class="glyphicon glyphicon-sort" style="font-size: 20px; color: #F9AE1D;"></span>
                   </div>
                 </td>
-                <td class="test-comment">
-                  <button type="button" class="glyphicon glyphicon-envelope btn btn-link" data-toggle="modal" data-target="#examModal" style="font-size: 15px;"></button>
+                <td class="test-comment" style="text-align: center;">
+                  <button ng-click="getComment($index)" type="button" class="glyphicon glyphicon-comment btn btn-link" data-toggle="modal" data-target="#examModal" style="font-size: 15px;"></button>
                 </td>
             </table>
           </div>
@@ -58,47 +61,10 @@
       </div>
     </div>
 
-    <!-- <div class="flex-container">
-      <div class="flex-item">
-        <button type="button" id="examHelp" class="glyphicon glyphicon-info-sign btn btn-link" data-toggle="modal" data-target="#helpModal" ng-click="displayHelp($event);"></button>
-        <div id="line-chart" style="padding-top: 2%;"></div>
-      </div>
-
-      <div class="flex-item">
-        <button type="button" id="examHelp" class="glyphicon glyphicon-info-sign btn btn-link" data-toggle="modal" data-target="#helpModal" ng-click="displayHelp($event);"></button>
-        <h3 align="center">Your Recent Assessments</h3>
-        <table class="table test-data">
-          <tr ng-repeat="test in testInfo">
-            <td class="test-name">
-              {{test.title}}
-              <br>
-              {{test.examdate}}
-            </td>
-            <td class="test-score">
-              {{test.newval}}
-            </td>
-            <td class="test-delta">
-              <div ng-if="test.delta == 'up'">
-                <span class="glyphicon glyphicon-arrow-up" style="font-size: 20px; color: #388E3C"></span>
-              </div>
-              <div ng-if="test.delta == 'down'">
-                <span class="glyphicon glyphicon-arrow-down" style="font-size: 20px; color: #D32F2F"></span>
-              </div>
-              <div ng-if="test.delta == 'even'">
-                <span class="glyphicon glyphicon-sort" style="font-size: 20px; color: #F9AE1D;"></span>
-              </div>
-            </td>
-            <td class="test-comment">
-              <button type="button" class="glyphicon glyphicon-envelope btn btn-link" data-toggle="modal" data-target="#examModal" style="font-size: 15px;"></button>
-            </td>
-        </table>
-      </div>
-    </div> -->
-
     <div class = "row">
       <div class="col-xs-12 col-md-10 col-md-offset-1">
         <button type="button" id="checklistHelp" class="glyphicon glyphicon-info-sign btn btn-link" data-toggle="modal" data-target="#helpModal" ng-click="displayHelp($event);"></button>
-        <h3 align="center">EPA {{epa}} Checklist</h3>
+        <h3 align="center">EPA {{epa}} Requirements</h3>
         <ul ng-repeat="criteria in epaDetails.criteria">
           <li class="detail-li">
             {{criteria.mainCriteria}}
@@ -118,11 +84,10 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h4 class="modal-title">Exam 1 Comments</h4>
+          <h4 class="modal-title">Comments</h4>
         </div>
         <div class="modal-body">
-          <div>Greetings</div>
-          <div>Link to exam.</div>
+          {{commentText}}
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
