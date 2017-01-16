@@ -9,7 +9,7 @@ var multer = require('multer');
 var upload = multer();
 
 var con = mysql.createConnection({
-  host: 'mydb.cs.unc.edu',
+  host: 'mydb.cs.unc.edu', 
   user: 'granthum',
   password: 'CH@ngemenow99Please!granthum',
   database: 'medtrackdb'
@@ -38,7 +38,7 @@ router.get('/epa/:epa', function(req,res) {
 
 //GET request that returns details of the most recent 10 examinations for a given student and EPA
 router.get('/tests/:id/:epa', function(req,res){
-  con.query('SELECT * FROM EPAHistory  WHERE student = ? AND epaid = ? ORDER BY examdate desc LIMIT 10', [req.params.id,req.params.epa], function(err, rows, fields)
+  con.query('SELECT * FROM EPAHistory  WHERE student = ? AND epaid = ? ORDER BY examdate desc', [req.params.id,req.params.epa], function(err, rows, fields)
   {
     if(err){
       console.log('Connection result error '+err);
@@ -138,7 +138,7 @@ router.post('/new/adviser', upload.array(), function(req, res){
 //Returns the new student's uid on success
 router.post('/new/student', upload.array(), function(req, res){
   var body = req.body;
-  con.query('INSERT INTO Users (username, email, fname, lname, permissions, adviserid, year) VALUES (?, ?, ?, ?, ?, ?, ?)', [body.username, body.email, body.fname, body.lname, 0, body.adviserid, body.year], function(err, rows, fields){
+  con.query('INSERT INTO Users (uid, username, email, fname, lname, permissions, adviserid, year) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [body.uid, body.username, body.email, body.fname, body.lname, 0, body.adviserid, body.year], function(err, rows, fields){
     if(err){
       res.send("Fail1, " + err);
     }

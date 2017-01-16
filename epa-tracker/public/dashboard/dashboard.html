@@ -54,6 +54,9 @@
             <div align = "center">
               <h4>{{key}}</h4>
               <div ng-repeat="epa in level | orderBy:epa">
+                <span ng-if="summaryDeltas.Even.indexOf(epa) > -1">
+                  <span class="glyphicon glyphicon-arrow-down" style="color: #D32F2F;"></span>
+                </span>
                 <span ng-if="summaryDeltas.Regressed.indexOf(epa) > -1">
                   <span class="glyphicon glyphicon-arrow-down" style="color: #D32F2F;"></span>
                 </span>
