@@ -434,9 +434,9 @@ function logAssessment(req, res) {
             db.all("SELECT S.epaNum, A.aContent FROM Survey S, Activities A WHERE S.aNum=? AND S.aNum=A.aNum", aNum, function(err, rows) {
                 rows.forEach(function(epa) {
                     console.log("Sending assessment to the epa tracker");
-                    var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum == 5 ? 4: 4, comments: comment};
+                    var post_obj = {student: pid, epaid: epa.epaNum, title: epa.aContent, examdate: date, newval: choiceNum == 5 ? 4: choiceNum, comments: comment};
                     console.log(post_obj);
-                    request.post({ url: 'http://medtrack.cs.unc.edu/new/exam', json: post_obj },
+                    request.post({ url: 'http://localhost:8080/new/exam', json: post_obj },
                         function (error, response, body) {
                             if (!error && response.statusCode == 200) {
                                 console.log(body);

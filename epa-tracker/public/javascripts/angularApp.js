@@ -1,9 +1,22 @@
+//Initializing the angular app
+//Contributions by Grant
+
 angular.module('appControllers',[]);
-var myApp = angular.module('myApp', ['appControllers','ngRoute']);
+var myApp = angular.module('myApp', ['appControllers','ngRoute','ngCookies']);
 
 //Routing
 myApp.config(['$routeProvider', function($routeProvider) {
   $routeProvider
+  .when('/login',{
+    templateUrl: '/login/login.html',
+  })
+  .when('/unauthorized',{
+    templateUrl : '/unauth/unauthorized.html',
+  })
+  .when('/faq',{
+    templateUrl : '/faq/faq.html',
+    caseInsensitiveMatch: true
+  })
   .when('/:id', {
     templateUrl : '/dashboard/dashboard.html',
   })
@@ -15,7 +28,7 @@ myApp.config(['$routeProvider', function($routeProvider) {
     templateUrl : '/adviser/adviser.html',
     caseInsensitiveMatch: true
   })
-  /*.otherwise({
-    redirectTo  : '/'
-  });*/
+  .otherwise({
+    redirectTo  : '/login'
+  });
 }]);

@@ -3,6 +3,8 @@
     <div class="row block">
       <div class="col-xs-12 col-md-10 col-md-offset-1">
         <div style="font-size: 28px" align="center">{{name}}</div>
+        <div style="font-size: 20px" align="center">Email: {{email}}</div>
+        <div style="font-size: 20px" align="center">Year: {{year}}</div>
       </div>
     </div>
 
@@ -52,6 +54,9 @@
             <div align = "center">
               <h4>{{key}}</h4>
               <div ng-repeat="epa in level | orderBy:epa">
+                <span ng-if="summaryDeltas.Even.indexOf(epa) > -1">
+                  <span class="glyphicon glyphicon-arrow-down" style="color: #D32F2F;"></span>
+                </span>
                 <span ng-if="summaryDeltas.Regressed.indexOf(epa) > -1">
                   <span class="glyphicon glyphicon-arrow-down" style="color: #D32F2F;"></span>
                 </span>

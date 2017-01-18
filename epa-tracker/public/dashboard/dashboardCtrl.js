@@ -1,22 +1,42 @@
-angular.module('appControllers').controller('dashboardCtrl', ['$scope','$routeParams','$http',function($scope,$routeParams,$http){
+//Angular controller for the student dashboard view
+//Contributions by Nick, Grant, Tommy
+
+angular.module('appControllers').controller('dashboardCtrl', ['$scope','$routeParams','$http','cookieService','$location',function($scope,$routeParams,$http,cookieService,$location){
+
   $scope.id = $routeParams.id;
   $scope.summaryDeltas = {
     'Regressed' : [],
     'Even' : [],
     'Improved' : []
   }
+  var userCookie = cookieService.getCookie('user');
+
+
+  if(!userCookie){
+    $location.url('/login');
+  }
+  else{
+    cookieService.isAuthorized(userCookie, $scope.id).then(function(auth){
+      if(!auth){
+        $location.url('/unauthorized');
+      }
+    });
+  }
+
   $http({
     method: 'GET',
     url: '/users/'+$routeParams.id,
   }).then(function successCallback(response) {
-    $scope.name = response.data[0].fname + " " + response.data[0].lname
+    $scope.name = response.data[0].fname + " " + response.data[0].lname;
+    $scope.year = response.data[0].year;
+    $scope.email = response.data[0].email;
   }, function errorCallback(response) {
-    console.log("error loading user "+$routeParams.id)
+    console.log("error loading user "+$routeParams.id);
   });
 
   $http({
     method: 'GET',
-    url: '/users/'+$routeParams.id+'/summary'
+    url: '/student/'+$routeParams.id+'/summary'
   }).then(function successCallback(response) {
       $scope.currentEPAs = response.data;
       $scope.graphData = {
@@ -83,6 +103,11 @@ angular.module('appControllers').controller('dashboardCtrl', ['$scope','$routePa
           },
           plotOptions: {
               series: {
+                  states: {
+                      hover: {
+                          enabled: false
+                      }
+                  },
                   borderWidth: 0,
                   dataLabels: {
                       enabled: true,
@@ -101,22 +126,22 @@ angular.module('appControllers').controller('dashboardCtrl', ['$scope','$routePa
               name: 'EPAs in this level',
               colorByPoint: true,
               data: [{
-                  name: 'Pre Entrustable',
+                  name: 'Pre Entrustable (Early learner)',
                   y: $scope.graphData[1].length,
                   color: '#7E57C2'
                   //drilldown: 'Pre Entrustable'
               }, {
-                  name: 'Able to do With Supervision',
+                  name: 'Direct Supervision',
                   y: $scope.graphData[2].length,
                   color: '#7E57C2'
                   //drilldown: 'Level 2'
               }, {
-                  name: 'Able to do Without Supervision',
+                  name: 'Indirect Supervision',
                   y: $scope.graphData[3].length,
                   color: '#7E57C2'
                   //drilldown: 'Level 3'
               }, {
-                  name: 'Entrustable',
+                  name: 'Entrustable (Independent)',
                   y: $scope.graphData[4].length,
                   color: '#7E57C2'
                   //drilldown: 'Entrustable'
@@ -132,23 +157,18 @@ angular.module('appControllers').controller('dashboardCtrl', ['$scope','$routePa
       console.log("error")
   });
 
-
-
-
-
   //Modal Text
   $scope.helpText = "This is placeholder text"
   $scope.displayHelp = function(event){
     if(event.target.id == "chartHelp"){
-      $scope.helpText = "This section displays a bar graph of the levels of the student's EPAs."+
-        "\r\nEPAs range between 1 (not entrustable) and 4 (entrustable), and mastery levels vary based on the difficulty of work students are exposed to.";
+      $scope.helpText = "This section displays a bar graph of the levels of the student's EPAs. EPAs can be scored in a range from 1 to 4.\r\n\r\nLevel 1 (Pre-Entrustable): Unable to properly perform the EPA.\r\nLevel 2 (Direct Supervision): Direct supervision is required when performing an EPA.\r\nLevel 3 (Indirect Supervision): Does not need direct supervision to perform an EPA.\r\nLevel 4 (Entrustable): Routinely able to perform an EPA at a proficient level without supervision.\r\n\r\nStudents in lower grade levels are expected to get lower mastery levels for their EPAs.";
     }
     if(event.target.id == "regHelp"){
-      $scope.helpText = "This section details the number of EPAs that have regressed or improved since the last reporting period.";
+      $scope.helpText = "This section details the number of EPAs that have regressed or improved compared to the average of the last 10 examinations in each EPA level.";
     }
     if(event.target.id == "listHelp"){
       $scope.helpText = "This section is a detailed combination of the above two; EPAs are listed based on mastery level and improvements and regressions are indicated." +
-        "\r\nClick on an EPA to show the details page for that EPA.";
+        "\r\n\r\nClick on an EPA to show the details page for that EPA.";
     }
   }
 }]);
